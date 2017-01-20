@@ -16,6 +16,7 @@ namespace db
 
 	CDbThread::~CDbThread()
 	{
+		delete this->m_pThread;
 	}
 
 	bool CDbThread::connectDb(bool bInit)
@@ -118,18 +119,19 @@ namespace db
 			if (sDbCommand.nSessionID == 0)
 				continue;
 
-			proto::db::response* pResponse = new proto::db::response();
-			pResponse->set_session_id(sDbCommand.nSessionID);
-			pResponse->set_err_code(nErrorCode);
+			SDbResultInfo sDbResultInfo;
+			sDbResultInfo.pResponse = std::make_shared<proto::db::response>();
+			sDbResultInfo.pResponse->set_session_id(sDbCommand.nSessionID);
+			sDbResultInfo.pResponse->set_err_code(nErrorCode);
 			if (pMessage != nullptr)
 			{
 				std::string* szContent = new std::string;
 				pMessage->SerializeToString(szContent);
-				pResponse->set_name(pMessage->GetTypeName());
-				pResponse->set_allocated_content(szContent);
+				sDbResultInfo.pResponse->set_name(pMessage->GetTypeName());
+				sDbResultInfo.pResponse->set_allocated_content(szContent);
 			}
 
-			this->m_pDbThreadMgr->addResult(sDbCommand.nServiceID, pResponse);
+			this->m_pDbThreadMgr->addResultInfo(sDbResultInfo);
 		}
 
 		return true;
@@ -146,7 +148,7 @@ namespace db
 	uint32_t CDbThread::getQueueSize()
 	{
 		std::unique_lock<std::mutex> lock(this->m_tCommandLock);
-		return this->m_listCommand.size();
+		return (uint32_t)this->m_listCommand.size();
 	}
 
 	uint32_t CDbThread::getQPS()

@@ -69,14 +69,17 @@ namespace db
 
 	void release(CDbThreadMgr* pDbThreadMgr)
 	{
+		DebugAst(pDbThreadMgr != nullptr);
+		pDbThreadMgr->exit();
+
 		delete pDbThreadMgr;
 	}
 
-	void getResult(CDbThreadMgr* pDbThreadMgr, std::list<std::pair<uint32_t, proto::db::response*>>& listResult)
+	void getResultInfo(CDbThreadMgr* pDbThreadMgr, std::list<SDbResultInfo>& listResultInfo)
 	{
 		DebugAst(pDbThreadMgr != nullptr);
 
-		pDbThreadMgr->getResult(listResult);
+		pDbThreadMgr->getResultInfo(listResultInfo);
 	}
 
 	void query(CDbThreadMgr* pDbThreadMgr, uint32_t nServiceID, const proto::db::request* pRequest)

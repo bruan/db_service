@@ -39,6 +39,7 @@ namespace db
 			this->m_vecDbThread[i]->join();
 			delete this->m_vecDbThread[i];
 		}
+		this->m_vecDbThread.clear();
 	}
 
 	void CDbThreadMgr::query(uint32_t nThreadIndex, const SDbCommand& sDbCommand)
@@ -58,16 +59,16 @@ namespace db
 		return this->m_sDbConnectionInfo;
 	}
 
-	void CDbThreadMgr::addResult(uint32_t nServiceID, proto::db::response* pResponse)
+	void CDbThreadMgr::addResultInfo(const SDbResultInfo& sResultInfo)
 	{
 		std::unique_lock<std::mutex> lock(this->m_tResultLock);
-		this->m_listResult.push_back(std::make_pair(nServiceID, pResponse));
+		this->m_listResultInfo.push_back(sResultInfo);
 	}
 
-	void CDbThreadMgr::getResult(std::list<std::pair<uint32_t, proto::db::response*>>& listResult)
+	void CDbThreadMgr::getResultInfo(std::list<SDbResultInfo>& listResultInfo)
 	{
 		std::unique_lock<std::mutex> lock(this->m_tResultLock);
-		listResult.splice(listResult.end(), this->m_listResult);
+		listResultInfo.splice(listResultInfo.end(), this->m_listResultInfo);
 	}
 
 	void CDbThreadMgr::getQPS(std::vector<uint32_t>& vecQPS)

@@ -35,11 +35,11 @@ public:
 
 	void update()
 	{
-		std::list<std::pair<uint32_t, proto::db::response*>> listResult;
-		db::getResult(this->m_pDbThreadMgr, listResult);
-		for (auto iter = listResult.begin(); iter != listResult.end(); ++iter)
+		std::list<db::SDbResultInfo> listDbResultInfo;
+		db::getResultInfo(this->m_pDbThreadMgr, listDbResultInfo);
+		for (auto iter = listDbResultInfo.begin(); iter != listDbResultInfo.end(); ++iter)
 		{
-			this->onMessage(iter->second);
+			this->onMessage(iter->pResponse.get());
 		}
 	}
 
