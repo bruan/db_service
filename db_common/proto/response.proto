@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package proto.db;
+
+message response {
+	uint64 session_id = 1;
+	uint32 err_code = 2;
+	string name = 3;
+	string content = 4;
+}

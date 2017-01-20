@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="inc">
+      <UniqueIdentifier>{68eae67e-012f-41f5-bf65-ee2dca2232b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2981602d-b4b2-4c4c-a34b-8189503fa2ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\command_handler">
+      <UniqueIdentifier>{f47dc6c4-9a9f-42ff-9504-13f4f020f387}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="db_connection.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_protobuf.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_record_set.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_service_base.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_thread.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_thread_mgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_call_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_delete_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_handler_proxy.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_insert_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_nop_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_query_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_select_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_update_handler.h">
+      <Filter>src\command_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\db_service.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="db_connection.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_protobuf.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_record_set.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_service.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_service_base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_thread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_thread_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_call_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_delete_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_handler_proxy.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_insert_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_nop_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_query_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_select_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_update_handler.cpp">
+      <Filter>src\command_handler</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

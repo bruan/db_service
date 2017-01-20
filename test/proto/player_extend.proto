@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "db_option.proto";
+
+package proto.db;
+
+message player_extend_data {
+	uint32 data1 = 1;
+	uint32 data2 = 2;
+}
+
+message player_extend_data_set {
+	repeated player_extend_data data = 1;
+}
+
+message player_extend {
+	option (primary_key) = "id";
+	uint32 id = 1;
+	player_extend_data_set data_set = 2[(serialize_type) = 1];
+}
+
+message player_extend_set {
+	repeated player_extend data_set = 1;
+}

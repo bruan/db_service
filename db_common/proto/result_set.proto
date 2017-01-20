@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package proto.db;
+
+message row {
+    repeated string value = 1;
+}
+
+message result_set {
+	repeated string field_name = 1;
+    repeated row rows = 2;
+}

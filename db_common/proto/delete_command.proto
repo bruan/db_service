@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package proto.db;
+
+message delete_command {
+	uint64 id = 1;
+	string table_name = 2;
+}

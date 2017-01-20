@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "db_option.proto";
+
+package proto.db;
+
+message player_base {
+	option (primary_key) = "id";
+	uint32 id = 1;
+	string name = 2;
+}
+
+message player_base_set {
+	repeated player_base data_set = 1;
+}

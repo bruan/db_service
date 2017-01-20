@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+package proto.db;
+
+message nop_command {
+}

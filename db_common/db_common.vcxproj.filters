@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="proto_src">
+      <UniqueIdentifier>{4bdf79eb-6290-406b-a165-b2eb1fdbc31a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{e89e4eef-c51a-422f-b530-b5731ecc46c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{756bc542-41b3-4a9a-9f65-00cf6b825324}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="proto_src\call_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\db_option.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\delete_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\query_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\result_set.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\select_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\request.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\response.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_proxy.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_client.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="variant.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_src\nop_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="proto_src\call_command.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\db_option.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\delete_command.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\query_command.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\result_set.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\select_command.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\request.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\response.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_common.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="db_client.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="db_proxy.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="variant.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\nop_command.pb.h">
+      <Filter>proto_src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
