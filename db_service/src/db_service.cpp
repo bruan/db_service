@@ -113,4 +113,18 @@ namespace db
 
 		pDbThreadMgr->query(pRequest->associate_id(), sDbCommand);
 	}
+
+	void getQPS(CDbThreadMgr* pDbThreadMgr, std::vector<uint32_t>& vecQPS)
+	{
+		DebugAst(pDbThreadMgr != nullptr);
+
+		pDbThreadMgr->getQPS(vecQPS);
+	}
+
+	void getQueueSize(CDbThreadMgr* pDbThreadMgr, std::vector<uint32_t>& vecSize)
+	{
+		DebugAst(pDbThreadMgr != nullptr);
+
+		pDbThreadMgr->getQueueSize(vecSize);
+	}
 }

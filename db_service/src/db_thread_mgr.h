@@ -37,6 +37,9 @@ namespace db
 
 		void		getResult(std::list<std::pair<uint32_t, proto::db::response*>>& listResult);
 
+		void		getQPS(std::vector<uint32_t>& vecQPS);
+		void		getQueueSize(std::vector<uint32_t>& vecSize);
+
 	private:
 		std::vector<CDbThread*>	m_vecDbThread;
 		SDbConnectionInfo		m_sDbConnectionInfo;

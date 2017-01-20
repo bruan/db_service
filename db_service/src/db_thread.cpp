@@ -10,6 +10,7 @@ namespace db
 		: m_pDbThreadMgr(pDbThreadMgr)
 		, m_pThread(nullptr)
 		, m_quit(0)
+		, m_nQPS(0)
 	{
 	}
 
@@ -140,5 +141,16 @@ namespace db
 		this->m_listCommand.push_back(sDbCommand);
 
 		this->m_condition.notify_all();
+	}
+
+	uint32_t CDbThread::getQueueSize()
+	{
+		std::unique_lock<std::mutex> lock(this->m_tCommandLock);
+		return this->m_listCommand.size();
+	}
+
+	uint32_t CDbThread::getQPS()
+	{
+		return this->m_nQPS;
 	}
 }

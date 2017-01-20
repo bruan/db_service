@@ -69,4 +69,22 @@ namespace db
 		std::unique_lock<std::mutex> lock(this->m_tResultLock);
 		listResult.splice(listResult.end(), this->m_listResult);
 	}
+
+	void CDbThreadMgr::getQPS(std::vector<uint32_t>& vecQPS)
+	{
+		vecQPS.resize(this->m_vecDbThread.size());
+		for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
+		{
+			vecQPS[i] = this->m_vecDbThread[i]->getQPS();
+		}
+	}
+
+	void CDbThreadMgr::getQueueSize(std::vector<uint32_t>& vecSize)
+	{
+		vecSize.resize(this->m_vecDbThread.size());
+		for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
+		{
+			vecSize[i] = this->m_vecDbThread[i]->getQueueSize();
+		}
+	}
 }

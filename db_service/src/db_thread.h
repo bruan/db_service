@@ -19,14 +19,16 @@ namespace db
 		CDbThread(CDbThreadMgr* pDbThreadMgr);
 		~CDbThread();
 
-		bool	init();
-		void	query(const SDbCommand& sDbCommand);
-		void	join();
+		bool		init();
+		void		query(const SDbCommand& sDbCommand);
+		void		join();
+		uint32_t	getQueueSize();
+		uint32_t	getQPS();
 
 	private:
-		bool	connectDb(bool bInit);
-		bool	onProcess();
-		void	onDestroy();
+		bool		connectDb(bool bInit);
+		bool		onProcess();
+		void		onDestroy();
 
 	private:
 		std::atomic<uint32_t>	m_quit;
@@ -37,5 +39,6 @@ namespace db
 		CDbConnection			m_dbConnection;
 		CDbCommandHandlerProxy*	m_pDbCommandHandlerProxy;
 		CDbThreadMgr*			m_pDbThreadMgr;
+		uint32_t				m_nQPS;
 	};
 }
