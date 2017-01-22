@@ -46,6 +46,7 @@ namespace db
 		CDbRecordset* pDbRecordset = nullptr;
 		DEFER(delete pDbRecordset);
 
+		bool bOK = false;
 		for (size_t i = 0; i < _TRY_DEAD_LOOP_COUNT; ++i)
 		{
 			this->m_pDbConnection->begintrans();
@@ -68,9 +69,13 @@ namespace db
 				return kRC_MYSQL_ERROR;
 			}
 
+			bOK = true;
 			this->m_pDbConnection->endtrans();
 			break;
 		}
+
+		if (!bOK)
+			return kRC_MYSQL_ERROR;
 
 		if (pDbRecordset == nullptr)
 			return kRC_OK;

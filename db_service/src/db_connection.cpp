@@ -65,16 +65,16 @@ namespace db
 	{
 		DebugAstEx(this->isConnect(), kMET_Unknwon);
 
-		int32_t nError = mysql_real_query(this->m_pMysql, szSQL.c_str(), (unsigned long)szSQL.size());
-		if (0 != nError)
+		if (0 != mysql_real_query(this->m_pMysql, szSQL.c_str(), (unsigned long)szSQL.size()))
 		{
+			uint32_t nError = mysql_errno(this->m_pMysql);
 			PrintWarning("mysql_real_query error: %d, error: %s sql: %s", nError, mysql_error(this->m_pMysql), szSQL.c_str());
 			return nError;
 		}
 		MYSQL_RES* pRes = mysql_store_result(this->m_pMysql);
 		if (nullptr == pRes)
 		{
-			nError = mysql_errno(this->m_pMysql);
+			uint32_t nError = mysql_errno(this->m_pMysql);
 			if (0 != nError)
 				PrintWarning("mysql_store_result error: %s sql: %s", mysql_error(this->m_pMysql), szSQL.c_str());
 			

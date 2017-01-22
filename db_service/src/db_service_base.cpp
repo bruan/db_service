@@ -92,6 +92,44 @@ namespace db
 		return true;
 #endif
 	}
+
+	char* encodeVarint(char* szBuf, uint64_t nValue)
+	{
+		static const int32_t B = 128;
+		unsigned char* ptr = reinterpret_cast<unsigned char*>(szBuf);
+		while (nValue >= B)
+		{
+			*(ptr++) = (nValue&(B - 1)) | B;
+			nValue >>= 7;
+		}
+
+		*(ptr++) = static_cast<unsigned char>(nValue);
+		return reinterpret_cast<char*>(ptr);
+	}
+
+	const char* decodeVarint(const char* szBuf, uint64_t& nValue)
+	{
+		static const int32_t B = 128;
+		const unsigned char* ptr = reinterpret_cast<const unsigned char*>(szBuf);
+		for (uint32_t nShift = 0; nShift < 64; nShift += 7)
+		{
+			uint64_t nByte = *(ptr);
+			++ptr;
+			if(nByte&B)
+			{
+				nValue |= ((nByte&(B - 1)) << nShift);
+			}
+			else
+			{
+				nValue |= (nByte << nShift);
+
+				return reinterpret_cast<const char*>(ptr);
+			}
+		}
+
+		return nullptr;
+	}
+
 }
 
 #ifdef _WIN32

@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="player_base.pb.h" />
     <ClInclude Include="player_extend.pb.h" />
+    <ClInclude Include="player_extend1.pb.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -161,6 +162,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="player_extend.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4244;4267;4018;4996;</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="player_extend1.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4244;4267;4018;4996;</DisableSpecificWarnings>
     </ClCompile>

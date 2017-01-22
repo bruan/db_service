@@ -5,18 +5,21 @@
 
 namespace db
 {
-	bool	itoa(int32_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
+	bool		itoa(int32_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
 
-	bool	uitoa(uint32_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
+	bool		uitoa(uint32_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
 
-	bool	i64toa(int64_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
-	bool	ui64toa(uint64_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
+	bool		i64toa(int64_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
+	bool		ui64toa(uint64_t nValue, char* szBuf, size_t nBufSize, uint32_t nRadix);
 
-	bool	atoi(const char* szBuf, int32_t& nVal);
-	bool	atoui(const char* szBuf, uint32_t& nVal);
+	bool		atoi(const char* szBuf, int32_t& nVal);
+	bool		atoui(const char* szBuf, uint32_t& nVal);
 
-	bool	atoi64(const char* szBuf, int64_t& nVal);
-	bool	atoui64(const char* szBuf, uint64_t& nVal);
+	bool		atoi64(const char* szBuf, int64_t& nVal);
+	bool		atoui64(const char* szBuf, uint64_t& nVal);
+
+	char*		encodeVarint(char* szBuf, uint64_t nValue);
+	const char*	decodeVarint(const char* szBuf, uint64_t& nValue);
 
 #define	DebugAst(Exp)			do{ if(!(Exp)) { assert(0); return; } } while(0)
 #define	DebugAstEx(Exp, Ret)	do{ if(!(Exp)) { assert(0); return Ret; } } while(0)

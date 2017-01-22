@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "db_option.proto";
+
+package proto.db;
+
+message player_extend1_data {
+	uint32 data1 = 1;
+	uint32 data2 = 2;
+}
+
+message player_extend1_data_set {
+	repeated player_extend1_data data = 1;
+}
+
+message player_extend1 {
+	option (primary_key) = "id";
+	uint32 id = 1;
+	google.protobuf.Any data_set = 2[(serialize_type) = 1];
+}
+
+message player_extend1_set {
+	repeated player_extend1 data_set = 1;
+}

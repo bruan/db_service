@@ -30,6 +30,9 @@
     <ClInclude Include="player_extend.pb.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="player_extend1.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +45,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="player_extend.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="player_extend1.pb.cc">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

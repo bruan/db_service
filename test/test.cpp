@@ -17,6 +17,7 @@
 #include "result_set.pb.h"
 #include "player_extend.pb.h"
 #include "google/protobuf/util/json_util.h"
+#include "player_extend1.pb.h"
 
 using namespace std;
 
@@ -57,16 +58,6 @@ private:
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	std::list<int> l1;
-	std::list<int> l2;
-	l1.push_back(1);
-	l1.push_back(2);
-	l2.push_back(11);
-	l2.push_back(12);
-
-	l1.splice(l1.begin(), l2, l2.begin(), l2.end());
-
-
 	CMyDbProxy myDbProxy;
 	db::CDbClient dbClient(&myDbProxy);
 	dbClient.nop(100, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
@@ -141,8 +132,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		pData->set_data1(888);
 		pData->set_data2(999);
 
-		const google::protobuf::FieldDescriptor* pFieldDescriptor = msg1.GetDescriptor()->field(1);
-
 		dbClient.insert(&msg1);
 
 		proto::db::player_extend msg2;
@@ -186,6 +175,53 @@ int _tmain(int argc, _TCHAR* argv[])
 				cout << "id: " << base.id() << " name: " << szText << endl;
 			}
 		});
+	}
+
+	{
+		proto::db::player_extend1 msg1;
+		msg1.set_id(100);
+		proto::db::player_extend1_data_set ds;
+		proto::db::player_extend1_data* pData = ds.add_data();
+		pData->set_data1(555);
+		pData->set_data2(666);
+		pData = ds.add_data();
+		pData->set_data1(888);
+		pData->set_data2(999);
+		msg1.mutable_data_set()->PackFrom(ds);
+
+		dbClient.update(&msg1);
+
+		dbClient.select(100, "player_extend1", 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+		{
+			const proto::db::player_extend1* pBase = dynamic_cast<const proto::db::player_extend1*>(pMessage);
+			if (nullptr == pBase)
+				return;
+
+			const google::protobuf::Message& subMessage = pBase->data_set();
+			std::string szText;
+			google::protobuf::util::MessageToJsonString(subMessage, &szText).ok();
+
+			cout << "id: " << pBase->id() << " name: " << szText << endl;
+		});
+
+// 		std::vector<db::CVariant> vecArgs;
+// 		vecArgs.push_back(100);
+// 		dbClient.query(0, "player_extend1", "id={0}", vecArgs, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+// 		{
+// 			const proto::db::player_extend_set* pBaseSet = dynamic_cast<const proto::db::player_extend_set*>(pMessage);
+// 			if (nullptr == pBaseSet)
+// 				return;
+// 
+// // 			for (int32_t i = 0; i < pBaseSet->data_set_size(); ++i)
+// // 			{
+// // 				const proto::db::player_extend1& base = pBaseSet->data_set(i);
+// // 				const google::protobuf::Message& subMessage = base.data_set();
+// // 				std::string szText;
+// // 				google::protobuf::util::MessageToJsonString(subMessage, &szText).ok();
+// // 
+// // 				cout << "id: " << base.id() << " name: " << szText << endl;
+// // 			}
+// 		});
 	}
 
 	while (true)
