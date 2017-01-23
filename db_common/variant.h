@@ -75,15 +75,13 @@ namespace db
 		EVariantValueType m_eType;
 		union
 		{
-			int64_t	m_nValue;
-			double	m_fValue;
-			struct SText
+			struct
 			{
 				char*		szStr;
 				uint32_t	nLen;
 			} m_sText;
-#define		m_szStr m_sText.szStr
-#define		m_nLen  m_sText.nLen
+			int64_t	m_nValue;
+			double	m_fValue;
 		};
 	};
 }

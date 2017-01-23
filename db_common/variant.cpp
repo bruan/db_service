@@ -121,7 +121,7 @@ namespace db
 			break;
 
 		case eVVT_String:
-			this->setString(rhs.m_szStr, rhs.m_nLen);
+			this->setString(rhs.m_sText.szStr, rhs.m_sText.nLen);
 			break;
 
 		default:
@@ -159,10 +159,10 @@ namespace db
 
 		case eVVT_String:
 			{
-				this->m_szStr = rhs.m_szStr;
-				this->m_nLen = rhs.m_nLen;
-				rhs.m_szStr = nullptr;
-				rhs.m_nLen = 0;
+				this->m_sText.szStr = rhs.m_sText.szStr;
+				this->m_sText.nLen = rhs.m_sText.nLen;
+				rhs.m_sText.szStr = nullptr;
+				rhs.m_sText.nLen = 0;
 			}
 			break;
 
@@ -180,8 +180,8 @@ namespace db
 		switch (this->m_eType)
 		{
 		case eVVT_String:
-			delete[] this->m_szStr;
-			this->m_nLen = 0;
+			delete[] this->m_sText.szStr;
+			this->m_sText.nLen = 0;
 			break;
 
 		default:
@@ -191,7 +191,7 @@ namespace db
 		this->m_eType = eVVT_None;
 		this->m_fValue = 0.0;
 		this->m_nValue = 0;
-		this->m_szStr = nullptr;
+		this->m_sText.szStr = nullptr;
 	}
 
 	CVariant::operator int8_t() const
@@ -272,7 +272,7 @@ namespace db
 		switch (this->m_eType)
 		{
 		case eVVT_String:
-			return this->m_szStr;
+			return this->m_sText.szStr;
 
 		default:
 			PrintWarning("operator const char* invalid type %d", (int32_t)this->m_eType);
@@ -285,7 +285,7 @@ namespace db
 		switch (this->m_eType)
 		{
 		case eVVT_String:
-			return std::string(this->m_szStr, this->m_nLen);
+			return std::string(this->m_sText.szStr, this->m_sText.nLen);
 
 		default:
 			PrintWarning("operator const char* invalid type %d", (int32_t)this->m_eType);
@@ -298,7 +298,7 @@ namespace db
 		switch (this->m_eType)
 		{
 		case eVVT_String:
-			return this->m_nLen;
+			return this->m_sText.nLen;
 
 		case eVVT_Int32:
 		case eVVT_UInt32:
@@ -405,9 +405,9 @@ namespace db
 
 		this->m_eType = eVVT_String;
 
-		this->m_szStr = new char[nLen];
-		memcpy(this->m_szStr, szStr, nLen);
-		this->m_nLen = nLen;
+		this->m_sText.szStr = new char[nLen];
+		memcpy(this->m_sText.szStr, szStr, nLen);
+		this->m_sText.nLen = nLen;
 	}
 
 	bool CVariant::isVaild() const
@@ -421,10 +421,10 @@ namespace db
 		{
 		case eVVT_String:
 			{
-				if (this->m_szStr == nullptr)
+				if (this->m_sText.szStr == nullptr)
 					return "";
 
-				return std::string(this->m_szStr, this->m_nLen);
+				return std::string(this->m_sText.szStr, this->m_sText.nLen);
 			}
 			break;
 

@@ -4,7 +4,10 @@
 
 #include "db_service_base.h"
 
+#ifdef _WIN32
 #include <windows.h>
+#endif
+
 #include "mysql/mysql.h"
 
 namespace db
@@ -46,9 +49,9 @@ namespace db
 		uint32_t		execute(const std::string& szSQL, CDbRecordset** pDbRecordset);
 		bool			ping();
 		uint64_t		getAffectedRow() const;
-		void			enableAutoCommit(bool enable);
-		void			begintrans();
-		void			endtrans();
+		void			autoCommit(bool enable);
+		void			begin();
+		void			commit();
 		void			rollback();
 		std::string		escape(const std::string& szSQL);
 

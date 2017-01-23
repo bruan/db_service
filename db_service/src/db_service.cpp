@@ -4,15 +4,20 @@
 
 #include <vector>
 #include <string>
-
+#ifdef _WIN32
+#else
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#endif
 #include "db_common.h"
 
-#include "proto_src\select_command.pb.h"
-#include "proto_src\delete_command.pb.h"
-#include "proto_src\query_command.pb.h"
-#include "proto_src\call_command.pb.h"
-#include "proto_src\result_set.pb.h"
-#include "proto_src\nop_command.pb.h"
+#include "proto_src/select_command.pb.h"
+#include "proto_src/delete_command.pb.h"
+#include "proto_src/query_command.pb.h"
+#include "proto_src/call_command.pb.h"
+#include "proto_src/result_set.pb.h"
+#include "proto_src/nop_command.pb.h"
 
 namespace db
 {
@@ -31,29 +36,43 @@ namespace db
 
 	static SOnce s_Once;
 
-	CDbThreadMgr* create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount)
-	{	
-		char szDir[MAX_PATH + 32] = { 0 };
-		int32_t ret = ::GetCurrentDirectoryA(MAX_PATH, szDir);
-		if (ret == 0)
-			return false;
+	CDbThreadMgr* create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount)
+	{
+		std::vector<std::string> vecProto;
 
-		szDir[ret] = '\0';
-
-		strcat_s(szDir, "\\proto\\*.proto");
-
+#ifdef _WIN32
 		WIN32_FIND_DATAA FindFileData;
-		HANDLE hFind = ::FindFirstFileA(szDir, &FindFileData);
+		HANDLE hFind = ::FindFirstFileA((szProtoDir + "/*.proto").c_str(), &FindFileData);
 		if (hFind == INVALID_HANDLE_VALUE)
 			return false;
 
-		std::vector<std::string> vecProto;
 		do
 		{
 			vecProto.push_back(FindFileData.cFileName);
 		} while (::FindNextFileA(hFind, &FindFileData) != 0);
 		::FindClose(hFind);
+#else
+		DIR* pDir = nullptr;
+		struct dirent* pFile = nullptr;
+		struct stat sb;
 
+		if ((pDir = opendir(szProtoDir.c_str())) == nullptr)
+			return false;
+
+		while ((pFile = readdir(pDir)) != nullptr)
+		{
+			if (strncmp(pFile->d_name, ".", 1) == 0)
+				continue;
+
+			std::string szName = pFile->d_name;
+			size_t pos = szName.find_last_of(".proto");
+			if (pos + 1 != szName.size())
+				continue;
+
+			vecProto.push_back(szName);
+		}
+		closedir(pDir);
+#endif
 		if (!importProtobuf("proto", vecProto))
 			return nullptr;
 

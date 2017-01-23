@@ -29,7 +29,7 @@ namespace db
 
 	void CDbCommandHandlerProxy::onConnect(CDbConnection* pDbConnection)
 	{
-		pDbConnection->enableAutoCommit(false);
+		pDbConnection->autoCommit(true);
 
 		for (auto iter = this->m_mapDbCommandHandler.begin(); iter != this->m_mapDbCommandHandler.end(); ++iter)
 		{

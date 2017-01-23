@@ -2,23 +2,31 @@
 //
 
 #include "stdafx.h"
-#include "../db_service/inc/db_service.h"
+#include "db_service.h"
 #include "player_base.pb.h"
-#include <Windows.h>
 #include "select_command.pb.h"
 #include "query_command.pb.h"
 #include "call_command.pb.h"
 
-#include "../db_proxy.h"
-#include "../db_client.h"
+#include "db_proxy.h"
+#include "db_client.h"
 
 #include <iostream>
-#include "../db_service/src/db_command_handler.h"
 #include "result_set.pb.h"
 #include "player_extend.pb.h"
 #include "google/protobuf/util/json_util.h"
 #include "player_extend1.pb.h"
+#include <stdlib.h>
+#include <string>
+#include <memory>
+#include <string.h>
 
+#ifdef _WIN32
+#include <direct.h>
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 using namespace std;
 
 class CMyDbProxy : public db::CDbProxy
@@ -26,7 +34,16 @@ class CMyDbProxy : public db::CDbProxy
 public:
 	CMyDbProxy()
 	{
-		this->m_pDbThreadMgr = db::create("127.0.0.1", 3306, "test", "root", "123456", "utf8", 5);
+		char szDir[256] = { 0 };
+#ifdef _WIN32
+		_getcwd(szDir, 256);
+#else
+		getcwd(szDir, 256);
+#endif
+		std::string szProtoDir = szDir;
+		szProtoDir += "/proto";
+		
+		this->m_pDbThreadMgr = db::create("192.168.222.1", 3306, "test", "root", "123456", "utf8", szProtoDir, 5);
 	}
 
 	virtual ~CMyDbProxy()
@@ -56,7 +73,7 @@ private:
 	db::CDbThreadMgr* m_pDbThreadMgr;
 };
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	CMyDbProxy myDbProxy;
 	db::CDbClient dbClient(&myDbProxy);
@@ -227,10 +244,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	while (true)
 	{
 		myDbProxy.update();
+#ifdef _WIN32
 		Sleep(100);
+#endif
 	}
 
-	Sleep(~0);
 	return 0;
 }
 

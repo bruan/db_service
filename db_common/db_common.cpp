@@ -22,21 +22,6 @@
 namespace db
 {
 
-	bool parseProtoText(const std::string& szText, google::protobuf::Message* pMessage)
-	{
-		if (nullptr == pMessage)
-			return false;
-
-		return google::protobuf::util::JsonStringToMessage(szText, pMessage).ok();
-	}
-
-	bool parseProtoBin(const std::string& szBin, google::protobuf::Message* pMessage)
-	{
-		if (nullptr == pMessage)
-			return false;
-
-		return pMessage->ParseFromString(szBin);
-	}
 }
 
 #ifdef _WIN32

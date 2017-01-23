@@ -121,19 +121,19 @@ namespace db
 		return szBuf;
 	}
 
-	void CDbConnection::enableAutoCommit(bool enable)
+	void CDbConnection::autoCommit(bool enable)
 	{
 		std::ostringstream oss;
 		oss << "set autocommit = " << enable ? 1 : 0;
 		this->execute(oss.str(), nullptr);
 	}
 
-	void CDbConnection::begintrans()
+	void CDbConnection::begin()
 	{
-		this->execute("start transaction", nullptr);
+		this->execute("begin", nullptr);
 	}
 
-	void CDbConnection::endtrans()
+	void CDbConnection::commit()
 	{
 		this->execute("commit", nullptr);
 	}

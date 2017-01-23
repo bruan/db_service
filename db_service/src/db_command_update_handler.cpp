@@ -23,120 +23,81 @@ namespace db
 		std::string szTableName;
 		DebugAstEx(getTableNameByMessageName(szMessageName, szTableName), kRC_PROTO_ERROR);
 
-		std::string szPrimaryName = getPrimaryName(pMessage);
-		DebugAstEx(!szPrimaryName.empty(), kRC_PROTO_ERROR);
-
-		std::string szPrimaryValue = getPrimaryValue(pMessage);
-		DebugAstEx(!szPrimaryValue.empty(), kRC_PROTO_ERROR);
-
 		std::vector<SFieldInfo> vecFieldInfo;
 		DebugAstEx(getMessageFieldInfos(pMessage, vecFieldInfo), kRC_PROTO_ERROR);
 
-		std::string szClause;
-		szClause.reserve(1024);
+		std::string szInsertClause;
+		szInsertClause.reserve(1024);
+		szInsertClause = "(";
 		for (size_t i = 0; i < vecFieldInfo.size(); ++i)
 		{
 			const SFieldInfo& sFieldInfo = vecFieldInfo[i];
 
 			if (i != 0)
-				szClause += ",";
+				szInsertClause += ",";
 
-			szClause += sFieldInfo.szName;
-			szClause += "=";
+			szInsertClause += sFieldInfo.szName;
+		}
+		szInsertClause += ") values (";
+
+		for (size_t i = 0; i < vecFieldInfo.size(); ++i)
+		{
+			const SFieldInfo& sFieldInfo = vecFieldInfo[i];
+
+			if (i != 0)
+				szInsertClause += ",";
 
 			if (sFieldInfo.bStr)
 			{
-				szClause += "'";
-				szClause += this->m_pDbConnection->escape(sFieldInfo.szValue);
-				szClause += "'";
+				szInsertClause += "'";
+				szInsertClause += this->m_pDbConnection->escape(sFieldInfo.szValue);
+				szInsertClause += "'";
 			}
 			else
 			{
-				szClause += sFieldInfo.szValue;
+				szInsertClause += sFieldInfo.szValue;
+			}
+		}
+		szInsertClause += ")";
+
+		std::string szUpdateClause;
+		szUpdateClause.reserve(1024);
+		for (size_t i = 0; i < vecFieldInfo.size(); ++i)
+		{
+			const SFieldInfo& sFieldInfo = vecFieldInfo[i];
+
+			if (i != 0)
+				szUpdateClause += ",";
+
+			szUpdateClause += sFieldInfo.szName;
+			szUpdateClause += "=";
+
+			if (sFieldInfo.bStr)
+			{
+				szUpdateClause += "'";
+				szUpdateClause += this->m_pDbConnection->escape(sFieldInfo.szValue);
+				szUpdateClause += "'";
+			}
+			else
+			{
+				szUpdateClause += sFieldInfo.szValue;
 			}
 		}
 
 		std::ostringstream oss;
-		oss << "update " << szTableName << " set " << szClause << " where " << szPrimaryName << " = " << szPrimaryValue << " limit 1";
-		std::string szSQL(oss.str());
+		oss << "insert into " << szTableName << szInsertClause << " on duplicate key update " << szUpdateClause;
+		std::string szSQL = oss.str();
 
 #ifdef _DEBUG_SQL
 		PrintInfo("%s", szSQL.c_str());
 #endif
-		
-		this->m_pDbConnection->begintrans();
+
 		uint32_t nErrorType = this->m_pDbConnection->execute(szSQL, nullptr);
 		if (nErrorType == kMET_LostConnection)
-		{
-			this->m_pDbConnection->rollback();
 			return kRC_LOST_CONNECTION;
-		}
 		else if (nErrorType != kMET_OK)
-		{
-			this->m_pDbConnection->rollback();
 			return kRC_MYSQL_ERROR;
-		}
-
-		if (this->m_pDbConnection->getAffectedRow() >= 1)
-		{
-			this->m_pDbConnection->endtrans();
-			return kRC_OK;
-		}
-		oss.str("");
-		szClause.clear();
-		szClause = "(";
-		for (size_t i = 0; i < vecFieldInfo.size(); ++i)
-		{
-			const SFieldInfo& sFieldInfo = vecFieldInfo[i];
-
-			if (i != 0)
-				szClause += ",";
-
-			szClause += sFieldInfo.szName;
-		}
-		szClause += ") values (";
-
-		for (size_t i = 0; i < vecFieldInfo.size(); ++i)
-		{
-			const SFieldInfo& sFieldInfo = vecFieldInfo[i];
-
-			if (i != 0)
-				szClause += ",";
-
-			if (sFieldInfo.bStr)
-			{
-				szClause += "'";
-				szClause += this->m_pDbConnection->escape(sFieldInfo.szValue);
-				szClause += "'";
-			}
-			else
-			{
-				szClause += sFieldInfo.szValue;
-			}
-		}
-		szClause += ")";
-
-		oss << "insert into " << szTableName << szClause;
-		szSQL = oss.str();
-
-#ifdef _DEBUG_SQL
-		PrintInfo("%s", szSQL.c_str());
-#endif
-
-		nErrorType = this->m_pDbConnection->execute(szSQL, nullptr);
-		if (nErrorType == kMET_LostConnection)
-		{
-			this->m_pDbConnection->rollback();
-			return kRC_LOST_CONNECTION;
-		}
-		else if (nErrorType != kMET_OK)
-		{
-			this->m_pDbConnection->rollback();
-			return kRC_MYSQL_ERROR;
-		}
-
-		this->m_pDbConnection->endtrans();
-
-		return this->m_pDbConnection->getAffectedRow() == 1 ? kRC_OK : kRC_MYSQL_ERROR;
+		
+		return (this->m_pDbConnection->getAffectedRow() == 1 || this->m_pDbConnection->getAffectedRow() == 2) ? kRC_OK : kRC_MYSQL_ERROR;
 	}
 }

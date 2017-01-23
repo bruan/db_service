@@ -1,12 +1,12 @@
 #include "db_proxy.h"
-#include "proto_src\select_command.pb.h"
-#include "proto_src\delete_command.pb.h"
-#include "proto_src\db_option.pb.h"
-#include "proto_src\response.pb.h"
-#include "proto_src\query_command.pb.h"
-#include "proto_src\call_command.pb.h"
-#include "proto_src\result_set.pb.h"
-#include "proto_src\nop_command.pb.h"
+#include "proto_src/select_command.pb.h"
+#include "proto_src/delete_command.pb.h"
+#include "proto_src/db_option.pb.h"
+#include "proto_src/response.pb.h"
+#include "proto_src/query_command.pb.h"
+#include "proto_src/call_command.pb.h"
+#include "proto_src/result_set.pb.h"
+#include "proto_src/nop_command.pb.h"
 
 namespace db
 {

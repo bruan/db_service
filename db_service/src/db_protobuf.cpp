@@ -161,40 +161,36 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_INT32:
 			{
 				int32_t nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
-				char szBuf[256] = { 0 };
-				if (!db::itoa(nValue, szBuf, _countof(szBuf), 10))
-					return "";
-				return szBuf;
+				std::ostringstream oss;
+				oss << nValue;
+				return oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT32:
 			{
 				uint32_t nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
-				char szBuf[256] = { 0 };
-				if (!db::uitoa(nValue, szBuf, _countof(szBuf), 10))
-					return "";
-				return szBuf;
+				std::ostringstream oss;
+				oss << nValue;
+				return oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_INT64:
 			{
 				int64_t nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
-				char szBuf[256] = { 0 };
-				if (!db::i64toa(nValue, szBuf, _countof(szBuf), 10))
-					return "";
-				return szBuf;
+				std::ostringstream oss;
+				oss << nValue;
+				return oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT64:
 			{
 				uint64_t nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
-				char szBuf[256] = { 0 };
-				if (!db::ui64toa(nValue, szBuf, _countof(szBuf), 10))
-					return "";
-				return szBuf;
+				std::ostringstream oss;
+				oss << nValue;
+				return oss.str();
 			}
 			break;
 
@@ -229,7 +225,9 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_INT32:
 			{
 				int32_t nValue = 0;
-				DebugAstEx(db::atoi(szValue.c_str(), nValue), false);
+				std::istringstream iss(szValue);
+				iss >> nValue;
+				//DebugAstEx(db::atoi(szValue.c_str(), nValue), false);
 				pReflection->SetInt32(pMessage, pFieldDescriptor, nValue);
 			}
 			break;
@@ -237,7 +235,8 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_UINT32:
 			{
 				uint32_t nValue = 0;
-				DebugAstEx(db::atoui(szValue.c_str(), nValue), false);
+				std::istringstream iss(szValue);
+				iss >> nValue;
 				pReflection->SetUInt32(pMessage, pFieldDescriptor, nValue);
 			}
 			break;
@@ -245,7 +244,8 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_INT64:
 			{
 				int64_t nValue = 0;
-				DebugAstEx(db::atoi64(szValue.c_str(), nValue), false);
+				std::istringstream iss(szValue);
+				iss >> nValue;
 				pReflection->SetInt64(pMessage, pFieldDescriptor, nValue);
 			}
 			break;
@@ -253,7 +253,8 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_UINT64:
 			{
 				uint64_t nValue = 0;
-				DebugAstEx(db::atoui64(szValue.c_str(), nValue), false);
+				std::istringstream iss(szValue);
+				iss >> nValue;
 				pReflection->SetUInt64(pMessage, pFieldDescriptor, nValue);
 			}
 			break;
@@ -261,8 +262,7 @@ namespace db {
 		case google::protobuf::FieldDescriptor::TYPE_DOUBLE:
 			{
 				double nValue = 0.0;
-				std::stringstream oss;
-				oss << szValue;
+				std::istringstream oss(szValue);
 				oss >> nValue;
 				pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
 			}
@@ -420,40 +420,13 @@ namespace db {
 		return pDescriptor->options().GetExtension(primary_key);
 	}
 
-	std::string getPrimaryValue(const google::protobuf::Message* pMessage)
-	{
-		DebugAstEx(pMessage != nullptr, "");
-
-		const google::protobuf::Reflection* pReflection = pMessage->GetReflection();
-		DebugAstEx(pReflection != nullptr, "");
-
-		const google::protobuf::Descriptor* pDescriptor = pMessage->GetDescriptor();
-		DebugAstEx(pDescriptor != nullptr, "");
-
-		std::string szPrimaryFieldName = pDescriptor->options().GetExtension(primary_key);
-		if (szPrimaryFieldName.empty())
-		{
-			PrintWarning("Message[%s] can't primary_key option", pMessage->GetTypeName().c_str());
-			return "";
-		}
-
-		const google::protobuf::FieldDescriptor* pFieldDescriptor = pMessage->GetDescriptor()->FindFieldByName(szPrimaryFieldName);
-		if (pFieldDescriptor == nullptr)
-		{
-			PrintWarning("Message[%s] can't find field[%s].", pMessage->GetTypeName().c_str(), szPrimaryFieldName.c_str());
-			return false;
-		}
-
-		return getBasicTypeFieldValue(pMessage, pFieldDescriptor, pReflection);
-	}
-
 	google::protobuf::Message* createRepeatMessage(CDbRecordset* pDbRecordset, const std::string& szName)
 	{
-		DebugAstEx(pDbRecordset != nullptr, false);
+		DebugAstEx(pDbRecordset != nullptr, nullptr);
 
 		std::string szMessageName(szName + "_set");
 		google::protobuf::Message* pMessage = CMessageFactory::Inst()->createMessage(szMessageName);
-		DebugAstEx(pMessage != nullptr, false);
+		DebugAstEx(pMessage != nullptr, nullptr);
 
 		const google::protobuf::Reflection* pMainReflection = pMessage->GetReflection();
 		if (pMainReflection == nullptr)

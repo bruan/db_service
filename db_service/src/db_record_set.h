@@ -1,7 +1,10 @@
 #pragma once
 
 #include <string>
+
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include "variant.h"
 #include "mysql/mysql.h"

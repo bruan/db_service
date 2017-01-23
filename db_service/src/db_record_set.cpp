@@ -2,6 +2,8 @@
 #include "db_connection.h"
 #include "db_common.h"
 
+#include <sstream>
+
 namespace db
 {
 	CDbRecordset::CDbRecordset()
@@ -77,7 +79,8 @@ namespace db
 				if (this->m_curRow[nCol] != nullptr)
 				{
 					int32_t nVal = 0;
-					db::atoi(this->m_curRow[nCol], nVal);
+					std::istringstream iss(this->m_curRow[nCol]);
+					iss >> nVal;
 					return CVariant(nVal);
 				}
 				else
@@ -92,7 +95,8 @@ namespace db
 				if (this->m_curRow[nCol] != nullptr)
 				{
 					int64_t nVal = 0;
-					db::atoi64(this->m_curRow[nCol], nVal);
+					std::istringstream iss(this->m_curRow[nCol]);
+					iss >> nVal;
 					return CVariant(nVal);
 				}
 				else

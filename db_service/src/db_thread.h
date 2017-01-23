@@ -8,7 +8,7 @@
 #include <condition_variable>
 #include <atomic>
 
-#include "proto_src\response.pb.h"
+#include "proto_src/response.pb.h"
 
 namespace db
 {

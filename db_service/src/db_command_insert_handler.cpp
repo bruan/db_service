@@ -68,20 +68,12 @@ namespace db
 		PrintInfo("%s", szSQL.c_str());
 #endif
 
-		this->m_pDbConnection->begintrans();
 		uint32_t nErrorType = this->m_pDbConnection->execute(szSQL, nullptr);
 		if (nErrorType == kMET_LostConnection)
-		{
-			this->m_pDbConnection->rollback();
 			return kRC_LOST_CONNECTION;
-		}
 		else if (nErrorType != kMET_OK)
-		{
-			this->m_pDbConnection->rollback();
 			return kRC_MYSQL_ERROR;
-		}
-		this->m_pDbConnection->endtrans();
-
+		
 		return this->m_pDbConnection->getAffectedRow() == 1 ? kRC_OK : kRC_MYSQL_ERROR;
 	}
 }

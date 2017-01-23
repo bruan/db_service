@@ -45,11 +45,14 @@ namespace db
 
 		CDbRecordset* pDbRecordset = nullptr;
 		DEFER(delete pDbRecordset);
+		
+		this->m_pDbConnection->autoCommit(false);
+		DEFER(this->m_pDbConnection->autoCommit(true));
 
 		bool bOK = false;
 		for (size_t i = 0; i < _TRY_DEAD_LOOP_COUNT; ++i)
 		{
-			this->m_pDbConnection->begintrans();
+			this->m_pDbConnection->begin();
 			uint32_t nErrorType = this->m_pDbConnection->execute(szSQL, &pDbRecordset);
 			
 			if (nErrorType == kMET_Deadloop)
@@ -70,7 +73,7 @@ namespace db
 			}
 
 			bOK = true;
-			this->m_pDbConnection->endtrans();
+			this->m_pDbConnection->commit();
 			break;
 		}
 

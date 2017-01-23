@@ -99,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../db_common/proto_src;../db_common/;../3rd/mysql/include;../3rd/protobuf/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../db_common;../db_common/proto_src;../db_service/inc;../3rd/mysql/include;../3rd/protobuf/include;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

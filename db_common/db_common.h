@@ -32,7 +32,4 @@ namespace db
 #define PrintInfo(szFormat, ...)
 
 #define PrintWarning(szFormat, ...)
-
-	bool parseProtoText(const std::string& szText, google::protobuf::Message* pMessage);
-	bool parseProtoBin(const std::string& szBin, google::protobuf::Message* pMessage);
 }
