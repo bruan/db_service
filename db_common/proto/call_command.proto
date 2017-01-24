@@ -4,5 +4,5 @@ package proto.db;
 
 message call_command {
 	string sql = 1;
-	repeated string args = 2;
+	repeated bytes args = 2;
 }

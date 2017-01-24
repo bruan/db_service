@@ -6,8 +6,8 @@ package proto.db;
 
 message player_base {
 	option (primary_key) = "id";
-	uint32 id = 1;
-	string name = 2;
+	sfixed32 id = 1;
+	bytes name = 2;
 }
 
 message player_base_set {

@@ -96,7 +96,7 @@ void protobuf_AddDesc_query_5fcommand_2eproto_impl() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\023query_command.proto\022\010proto.db\"G\n\rquery"
     "_command\022\022\n\ntable_name\030\001 \001(\t\022\024\n\014where_cl"
-    "ause\030\002 \001(\t\022\014\n\004args\030\003 \003(\tb\006proto3", 112);
+    "ause\030\002 \001(\t\022\014\n\004args\030\003 \003(\014b\006proto3", 112);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "query_command.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_query_5fcommand_2eproto);
@@ -242,17 +242,12 @@ bool query_command::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated string args = 3;
+      // repeated bytes args = 3;
       case 3: {
         if (tag == 26) {
          parse_args:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->add_args()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->args(this->args_size() - 1).data(),
-            this->args(this->args_size() - 1).length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.query_command.args"));
         } else {
           goto handle_unusual;
         }
@@ -305,13 +300,9 @@ void query_command::SerializeWithCachedSizes(
       2, this->where_clause(), output);
   }
 
-  // repeated string args = 3;
+  // repeated bytes args = 3;
   for (int i = 0; i < this->args_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->args(i).data(), this->args(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.query_command.args");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       3, this->args(i), output);
   }
 
@@ -344,14 +335,10 @@ void query_command::SerializeWithCachedSizes(
         2, this->where_clause(), target);
   }
 
-  // repeated string args = 3;
+  // repeated bytes args = 3;
   for (int i = 0; i < this->args_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->args(i).data(), this->args(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.query_command.args");
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(3, this->args(i), target);
+      WriteBytesToArray(3, this->args(i), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.query_command)
@@ -376,11 +363,11 @@ size_t query_command::ByteSizeLong() const {
         this->where_clause());
   }
 
-  // repeated string args = 3;
+  // repeated bytes args = 3;
   total_size += 1 *
       ::google::protobuf::internal::FromIntSize(this->args_size());
   for (int i = 0; i < this->args_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->args(i));
   }
 
@@ -570,7 +557,7 @@ void query_command::set_allocated_where_clause(::std::string* where_clause) {
   // @@protoc_insertion_point(field_set_allocated:proto.db.query_command.where_clause)
 }
 
-// repeated string args = 3;
+// repeated bytes args = 3;
 int query_command::args_size() const {
   return args_.size();
 }
@@ -596,7 +583,7 @@ void query_command::set_args(int index, const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.query_command.args)
 }
-void query_command::set_args(int index, const char* value, size_t size) {
+void query_command::set_args(int index, const void* value, size_t size) {
   args_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   dirty_ = true;
@@ -617,7 +604,7 @@ void query_command::add_args(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.query_command.args)
 }
-void query_command::add_args(const char* value, size_t size) {
+void query_command::add_args(const void* value, size_t size) {
   args_.Add()->assign(reinterpret_cast<const char*>(value), size);
   dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.query_command.args)

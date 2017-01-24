@@ -118,8 +118,8 @@ void protobuf_AddDesc_player_5fbase_2eproto_impl() {
   protobuf_InitDefaults_player_5fbase_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\021player_base.proto\022\010proto.db\032\017db_option"
-    ".proto\"/\n\013player_base\022\n\n\002id\030\001 \001(\r\022\014\n\004nam"
-    "e\030\002 \001(\t:\006\202\265\030\002id\":\n\017player_base_set\022\'\n\010da"
+    ".proto\"/\n\013player_base\022\n\n\002id\030\001 \001(\017\022\014\n\004nam"
+    "e\030\002 \001(\014:\006\202\265\030\002id\":\n\017player_base_set\022\'\n\010da"
     "ta_set\030\001 \003(\0132\025.proto.db.player_baseb\006pro"
     "to3", 163);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
@@ -178,7 +178,7 @@ player_base::player_base(const player_base& from)
 void player_base::SharedCtor() {
   dirty_ = false;
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  id_ = 0u;
+  id_ = 0;
   _cached_size_ = 0;
 }
 
@@ -218,7 +218,7 @@ player_base* player_base::New(::google::protobuf::Arena* arena) const {
 
 void player_base::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.db.player_base)
-  id_ = 0u;
+  id_ = 0;
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -232,12 +232,12 @@ bool player_base::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 id = 1;
+      // optional sfixed32 id = 1;
       case 1: {
-        if (tag == 8) {
+        if (tag == 13) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_SFIXED32>(
                  input, &id_)));
         } else {
           goto handle_unusual;
@@ -246,16 +246,12 @@ bool player_base::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string name = 2;
+      // optional bytes name = 2;
       case 2: {
         if (tag == 18) {
          parse_name:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), this->name().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.player_base.name"));
         } else {
           goto handle_unusual;
         }
@@ -287,18 +283,14 @@ failure:
 void player_base::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.db.player_base)
-  // optional uint32 id = 1;
+  // optional sfixed32 id = 1;
   if (this->id() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteSFixed32(1, this->id(), output);
   }
 
-  // optional string name = 2;
+  // optional bytes name = 2;
   if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), this->name().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.player_base.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       2, this->name(), output);
   }
 
@@ -309,19 +301,15 @@ void player_base::SerializeWithCachedSizes(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_base)
-  // optional uint32 id = 1;
+  // optional sfixed32 id = 1;
   if (this->id() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteSFixed32ToArray(1, this->id(), target);
   }
 
-  // optional string name = 2;
+  // optional bytes name = 2;
   if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), this->name().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.player_base.name");
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         2, this->name(), target);
   }
 
@@ -333,17 +321,15 @@ size_t player_base::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_base)
   size_t total_size = 0;
 
-  // optional uint32 id = 1;
+  // optional sfixed32 id = 1;
   if (this->id() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->id());
+    total_size += 1 + 4;
   }
 
-  // optional string name = 2;
+  // optional bytes name = 2;
   if (this->name().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->name());
   }
 
@@ -430,23 +416,23 @@ void player_base::InternalSwap(player_base* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // player_base
 
-// optional uint32 id = 1;
+// optional sfixed32 id = 1;
 void player_base::clear_id() {
-  id_ = 0u;
+  id_ = 0;
 dirty_ = true;
 }
-::google::protobuf::uint32 player_base::id() const {
+::google::protobuf::int32 player_base::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.id)
   return id_;
 }
-void player_base::set_id(::google::protobuf::uint32 value) {
+void player_base::set_id(::google::protobuf::int32 value) {
   
   id_ = value;
   dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_base.id)
 }
 
-// optional string name = 2;
+// optional bytes name = 2;
 void player_base::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 dirty_ = true;
@@ -467,7 +453,7 @@ void player_base::set_name(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.player_base.name)
 }
-void player_base::set_name(const char* value, size_t size) {
+void player_base::set_name(const void* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

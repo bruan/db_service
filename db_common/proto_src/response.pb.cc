@@ -80,7 +80,6 @@ void protobuf_ShutdownFile_response_2eproto() {
 void protobuf_InitDefaults_response_2eproto_impl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::protobuf_InitDefaults_google_2fprotobuf_2fany_2eproto();
   ::google::protobuf::internal::GetEmptyString();
   response_default_instance_.DefaultConstruct();
   response_default_instance_.get_mutable()->InitAsDefaultInstance();
@@ -96,13 +95,11 @@ void protobuf_AddDesc_response_2eproto_impl() {
 
   protobuf_InitDefaults_response_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\016response.proto\022\010proto.db\032\031google/proto"
-    "buf/any.proto\"O\n\010response\022\022\n\nsession_id\030"
-    "\001 \001(\004\022\020\n\010err_code\030\002 \001(\r\022\014\n\004name\030\003 \001(\t\022\017\n"
-    "\007content\030\004 \001(\tb\006proto3", 142);
+    "\n\016response.proto\022\010proto.db\"O\n\010response\022\022"
+    "\n\nsession_id\030\001 \001(\004\022\020\n\010err_code\030\002 \001(\r\022\014\n\004"
+    "name\030\003 \001(\t\022\017\n\007content\030\004 \001(\014b\006proto3", 115);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "response.proto", &protobuf_RegisterTypes);
-  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2fany_2eproto();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_response_2eproto);
 }
 
@@ -282,16 +279,12 @@ bool response::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string content = 4;
+      // optional bytes content = 4;
       case 4: {
         if (tag == 34) {
          parse_content:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_content()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->content().data(), this->content().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.response.content"));
         } else {
           goto handle_unusual;
         }
@@ -343,13 +336,9 @@ void response::SerializeWithCachedSizes(
       3, this->name(), output);
   }
 
-  // optional string content = 4;
+  // optional bytes content = 4;
   if (this->content().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->content().data(), this->content().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.response.content");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       4, this->content(), output);
   }
 
@@ -381,14 +370,10 @@ void response::SerializeWithCachedSizes(
         3, this->name(), target);
   }
 
-  // optional string content = 4;
+  // optional bytes content = 4;
   if (this->content().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->content().data(), this->content().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.response.content");
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         4, this->content(), target);
   }
 
@@ -421,10 +406,10 @@ size_t response::ByteSizeLong() const {
         this->name());
   }
 
-  // optional string content = 4;
+  // optional bytes content = 4;
   if (this->content().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->content());
   }
 
@@ -602,7 +587,7 @@ void response::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:proto.db.response.name)
 }
 
-// optional string content = 4;
+// optional bytes content = 4;
 void response::clear_content() {
   content_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 dirty_ = true;
@@ -623,7 +608,7 @@ void response::set_content(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.response.content)
 }
-void response::set_content(const char* value, size_t size) {
+void response::set_content(const void* value, size_t size) {
   
   content_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

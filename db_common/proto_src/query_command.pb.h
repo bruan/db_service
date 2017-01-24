@@ -129,7 +129,7 @@ class query_command : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_where_clause();
   void set_allocated_where_clause(::std::string* where_clause);
 
-  // repeated string args = 3;
+  // repeated bytes args = 3;
   int args_size() const;
   void clear_args();
   static const int kArgsFieldNumber = 3;
@@ -137,11 +137,11 @@ class query_command : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* mutable_args(int index);
   void set_args(int index, const ::std::string& value);
   void set_args(int index, const char* value);
-  void set_args(int index, const char* value, size_t size);
+  void set_args(int index, const void* value, size_t size);
   ::std::string* add_args();
   void add_args(const ::std::string& value);
   void add_args(const char* value);
-  void add_args(const char* value, size_t size);
+  void add_args(const void* value, size_t size);
   const ::google::protobuf::RepeatedPtrField< ::std::string>& args() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_args();
 
@@ -271,7 +271,7 @@ inline void query_command::set_allocated_where_clause(::std::string* where_claus
   // @@protoc_insertion_point(field_set_allocated:proto.db.query_command.where_clause)
 }
 
-// repeated string args = 3;
+// repeated bytes args = 3;
 inline int query_command::args_size() const {
   return args_.size();
 }
@@ -297,7 +297,7 @@ inline void query_command::set_args(int index, const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.query_command.args)
 }
-inline void query_command::set_args(int index, const char* value, size_t size) {
+inline void query_command::set_args(int index, const void* value, size_t size) {
   args_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   dirty_ = true;
@@ -318,7 +318,7 @@ inline void query_command::add_args(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.query_command.args)
 }
-inline void query_command::add_args(const char* value, size_t size) {
+inline void query_command::add_args(const void* value, size_t size) {
   args_.Add()->assign(reinterpret_cast<const char*>(value), size);
   dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.query_command.args)

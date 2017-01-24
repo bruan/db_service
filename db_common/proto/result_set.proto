@@ -3,7 +3,7 @@ syntax = "proto3";
 package proto.db;
 
 message row {
-    repeated string value = 1;
+    repeated bytes value = 1;
 }
 
 message result_set {

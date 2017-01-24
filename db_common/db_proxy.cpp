@@ -61,18 +61,24 @@ namespace db
 		switch (pFieldDescriptor->type())
 		{
 		case google::protobuf::FieldDescriptor::TYPE_INT32:
+		case google::protobuf::FieldDescriptor::TYPE_SINT32:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED32:
 			nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT32:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED32:
 			nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_INT64:
+		case google::protobuf::FieldDescriptor::TYPE_SINT64:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED64:
 			nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT64:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED64:
 			nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
 			break;
 

@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 
 		proto::db::player_base msg2;
 		msg2.set_id(200);
-		msg2.set_name("bb");
+		msg2.set_name("уехЩ");
 		dbClient.update(&msg2);
 
 		dbClient.select(200, "player_base", 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)

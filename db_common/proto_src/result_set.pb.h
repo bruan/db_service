@@ -108,7 +108,7 @@ class row : public ::google::protobuf::Message /* @@protoc_insertion_point(class
 
   bool is_dirty() const { return dirty_; }
   void clear_dirty() { dirty_ = false; }
-  // repeated string value = 1;
+  // repeated bytes value = 1;
   int value_size() const;
   void clear_value();
   static const int kValueFieldNumber = 1;
@@ -116,11 +116,11 @@ class row : public ::google::protobuf::Message /* @@protoc_insertion_point(class
   ::std::string* mutable_value(int index);
   void set_value(int index, const ::std::string& value);
   void set_value(int index, const char* value);
-  void set_value(int index, const char* value, size_t size);
+  void set_value(int index, const void* value, size_t size);
   ::std::string* add_value();
   void add_value(const ::std::string& value);
   void add_value(const char* value);
-  void add_value(const char* value, size_t size);
+  void add_value(const void* value, size_t size);
   const ::google::protobuf::RepeatedPtrField< ::std::string>& value() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_value();
 
@@ -260,7 +260,7 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<result_set> result_se
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // row
 
-// repeated string value = 1;
+// repeated bytes value = 1;
 inline int row::value_size() const {
   return value_.size();
 }
@@ -286,7 +286,7 @@ inline void row::set_value(int index, const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.row.value)
 }
-inline void row::set_value(int index, const char* value, size_t size) {
+inline void row::set_value(int index, const void* value, size_t size) {
   value_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   dirty_ = true;
@@ -307,7 +307,7 @@ inline void row::add_value(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.row.value)
 }
-inline void row::add_value(const char* value, size_t size) {
+inline void row::add_value(const void* value, size_t size) {
   value_.Add()->assign(reinterpret_cast<const char*>(value), size);
   dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.row.value)

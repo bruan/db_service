@@ -109,19 +109,19 @@ class player_base : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   bool is_dirty() const { return dirty_; }
   void clear_dirty() { dirty_ = false; }
-  // optional uint32 id = 1;
+  // optional sfixed32 id = 1;
   void clear_id();
   static const int kIdFieldNumber = 1;
-  ::google::protobuf::uint32 id() const;
-  void set_id(::google::protobuf::uint32 value);
+  ::google::protobuf::int32 id() const;
+  void set_id(::google::protobuf::int32 value);
 
-  // optional string name = 2;
+  // optional bytes name = 2;
   void clear_name();
   static const int kNameFieldNumber = 2;
   const ::std::string& name() const;
   void set_name(const ::std::string& value);
   void set_name(const char* value);
-  void set_name(const char* value, size_t size);
+  void set_name(const void* value, size_t size);
   ::std::string* mutable_name();
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
@@ -132,7 +132,7 @@ class player_base : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::uint32 id_;
+  ::google::protobuf::int32 id_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_player_5fbase_2eproto_impl();
   friend void  protobuf_AddDesc_player_5fbase_2eproto_impl();
@@ -246,23 +246,23 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<player_base_set> play
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // player_base
 
-// optional uint32 id = 1;
+// optional sfixed32 id = 1;
 inline void player_base::clear_id() {
-  id_ = 0u;
+  id_ = 0;
 dirty_ = true;
 }
-inline ::google::protobuf::uint32 player_base::id() const {
+inline ::google::protobuf::int32 player_base::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.id)
   return id_;
 }
-inline void player_base::set_id(::google::protobuf::uint32 value) {
+inline void player_base::set_id(::google::protobuf::int32 value) {
   
   id_ = value;
   dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_base.id)
 }
 
-// optional string name = 2;
+// optional bytes name = 2;
 inline void player_base::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 dirty_ = true;
@@ -283,7 +283,7 @@ inline void player_base::set_name(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.player_base.name)
 }
-inline void player_base::set_name(const char* value, size_t size) {
+inline void player_base::set_name(const void* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

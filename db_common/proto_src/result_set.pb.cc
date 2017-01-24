@@ -118,7 +118,7 @@ void protobuf_AddDesc_result_5fset_2eproto_impl() {
   protobuf_InitDefaults_result_5fset_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\020result_set.proto\022\010proto.db\"\024\n\003row\022\r\n\005v"
-    "alue\030\001 \003(\t\"=\n\nresult_set\022\022\n\nfield_name\030\001"
+    "alue\030\001 \003(\014\"=\n\nresult_set\022\022\n\nfield_name\030\001"
     " \003(\t\022\033\n\004rows\030\002 \003(\0132\r.proto.db.rowb\006proto"
     "3", 121);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
@@ -225,17 +225,12 @@ bool row::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated string value = 1;
+      // repeated bytes value = 1;
       case 1: {
         if (tag == 10) {
          parse_value:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->add_value()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->value(this->value_size() - 1).data(),
-            this->value(this->value_size() - 1).length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.row.value"));
         } else {
           goto handle_unusual;
         }
@@ -268,13 +263,9 @@ failure:
 void row::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.db.row)
-  // repeated string value = 1;
+  // repeated bytes value = 1;
   for (int i = 0; i < this->value_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->value(i).data(), this->value(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.row.value");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       1, this->value(i), output);
   }
 
@@ -285,14 +276,10 @@ void row::SerializeWithCachedSizes(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.row)
-  // repeated string value = 1;
+  // repeated bytes value = 1;
   for (int i = 0; i < this->value_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->value(i).data(), this->value(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.row.value");
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(1, this->value(i), target);
+      WriteBytesToArray(1, this->value(i), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.row)
@@ -303,11 +290,11 @@ size_t row::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.row)
   size_t total_size = 0;
 
-  // repeated string value = 1;
+  // repeated bytes value = 1;
   total_size += 1 *
       ::google::protobuf::internal::FromIntSize(this->value_size());
   for (int i = 0; i < this->value_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->value(i));
   }
 
@@ -387,7 +374,7 @@ void row::InternalSwap(row* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // row
 
-// repeated string value = 1;
+// repeated bytes value = 1;
 int row::value_size() const {
   return value_.size();
 }
@@ -413,7 +400,7 @@ void row::set_value(int index, const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.row.value)
 }
-void row::set_value(int index, const char* value, size_t size) {
+void row::set_value(int index, const void* value, size_t size) {
   value_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   dirty_ = true;
@@ -434,7 +421,7 @@ void row::add_value(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.row.value)
 }
-void row::add_value(const char* value, size_t size) {
+void row::add_value(const void* value, size_t size) {
   value_.Add()->assign(reinterpret_cast<const char*>(value), size);
   dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.row.value)

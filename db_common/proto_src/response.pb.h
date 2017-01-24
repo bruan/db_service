@@ -27,7 +27,6 @@
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
-#include <google/protobuf/any.pb.h>
 // @@protoc_insertion_point(includes)
 
 namespace proto {
@@ -131,13 +130,13 @@ class response : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // optional string content = 4;
+  // optional bytes content = 4;
   void clear_content();
   static const int kContentFieldNumber = 4;
   const ::std::string& content() const;
   void set_content(const ::std::string& value);
   void set_content(const char* value);
-  void set_content(const char* value, size_t size);
+  void set_content(const void* value, size_t size);
   ::std::string* mutable_content();
   ::std::string* release_content();
   void set_allocated_content(::std::string* content);
@@ -251,7 +250,7 @@ inline void response::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:proto.db.response.name)
 }
 
-// optional string content = 4;
+// optional bytes content = 4;
 inline void response::clear_content() {
   content_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 dirty_ = true;
@@ -272,7 +271,7 @@ inline void response::set_content(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.response.content)
 }
-inline void response::set_content(const char* value, size_t size) {
+inline void response::set_content(const void* value, size_t size) {
   
   content_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

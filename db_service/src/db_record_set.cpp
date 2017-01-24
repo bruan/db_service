@@ -108,8 +108,17 @@ namespace db
 
 		case MYSQL_TYPE_STRING:
 		case MYSQL_TYPE_VAR_STRING:
+		case MYSQL_TYPE_VARCHAR:
 			{
 				return CVariant(this->m_curRow[nCol]);
+			}
+			break;
+
+		case MYSQL_TYPE_BLOB:
+		case MYSQL_TYPE_LONG_BLOB:
+		case MYSQL_TYPE_TINY_BLOB:
+			{
+				return CVariant(this->m_curRow[nCol], this->m_pField[nCol].max_length);
 			}
 			break;
 

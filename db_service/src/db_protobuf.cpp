@@ -150,47 +150,53 @@ namespace db {
 		return true;
 	}
 
-	static std::string getBasicTypeFieldValue(const google::protobuf::Message* pMessage, const google::protobuf::FieldDescriptor* pFieldDescriptor, const google::protobuf::Reflection* pReflection)
+	static bool getBasicTypeFieldValue(const google::protobuf::Message* pMessage, const google::protobuf::FieldDescriptor* pFieldDescriptor, const google::protobuf::Reflection* pReflection, std::string& szValue)
 	{
-		DebugAstEx(pMessage != nullptr, "");
-		DebugAstEx(pFieldDescriptor != nullptr, "");
-		DebugAstEx(pReflection != nullptr, "");
+		DebugAstEx(pMessage != nullptr, false);
+		DebugAstEx(pFieldDescriptor != nullptr, false);
+		DebugAstEx(pReflection != nullptr, false);
 
 		switch (pFieldDescriptor->type())
 		{
 		case google::protobuf::FieldDescriptor::TYPE_INT32:
+		case google::protobuf::FieldDescriptor::TYPE_SINT32:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED32:
 			{
 				int32_t nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
 				std::ostringstream oss;
 				oss << nValue;
-				return oss.str();
+				szValue = oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT32:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED32:
 			{
 				uint32_t nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
 				std::ostringstream oss;
 				oss << nValue;
-				return oss.str();
+				szValue = oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_INT64:
+		case google::protobuf::FieldDescriptor::TYPE_SINT64:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED64:
 			{
 				int64_t nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
 				std::ostringstream oss;
 				oss << nValue;
-				return oss.str();
+				szValue = oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT64:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED64:
 			{
 				uint64_t nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
 				std::ostringstream oss;
 				oss << nValue;
-				return oss.str();
+				szValue = oss.str();
 			}
 			break;
 
@@ -199,19 +205,29 @@ namespace db {
 				double nValue = pReflection->GetDouble(*pMessage, pFieldDescriptor);
 				std::ostringstream oss;
 				oss << nValue;
-				return oss.str();
+				szValue = oss.str();
+			}
+			break;
+
+		case google::protobuf::FieldDescriptor::TYPE_FLOAT:
+			{
+				float nValue = pReflection->GetFloat(*pMessage, pFieldDescriptor);
+				std::ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_STRING:
-			return pReflection->GetString(*pMessage, pFieldDescriptor);
+		case google::protobuf::FieldDescriptor::TYPE_BYTES:
+			szValue = pReflection->GetString(*pMessage, pFieldDescriptor);
 			break;
 
 		default:
-			DebugAstEx(false, "");
+			DebugAstEx(false, false);
 		}
 
-		return "";
+		return true;
 	}
 
 	bool setBasicTypeFieldValue(google::protobuf::Message* pMessage, const google::protobuf::Reflection* pReflection, const google::protobuf::FieldDescriptor* pFieldDescriptor, const std::string& szValue)
@@ -223,16 +239,18 @@ namespace db {
 		switch (pFieldDescriptor->type())
 		{
 		case google::protobuf::FieldDescriptor::TYPE_INT32:
+		case google::protobuf::FieldDescriptor::TYPE_SINT32:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED32:
 			{
 				int32_t nValue = 0;
 				std::istringstream iss(szValue);
 				iss >> nValue;
-				//DebugAstEx(db::atoi(szValue.c_str(), nValue), false);
 				pReflection->SetInt32(pMessage, pFieldDescriptor, nValue);
 			}
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT32:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED32:
 			{
 				uint32_t nValue = 0;
 				std::istringstream iss(szValue);
@@ -242,6 +260,8 @@ namespace db {
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_INT64:
+		case google::protobuf::FieldDescriptor::TYPE_SINT64:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED64:
 			{
 				int64_t nValue = 0;
 				std::istringstream iss(szValue);
@@ -251,6 +271,7 @@ namespace db {
 			break;
 
 		case google::protobuf::FieldDescriptor::TYPE_UINT64:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED64:
 			{
 				uint64_t nValue = 0;
 				std::istringstream iss(szValue);
@@ -268,7 +289,17 @@ namespace db {
 			}
 			break;
 
+		case google::protobuf::FieldDescriptor::TYPE_FLOAT:
+			{
+				float nValue = 0.0f;
+				std::istringstream oss(szValue);
+				oss >> nValue;
+				pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
+
 		case google::protobuf::FieldDescriptor::TYPE_STRING:
+		case google::protobuf::FieldDescriptor::TYPE_BYTES:
 			{
 				pReflection->SetString(pMessage, pFieldDescriptor, szValue);
 			}
@@ -296,7 +327,7 @@ namespace db {
 			const google::protobuf::FieldDescriptor* pFieldDescriptor = pDescriptor->field(i);
 			DebugAstEx(pFieldDescriptor != nullptr, false);
 			DebugAstEx(pFieldDescriptor->label() == google::protobuf::FieldDescriptor::LABEL_OPTIONAL, false);
-
+			
 			if (pFieldDescriptor->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE)
 			{
 				ESerializeType eSerializeType = (ESerializeType)pFieldDescriptor->options().GetExtension(serialize_type);
@@ -347,8 +378,8 @@ namespace db {
 			}
 			else
 			{
-				std::string szValue = getBasicTypeFieldValue(pMessage, pFieldDescriptor, pReflection);
-				if (szValue.empty())
+				std::string szValue;
+				if (!getBasicTypeFieldValue(pMessage, pFieldDescriptor, pReflection, szValue))
 				{
 					PrintWarning("ERROR: message[%s] can't get field[%s] value", pMessage->GetTypeName().c_str(), pFieldDescriptor->name().c_str());
 					return false;
@@ -357,7 +388,7 @@ namespace db {
 				SFieldInfo sFieldInfo;
 				sFieldInfo.szName = pFieldDescriptor->name();
 				sFieldInfo.szValue = std::move(szValue);
-				sFieldInfo.bStr = (pFieldDescriptor->type() == google::protobuf::FieldDescriptor::TYPE_STRING);
+				sFieldInfo.bStr = (pFieldDescriptor->type() == google::protobuf::FieldDescriptor::TYPE_STRING || pFieldDescriptor->type() == google::protobuf::FieldDescriptor::TYPE_BYTES);
 				
 				vecFieldInfo.push_back(sFieldInfo);
 			}
@@ -547,7 +578,7 @@ namespace db {
 		{
 			const std::string& szFieldName = pDbRecordset->getFieldName(i);
 			const std::string& szValue = pDbRecordset->getData(i);
-
+			
 			const google::protobuf::FieldDescriptor* pFieldDescriptor = pDescriptor->FindFieldByName(szFieldName);
 			if (pFieldDescriptor == nullptr)
 			{

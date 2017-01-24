@@ -94,7 +94,7 @@ void protobuf_AddDesc_call_5fcommand_2eproto_impl() {
   protobuf_InitDefaults_call_5fcommand_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\022call_command.proto\022\010proto.db\")\n\014call_c"
-    "ommand\022\013\n\003sql\030\001 \001(\t\022\014\n\004args\030\002 \003(\tb\006proto"
+    "ommand\022\013\n\003sql\030\001 \001(\t\022\014\n\004args\030\002 \003(\014b\006proto"
     "3", 81);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "call_command.proto", &protobuf_RegisterTypes);
@@ -220,17 +220,12 @@ bool call_command::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated string args = 2;
+      // repeated bytes args = 2;
       case 2: {
         if (tag == 18) {
          parse_args:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->add_args()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->args(this->args_size() - 1).data(),
-            this->args(this->args_size() - 1).length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.call_command.args"));
         } else {
           goto handle_unusual;
         }
@@ -273,13 +268,9 @@ void call_command::SerializeWithCachedSizes(
       1, this->sql(), output);
   }
 
-  // repeated string args = 2;
+  // repeated bytes args = 2;
   for (int i = 0; i < this->args_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->args(i).data(), this->args(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.call_command.args");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       2, this->args(i), output);
   }
 
@@ -301,14 +292,10 @@ void call_command::SerializeWithCachedSizes(
         1, this->sql(), target);
   }
 
-  // repeated string args = 2;
+  // repeated bytes args = 2;
   for (int i = 0; i < this->args_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->args(i).data(), this->args(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.db.call_command.args");
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(2, this->args(i), target);
+      WriteBytesToArray(2, this->args(i), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.call_command)
@@ -326,11 +313,11 @@ size_t call_command::ByteSizeLong() const {
         this->sql());
   }
 
-  // repeated string args = 2;
+  // repeated bytes args = 2;
   total_size += 1 *
       ::google::protobuf::internal::FromIntSize(this->args_size());
   for (int i = 0; i < this->args_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->args(i));
   }
 
@@ -465,7 +452,7 @@ void call_command::set_allocated_sql(::std::string* sql) {
   // @@protoc_insertion_point(field_set_allocated:proto.db.call_command.sql)
 }
 
-// repeated string args = 2;
+// repeated bytes args = 2;
 int call_command::args_size() const {
   return args_.size();
 }
@@ -491,7 +478,7 @@ void call_command::set_args(int index, const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.call_command.args)
 }
-void call_command::set_args(int index, const char* value, size_t size) {
+void call_command::set_args(int index, const void* value, size_t size) {
   args_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   dirty_ = true;
@@ -512,7 +499,7 @@ void call_command::add_args(const char* value) {
   dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.call_command.args)
 }
-void call_command::add_args(const char* value, size_t size) {
+void call_command::add_args(const void* value, size_t size) {
   args_.Add()->assign(reinterpret_cast<const char*>(value), size);
   dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.call_command.args)
