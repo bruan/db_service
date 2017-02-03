@@ -17,6 +17,7 @@ namespace db
 	CDbThread::~CDbThread()
 	{
 		delete this->m_pThread;
+		delete this->m_pDbCommandHandlerProxy;
 	}
 
 	bool CDbThread::connectDb(bool bInit)
@@ -50,9 +51,12 @@ namespace db
 		this->m_pThread->join();
 	}
 
-	bool CDbThread::init()
+	bool CDbThread::init(uint64_t nMaxCacheSize)
 	{
 		this->m_pDbCommandHandlerProxy = new CDbCommandHandlerProxy();
+		if (!this->m_pDbCommandHandlerProxy->init(nMaxCacheSize))
+			return false;
+
 		if (!this->connectDb(true))
 			return false;
 

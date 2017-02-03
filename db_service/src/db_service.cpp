@@ -37,7 +37,7 @@ namespace db
 	static SOnce s_Once;
 	static std::map<uint32_t, CDbThreadMgr*>	s_mapDbThreadMgr;
 
-	uint32_t create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount)
+	uint32_t create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
 	{
 		std::vector<std::string> vecProto;
 

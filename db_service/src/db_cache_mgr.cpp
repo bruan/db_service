@@ -4,6 +4,8 @@ namespace db
 {
 	CDbCacheMgr::CDbCacheMgr()
 		: m_nCurIndex(1)
+		, m_nDataSize(0)
+		, m_nMaxCacheSize(0)
 	{
 
 	}
@@ -11,6 +13,11 @@ namespace db
 	CDbCacheMgr::~CDbCacheMgr()
 	{
 
+	}
+
+	bool CDbCacheMgr::init(uint64_t nMaxCacheSize)
+	{
+		this->m_nMaxCacheSize = nMaxCacheSize;
 	}
 
 	uint32_t CDbCacheMgr::getDataID(const std::string& szDataName)
@@ -51,12 +58,36 @@ namespace db
 
 		CDbCache& sDbCache = this->m_mapCache[nID];
 
+		int32_t nSize = sDbCache.getDataSize();
 		sDbCache.setData(nDataID, pData);
+		this->m_nDataSize -= nSize;
+		this->m_nDataSize += sDbCache.getDataSize();
 	}
 
 	void CDbCacheMgr::cleanData()
 	{
+		if (this->m_nDataSize < this->m_nMaxCacheSize)
+			return;
 
+		std::vector<std::unordered_map<uint64_t, CDbCache>::iterator> vecElement;
+		vecElement.reserve(5);
+		for (size_t i = 0; i < 5; ++i)
+		{
+			if (this->m_mapCache.bucket_count() == 0)
+				break;
+
+			int32_t nPos = std::rand() % this->m_mapCache.bucket_count();
+			if (this->m_mapCache.begin(nPos) != this->m_mapCache.end(nPos))
+				vecElement.push_back(this->m_mapCache.begin(nPos));
+		}
+
+		if (vecElement.empty())
+			return;
+
+		int32_t nPos = std::rand() % vecElement.size();
+		CDbCache& sDbCache = vecElement[nPos]->second;
+		this->m_nDataSize -= sDbCache.getDataSize();
+		this->m_mapCache.erase(vecElement[nPos]);
 	}
 
 	void CDbCacheMgr::delData(uint64_t nID, const std::string& szDataName)
@@ -70,6 +101,9 @@ namespace db
 
 		CDbCache& sDbCache = iter->second;
 
+		int32_t nSize = sDbCache.getDataSize();
 		sDbCache.delData(nDataID);
+		this->m_nDataSize -= nSize;
+		this->m_nDataSize += sDbCache.getDataSize();
 	}
 }

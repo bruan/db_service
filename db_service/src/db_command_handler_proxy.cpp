@@ -28,7 +28,14 @@ namespace db
 
 	CDbCommandHandlerProxy::~CDbCommandHandlerProxy()
 	{
+		delete this->m_pDbCacheMgr;
+	}
 
+	bool CDbCommandHandlerProxy::init(uint64_t nMaxCacheSize)
+	{
+		this->m_pDbCacheMgr = new CDbCacheMgr();
+
+		return this->m_pDbCacheMgr->init(nMaxCacheSize);
 	}
 
 	void CDbCommandHandlerProxy::onConnect(CDbConnection* pDbConnection)
@@ -75,7 +82,7 @@ namespace db
 				const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
 				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-				std::shared_ptr<google::protobuf::Message> pData = this->m_dbCacheMgr.getData(pCommand->id(), pCommand->table_name());
+				std::shared_ptr<google::protobuf::Message> pData = this->m_pDbCacheMgr.getData(pCommand->id(), pCommand->table_name());
 				if (pData != nullptr)
 				{
 					pResponse = pData;
@@ -90,7 +97,7 @@ namespace db
 				if (!getPrimaryValue(pRequest.get(), nID))
 					return kRC_PROTO_ERROR;
 
-				this->m_dbCacheMgr.setData(nID, pRequest);
+				this->m_pDbCacheMgr.setData(nID, pRequest);
 			}
 			break;
 
@@ -100,7 +107,7 @@ namespace db
 				if (!getPrimaryValue(pRequest.get(), nID))
 					return kRC_PROTO_ERROR;
 
-				this->m_dbCacheMgr.setData(nID, pRequest);
+				this->m_pDbCacheMgr.setData(nID, pRequest);
 			}
 			break;
 
@@ -109,7 +116,7 @@ namespace db
 				const proto::db::delete_command* pCommand = dynamic_cast<const proto::db::delete_command*>(pRequest.get());
 				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-				this->m_dbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
+				this->m_pDbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
 			}
 			break;
 		}
@@ -123,7 +130,7 @@ namespace db
 			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
 			DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-			this->m_dbCacheMgr.setData(pCommand->id(), pResponse);
+			this->m_pDbCacheMgr.setData(pCommand->id(), pResponse);
 		}
 
 		return nErrorCode;

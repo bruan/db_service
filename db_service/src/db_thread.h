@@ -21,7 +21,7 @@ namespace db
 		CDbThread(CDbThreadMgr* pDbThreadMgr);
 		~CDbThread();
 
-		bool		init();
+		bool		init(uint64_t nMaxCacheSize);
 		void		query(const SDbCommand& sDbCommand);
 		void		join();
 		uint32_t	getQueueSize();

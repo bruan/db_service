@@ -15,7 +15,7 @@ namespace db
 		std::shared_ptr<proto::db::response>
 					pResponse;
 	};
-	uint32_t	create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount);
+	uint32_t	create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize);
 	void		query(uint32_t nID, uint32_t nServiceID, const proto::db::request* pRequest);
 	void		release(uint32_t nID);
 	void		getResultInfo(uint32_t nID, std::list<SDbResultInfo>& listResultInfo);

@@ -26,7 +26,7 @@ namespace db
 		CDbThreadMgr();
 		~CDbThreadMgr();
 
-		bool		init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount);
+		bool		init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount, uint64_t nMaxCacheSize);
 
 		uint32_t	getThreadCount() const;
 		void		query(uint32_t nThreadIndex, const SDbCommand& sDbCommand);

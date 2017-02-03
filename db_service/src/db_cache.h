@@ -19,8 +19,10 @@ namespace db
 				getData(uint32_t nDataID);
 		void	setData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
 		void	delData(uint32_t nDataID);
-		
+		int32_t getDataSize() const;
+
 	private:
 		std::map<uint32_t, std::shared_ptr<google::protobuf::Message>>	m_mapCache;
+		int32_t															m_nDataSize;
 	};
 }

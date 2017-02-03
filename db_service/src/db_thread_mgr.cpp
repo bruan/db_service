@@ -12,8 +12,10 @@ namespace db
 		
 	}
 
-	bool CDbThreadMgr::init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount)
+	bool CDbThreadMgr::init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
 	{
+		DebugAstEx(nDbThreadCount > 0, false);
+
 		this->m_sDbConnectionInfo.szHost = szHost;
 		this->m_sDbConnectionInfo.nPort = nPort;
 		this->m_sDbConnectionInfo.szDb = szDb;
@@ -21,11 +23,12 @@ namespace db
 		this->m_sDbConnectionInfo.szPassword = szPassword;
 		this->m_sDbConnectionInfo.szCharacterset = szCharacterset;
 
+		nMaxCacheSize = nMaxCacheSize / nDbThreadCount;
 		this->m_vecDbThread.resize(nDbThreadCount);
 		for (uint32_t i = 0; i < nDbThreadCount; ++i)
 		{
 			this->m_vecDbThread[i] = new CDbThread(this);
-			if (!this->m_vecDbThread[i]->init())
+			if (!this->m_vecDbThread[i]->init(nMaxCacheSize))
 				return false;
 		}
 
