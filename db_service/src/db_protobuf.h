@@ -23,7 +23,8 @@ namespace db
 	bool		getTableNameByMessageName(const std::string& szMessageName, std::string& szTableName);
 
 	std::string	getPrimaryName(const google::protobuf::Message* pMessage);
-	
+	bool		getPrimaryValue(const google::protobuf::Message* pMessage, uint64_t& nValue);
+
 	bool		getMessageFieldInfos(const google::protobuf::Message* pMessage, std::vector<SFieldInfo>& vecFieldInfo);
 
 	google::protobuf::Message* 

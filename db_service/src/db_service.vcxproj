@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\db_service.h" />
+    <ClInclude Include="db_cache.h" />
+    <ClInclude Include="db_cache_mgr.h" />
     <ClInclude Include="db_command_call_handler.h" />
     <ClInclude Include="db_command_delete_handler.h" />
     <ClInclude Include="db_command_handler.h" />
@@ -37,6 +39,8 @@
     <ClInclude Include="db_thread_mgr.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="db_cache.cpp" />
+    <ClCompile Include="db_cache_mgr.cpp" />
     <ClCompile Include="db_command_call_handler.cpp" />
     <ClCompile Include="db_command_delete_handler.cpp" />
     <ClCompile Include="db_command_handler_proxy.cpp" />

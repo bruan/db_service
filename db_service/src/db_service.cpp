@@ -35,8 +35,9 @@ namespace db
 	};
 
 	static SOnce s_Once;
+	static std::map<uint32_t, CDbThreadMgr*>	s_mapDbThreadMgr;
 
-	CDbThreadMgr* create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount)
+	uint32_t create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount)
 	{
 		std::vector<std::string> vecProto;
 
@@ -44,7 +45,7 @@ namespace db
 		WIN32_FIND_DATAA FindFileData;
 		HANDLE hFind = ::FindFirstFileA((szProtoDir + "/*.proto").c_str(), &FindFileData);
 		if (hFind == INVALID_HANDLE_VALUE)
-			return false;
+			return 0;
 
 		do
 		{
@@ -57,7 +58,7 @@ namespace db
 		struct stat sb;
 
 		if ((pDir = opendir(szProtoDir.c_str())) == nullptr)
-			return false;
+			return 0;
 
 		while ((pFile = readdir(pDir)) != nullptr)
 		{
@@ -74,37 +75,52 @@ namespace db
 		closedir(pDir);
 #endif
 		if (!importProtobuf("proto", vecProto))
-			return nullptr;
+			return 0;
 
 		CDbThreadMgr* pDbThreadMgr = new CDbThreadMgr();
 		if (!pDbThreadMgr->init(szHost, nPort, szDb, szUser, szPassword, szCharacterset, nDbThreadCount))
 		{
 			delete pDbThreadMgr;
-			return nullptr;
+			return 0;
 		}
 
-		return pDbThreadMgr;
+		static uint32_t nID = 1;
+		s_mapDbThreadMgr[nID] = pDbThreadMgr;
+
+		return nID++;
 	}
 
-	void release(CDbThreadMgr* pDbThreadMgr)
+	void release(uint32_t nID)
 	{
+		auto iter = s_mapDbThreadMgr.find(nID);
+		DebugAst(iter != s_mapDbThreadMgr.end());
+		CDbThreadMgr* pDbThreadMgr = iter->second;
+		s_mapDbThreadMgr.erase(iter);
 		DebugAst(pDbThreadMgr != nullptr);
+
 		pDbThreadMgr->exit();
 
 		delete pDbThreadMgr;
 	}
 
-	void getResultInfo(CDbThreadMgr* pDbThreadMgr, std::list<SDbResultInfo>& listResultInfo)
+	void getResultInfo(uint32_t nID, std::list<SDbResultInfo>& listResultInfo)
 	{
+		auto iter = s_mapDbThreadMgr.find(nID);
+		DebugAst(iter != s_mapDbThreadMgr.end());
+		CDbThreadMgr* pDbThreadMgr = iter->second;
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getResultInfo(listResultInfo);
 	}
 
-	void query(CDbThreadMgr* pDbThreadMgr, uint32_t nServiceID, const proto::db::request* pRequest)
+	void query(uint32_t nID, uint32_t nServiceID, const proto::db::request* pRequest)
 	{
-		DebugAst(pDbThreadMgr != nullptr);
 		DebugAst(pRequest != nullptr);
+
+		auto iter = s_mapDbThreadMgr.find(nID);
+		DebugAst(iter != s_mapDbThreadMgr.end());
+		CDbThreadMgr* pDbThreadMgr = iter->second;
+		DebugAst(pDbThreadMgr != nullptr);
 
 		static const char* szPrefix = "type.googleapis.com/";
 		static const size_t nPrefixLen = strlen(szPrefix);
@@ -131,20 +147,26 @@ namespace db
 		sDbCommand.nServiceID = nServiceID;
 		sDbCommand.nType = pRequest->type();
 		sDbCommand.nSessionID = pRequest->session_id();
-		sDbCommand.pMessage = pMessage;
+		sDbCommand.pMessage = std::shared_ptr<google::protobuf::Message>(pMessage);
 
 		pDbThreadMgr->query(pRequest->associate_id(), sDbCommand);
 	}
 
-	void getQPS(CDbThreadMgr* pDbThreadMgr, std::vector<uint32_t>& vecQPS)
+	void getQPS(uint32_t nID, std::vector<uint32_t>& vecQPS)
 	{
+		auto iter = s_mapDbThreadMgr.find(nID);
+		DebugAst(iter != s_mapDbThreadMgr.end());
+		CDbThreadMgr* pDbThreadMgr = iter->second;
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getQPS(vecQPS);
 	}
 
-	void getQueueSize(CDbThreadMgr* pDbThreadMgr, std::vector<uint32_t>& vecSize)
+	void getQueueSize(uint32_t nID, std::vector<uint32_t>& vecSize)
 	{
+		auto iter = s_mapDbThreadMgr.find(nID);
+		DebugAst(iter != s_mapDbThreadMgr.end());
+		CDbThreadMgr* pDbThreadMgr = iter->second;
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getQueueSize(vecSize);

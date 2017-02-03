@@ -451,6 +451,58 @@ namespace db {
 		return pDescriptor->options().GetExtension(primary_key);
 	}
 
+	bool getPrimaryValue(const google::protobuf::Message* pMessage, uint64_t& nValue)
+	{
+		if (pMessage == nullptr)
+			return false;
+
+		const google::protobuf::Reflection* pReflection = pMessage->GetReflection();
+		if (pReflection == nullptr)
+			return false;
+
+		const google::protobuf::Descriptor* pDescriptor = pMessage->GetDescriptor();
+		if (pDescriptor == nullptr)
+			return false;
+
+		std::string szPrimaryFieldName = pDescriptor->options().GetExtension(primary_key);
+		if (szPrimaryFieldName.empty())
+			return false;
+
+		const google::protobuf::FieldDescriptor* pFieldDescriptor = pMessage->GetDescriptor()->FindFieldByName(szPrimaryFieldName);
+		if (pFieldDescriptor == nullptr)
+			return false;
+
+		switch (pFieldDescriptor->type())
+		{
+		case google::protobuf::FieldDescriptor::TYPE_INT32:
+		case google::protobuf::FieldDescriptor::TYPE_SINT32:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED32:
+			nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
+			break;
+
+		case google::protobuf::FieldDescriptor::TYPE_UINT32:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED32:
+			nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
+			break;
+
+		case google::protobuf::FieldDescriptor::TYPE_INT64:
+		case google::protobuf::FieldDescriptor::TYPE_SINT64:
+		case google::protobuf::FieldDescriptor::TYPE_SFIXED64:
+			nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
+			break;
+
+		case google::protobuf::FieldDescriptor::TYPE_UINT64:
+		case google::protobuf::FieldDescriptor::TYPE_FIXED64:
+			nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
+			break;
+
+		default:
+			return false;
+		}
+
+		return true;
+	}
+
 	google::protobuf::Message* createRepeatMessage(CDbRecordset* pDbRecordset, const std::string& szName)
 	{
 		DebugAstEx(pDbRecordset != nullptr, nullptr);

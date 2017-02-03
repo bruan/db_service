@@ -8,6 +8,10 @@
 #include "db_command_select_handler.h"
 #include "db_command_update_handler.h"
 #include "db_common.h"
+#include "db_protobuf.h"
+
+#include "proto_src\select_command.pb.h"
+#include "proto_src\delete_command.pb.h"
 
 namespace db
 {
@@ -53,7 +57,7 @@ namespace db
 		}
 	}
 
-	uint32_t CDbCommandHandlerProxy::onDbCommand(uint32_t nType, const google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse)
+	uint32_t CDbCommandHandlerProxy::onDbCommand(uint32_t nType, std::shared_ptr<google::protobuf::Message> pRequest, std::shared_ptr<google::protobuf::Message>& pResponse)
 	{
 		std::string szName = pRequest->GetTypeName();
 		auto iter = this->m_mapDbCommandHandler.find(nType);
@@ -64,6 +68,64 @@ namespace db
 		if (pDbCommandHandler == nullptr)
 			return kRC_UNKNOWN;
 
-		return pDbCommandHandler->onDbCommand(pRequest, pResponse);
+		switch (nType)
+		{
+		case kOT_Select:
+			{
+				const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
+				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
+
+				std::shared_ptr<google::protobuf::Message> pData = this->m_dbCacheMgr.getData(pCommand->id(), pCommand->table_name());
+				if (pData != nullptr)
+				{
+					pResponse = pData;
+					return kRC_OK;
+				}
+			}
+			break;
+
+		case kOT_Update:
+			{
+				uint64_t nID = 0;
+				if (!getPrimaryValue(pRequest.get(), nID))
+					return kRC_PROTO_ERROR;
+
+				this->m_dbCacheMgr.setData(nID, pRequest);
+			}
+			break;
+
+		case kOT_Insert:
+			{
+				uint64_t nID = 0;
+				if (!getPrimaryValue(pRequest.get(), nID))
+					return kRC_PROTO_ERROR;
+
+				this->m_dbCacheMgr.setData(nID, pRequest);
+			}
+			break;
+
+		case kOT_Delete:
+			{
+				const proto::db::delete_command* pCommand = dynamic_cast<const proto::db::delete_command*>(pRequest.get());
+				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
+
+				this->m_dbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
+			}
+			break;
+		}
+
+		uint32_t nErrorCode = pDbCommandHandler->onDbCommand(pRequest.get(), pResponse);
+		if (nErrorCode != kRC_OK)
+			return nErrorCode;
+
+		if (nType == kOT_Select)
+		{
+			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
+			DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
+
+			this->m_dbCacheMgr.setData(pCommand->id(), pResponse);
+		}
+
+		return nErrorCode;
 	}
 }

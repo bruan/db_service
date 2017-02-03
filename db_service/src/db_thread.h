@@ -2,6 +2,8 @@
 #include "db_service_base.h"
 #include "db_command_handler_proxy.h"
 #include "db_connection.h"
+#include "db_cache_mgr.h"
+
 #include <list>
 #include <mutex>
 #include <thread>

@@ -39,9 +39,6 @@
     <ClInclude Include="db_command_handler.h">
       <Filter>src\command_handler</Filter>
     </ClInclude>
-    <ClInclude Include="db_command_handler_proxy.h">
-      <Filter>src\command_handler</Filter>
-    </ClInclude>
     <ClInclude Include="db_command_insert_handler.h">
       <Filter>src\command_handler</Filter>
     </ClInclude>
@@ -59,6 +56,15 @@
     </ClInclude>
     <ClInclude Include="..\inc\db_service.h">
       <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="db_cache.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_cache_mgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_command_handler_proxy.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,9 +95,6 @@
     <ClCompile Include="db_command_delete_handler.cpp">
       <Filter>src\command_handler</Filter>
     </ClCompile>
-    <ClCompile Include="db_command_handler_proxy.cpp">
-      <Filter>src\command_handler</Filter>
-    </ClCompile>
     <ClCompile Include="db_command_insert_handler.cpp">
       <Filter>src\command_handler</Filter>
     </ClCompile>
@@ -106,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="db_command_update_handler.cpp">
       <Filter>src\command_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="db_cache_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_cache.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_command_handler_proxy.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,10 +11,11 @@ namespace db
 {
 	struct SDbCommand
 	{
-		uint32_t					nServiceID;
-		uint32_t					nType;
-		uint64_t					nSessionID;
-		google::protobuf::Message*	pMessage;
+		uint32_t	nServiceID;
+		uint32_t	nType;
+		uint64_t	nSessionID;
+		std::shared_ptr<google::protobuf::Message>
+					pMessage;
 	};
 
 	struct SDbResult

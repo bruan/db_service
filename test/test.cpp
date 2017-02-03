@@ -43,18 +43,18 @@ public:
 		std::string szProtoDir = szDir;
 		szProtoDir += "/proto";
 		
-		this->m_pDbThreadMgr = db::create("192.168.222.1", 3306, "test", "root", "123456", "utf8", szProtoDir, 5);
+		this->m_nID = db::create("192.168.222.1", 3306, "test", "root", "123456", "utf8", szProtoDir, 5);
 	}
 
 	virtual ~CMyDbProxy()
 	{
-		db::release(this->m_pDbThreadMgr);
+		db::release(this->m_nID);
 	}
 
 	void update()
 	{
 		std::list<db::SDbResultInfo> listDbResultInfo;
-		db::getResultInfo(this->m_pDbThreadMgr, listDbResultInfo);
+		db::getResultInfo(this->m_nID, listDbResultInfo);
 		for (auto iter = listDbResultInfo.begin(); iter != listDbResultInfo.end(); ++iter)
 		{
 			this->onMessage(iter->pResponse.get());
@@ -64,13 +64,13 @@ public:
 protected:
 	virtual bool sendRequest(const proto::db::request* pRequest)
 	{
-		db::query(this->m_pDbThreadMgr, 0, pRequest);
+		db::query(this->m_nID, 0, pRequest);
 
 		return true;
 	}
 
 private:
-	db::CDbThreadMgr* m_pDbThreadMgr;
+	uint32_t m_nID;
 };
 
 int main(int argc, char* argv[])

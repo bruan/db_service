@@ -72,13 +72,6 @@ namespace db
 			this->m_dbConnection.close();
 			this->m_pDbCommandHandlerProxy->onDisconnect();
 			delete this->m_pDbCommandHandlerProxy;
-
-			while (!this->m_listCommand.empty())
-			{
-				SDbCommand sDbCommand = this->m_listCommand.back();
-				delete sDbCommand.pMessage;
-				this->m_listCommand.pop_back();
-			};
 		});
 
 		return true;
@@ -115,7 +108,6 @@ namespace db
 				this->m_listCommand.splice(this->m_listCommand.begin(), listCommand, iter, listCommand.end());
 				break;
 			}
-			delete sDbCommand.pMessage;
 			if (sDbCommand.nSessionID == 0)
 				continue;
 
