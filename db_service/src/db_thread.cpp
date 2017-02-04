@@ -6,8 +6,8 @@
 namespace db
 {
 
-	CDbThread::CDbThread(CDbThreadMgr* pDbThreadMgr)
-		: m_pDbThreadMgr(pDbThreadMgr)
+	CDbThread::CDbThread()
+		: m_pDbThreadMgr(nullptr)
 		, m_pThread(nullptr)
 		, m_quit(0)
 		, m_nQPS(0)
@@ -17,7 +17,6 @@ namespace db
 	CDbThread::~CDbThread()
 	{
 		delete this->m_pThread;
-		delete this->m_pDbCommandHandlerProxy;
 	}
 
 	bool CDbThread::connectDb(bool bInit)
@@ -41,7 +40,7 @@ namespace db
 			break;
 		} while (1);
 
-		this->m_pDbCommandHandlerProxy->onConnect(&this->m_dbConnection);
+		this->m_dbCommandHandlerProxy.onConnect(&this->m_dbConnection);
 		return true;
 	}
 
@@ -51,10 +50,11 @@ namespace db
 		this->m_pThread->join();
 	}
 
-	bool CDbThread::init(uint64_t nMaxCacheSize)
+	bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize)
 	{
-		this->m_pDbCommandHandlerProxy = new CDbCommandHandlerProxy();
-		if (!this->m_pDbCommandHandlerProxy->init(nMaxCacheSize))
+		DebugAstEx(pDbThreadMgr != nullptr, false);
+		this->m_pDbThreadMgr = pDbThreadMgr;
+		if (!this->m_dbCommandHandlerProxy.init(nMaxCacheSize))
 			return false;
 
 		if (!this->connectDb(true))
@@ -73,9 +73,10 @@ namespace db
 				}
 			}
 
+			this->m_dbCommandHandlerProxy.flushAllCache();
+
 			this->m_dbConnection.close();
-			this->m_pDbCommandHandlerProxy->onDisconnect();
-			delete this->m_pDbCommandHandlerProxy;
+			this->m_dbCommandHandlerProxy.onDisconnect();
 		});
 
 		return true;
@@ -86,7 +87,7 @@ namespace db
 		if (!this->m_dbConnection.isConnect())
 		{
 			this->m_dbConnection.close();
-			this->m_pDbCommandHandlerProxy->onDisconnect();
+			this->m_dbCommandHandlerProxy.onDisconnect();
 			this->connectDb(false);
 		}
 
@@ -105,7 +106,7 @@ namespace db
 			SDbCommand sDbCommand = *iter;
 
 			std::shared_ptr<google::protobuf::Message> pMessage;
-			uint32_t nErrorCode = this->m_pDbCommandHandlerProxy->onDbCommand(sDbCommand.nType, sDbCommand.pMessage, pMessage);
+			uint32_t nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, pMessage);
 			if (nErrorCode == kRC_LOST_CONNECTION)
 			{
 				std::unique_lock<std::mutex> lock(this->m_tCommandLock);

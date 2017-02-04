@@ -20,22 +20,23 @@ namespace db
 		this->m_mapDbCommandHandler[kOT_Call]	= new CDbCommandCallHandler();
 		this->m_mapDbCommandHandler[kOT_Delete] = new CDbCommandDeleteHandler();
 		this->m_mapDbCommandHandler[kOT_Insert] = new CDbCommandInsertHandler();
-		this->m_mapDbCommandHandler[kOT_Nop] = new CDbCommandNOPHandler();
-		this->m_mapDbCommandHandler[kOT_Query] = new CDbCommandQueryHandler();
+		this->m_mapDbCommandHandler[kOT_Query]	= new CDbCommandQueryHandler();
 		this->m_mapDbCommandHandler[kOT_Select] = new CDbCommandSelectHandler();
 		this->m_mapDbCommandHandler[kOT_Update] = new CDbCommandUpdateHandler();
+		this->m_mapDbCommandHandler[kOT_Nop]	= new CDbCommandNOPHandler();
 	}
 
 	CDbCommandHandlerProxy::~CDbCommandHandlerProxy()
 	{
-		delete this->m_pDbCacheMgr;
+		for (auto iter = this->m_mapDbCommandHandler.begin(); iter != this->m_mapDbCommandHandler.end(); ++iter)
+		{
+			delete iter->second;
+		}
 	}
 
 	bool CDbCommandHandlerProxy::init(uint64_t nMaxCacheSize)
 	{
-		this->m_pDbCacheMgr = new CDbCacheMgr();
-
-		return this->m_pDbCacheMgr->init(nMaxCacheSize);
+		return this->m_dbCacheMgr.init(this, nMaxCacheSize);
 	}
 
 	void CDbCommandHandlerProxy::onConnect(CDbConnection* pDbConnection)
@@ -44,7 +45,7 @@ namespace db
 
 		for (auto iter = this->m_mapDbCommandHandler.begin(); iter != this->m_mapDbCommandHandler.end(); ++iter)
 		{
-			CDbCommandHandler* pDbCommandHandler = iter->second;
+			auto& pDbCommandHandler = iter->second;
 			if (pDbCommandHandler == nullptr)
 				continue;
 
@@ -82,7 +83,7 @@ namespace db
 				const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
 				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-				std::shared_ptr<google::protobuf::Message> pData = this->m_pDbCacheMgr.getData(pCommand->id(), pCommand->table_name());
+				std::shared_ptr<google::protobuf::Message> pData = this->m_dbCacheMgr.getData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
 				if (pData != nullptr)
 				{
 					pResponse = pData;
@@ -97,7 +98,7 @@ namespace db
 				if (!getPrimaryValue(pRequest.get(), nID))
 					return kRC_PROTO_ERROR;
 
-				this->m_pDbCacheMgr.setData(nID, pRequest);
+				this->m_dbCacheMgr.setData(nID, pRequest);
 			}
 			break;
 
@@ -107,7 +108,7 @@ namespace db
 				if (!getPrimaryValue(pRequest.get(), nID))
 					return kRC_PROTO_ERROR;
 
-				this->m_pDbCacheMgr.setData(nID, pRequest);
+				this->m_dbCacheMgr.addData(nID, pRequest);
 			}
 			break;
 
@@ -116,7 +117,7 @@ namespace db
 				const proto::db::delete_command* pCommand = dynamic_cast<const proto::db::delete_command*>(pRequest.get());
 				DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-				this->m_pDbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
+				this->m_dbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
 			}
 			break;
 		}
@@ -130,9 +131,27 @@ namespace db
 			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
 			DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
 
-			this->m_pDbCacheMgr.setData(pCommand->id(), pResponse);
+			this->m_dbCacheMgr.setData(pCommand->id(), pResponse);
 		}
 
 		return nErrorCode;
+	}
+
+	void CDbCommandHandlerProxy::flushCache(std::shared_ptr<google::protobuf::Message>& pRequest)
+	{
+		CDbCommandHandler* pDbCommandHandler = this->m_mapDbCommandHandler[kOT_Update];
+		DebugAst(pDbCommandHandler != nullptr);
+
+		std::shared_ptr<google::protobuf::Message> pResponse;
+		uint32_t nErrorCode = pDbCommandHandler->onDbCommand(pRequest.get(), pResponse);
+		if (nErrorCode != kRC_OK)
+		{
+			PrintWarning("");
+		}
+	}
+
+	void CDbCommandHandlerProxy::flushAllCache()
+	{
+		this->m_dbCacheMgr.flushAllCache();
 	}
 }

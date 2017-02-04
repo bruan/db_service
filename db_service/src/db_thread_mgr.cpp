@@ -9,7 +9,7 @@ namespace db
 
 	CDbThreadMgr::~CDbThreadMgr()
 	{
-		
+		this->exit();
 	}
 
 	bool CDbThreadMgr::init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
@@ -27,8 +27,8 @@ namespace db
 		this->m_vecDbThread.resize(nDbThreadCount);
 		for (uint32_t i = 0; i < nDbThreadCount; ++i)
 		{
-			this->m_vecDbThread[i] = new CDbThread(this);
-			if (!this->m_vecDbThread[i]->init(nMaxCacheSize))
+			this->m_vecDbThread[i] = new CDbThread();
+			if (!this->m_vecDbThread[i]->init(this, nMaxCacheSize))
 				return false;
 		}
 

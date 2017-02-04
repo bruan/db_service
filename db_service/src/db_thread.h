@@ -2,7 +2,6 @@
 #include "db_service_base.h"
 #include "db_command_handler_proxy.h"
 #include "db_connection.h"
-#include "db_cache_mgr.h"
 
 #include <list>
 #include <mutex>
@@ -18,10 +17,10 @@ namespace db
 	class CDbThread
 	{
 	public:
-		CDbThread(CDbThreadMgr* pDbThreadMgr);
+		CDbThread();
 		~CDbThread();
 
-		bool		init(uint64_t nMaxCacheSize);
+		bool		init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize);
 		void		query(const SDbCommand& sDbCommand);
 		void		join();
 		uint32_t	getQueueSize();
@@ -39,7 +38,7 @@ namespace db
 		std::thread*			m_pThread;
 		std::list<SDbCommand>	m_listCommand;
 		CDbConnection			m_dbConnection;
-		CDbCommandHandlerProxy*	m_pDbCommandHandlerProxy;
+		CDbCommandHandlerProxy	m_dbCommandHandlerProxy;
 		CDbThreadMgr*			m_pDbThreadMgr;
 		uint32_t				m_nQPS;
 	};

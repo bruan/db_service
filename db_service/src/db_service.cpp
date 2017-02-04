@@ -78,7 +78,7 @@ namespace db
 			return 0;
 
 		CDbThreadMgr* pDbThreadMgr = new CDbThreadMgr();
-		if (!pDbThreadMgr->init(szHost, nPort, szDb, szUser, szPassword, szCharacterset, nDbThreadCount))
+		if (!pDbThreadMgr->init(szHost, nPort, szDb, szUser, szPassword, szCharacterset, nDbThreadCount, nMaxCacheSize))
 		{
 			delete pDbThreadMgr;
 			return 0;

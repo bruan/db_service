@@ -1,9 +1,11 @@
 #include "db_cache_mgr.h"
+#include "db_command_handler_proxy.h"
 
 namespace db
 {
 	CDbCacheMgr::CDbCacheMgr()
-		: m_nCurIndex(1)
+		: m_pDbCommandHandlerProxy(nullptr)
+		, m_nCurIndex(1)
 		, m_nDataSize(0)
 		, m_nMaxCacheSize(0)
 	{
@@ -15,9 +17,13 @@ namespace db
 
 	}
 
-	bool CDbCacheMgr::init(uint64_t nMaxCacheSize)
+	bool CDbCacheMgr::init(CDbCommandHandlerProxy* pDbCommandHandlerProxy, uint64_t nMaxCacheSize)
 	{
+		DebugAstEx(pDbCommandHandlerProxy != nullptr, false);
+
 		this->m_nMaxCacheSize = nMaxCacheSize;
+		this->m_pDbCommandHandlerProxy = pDbCommandHandlerProxy;
+		return true;
 	}
 
 	uint32_t CDbCacheMgr::getDataID(const std::string& szDataName)
@@ -43,12 +49,16 @@ namespace db
 
 		DebugAstEx(nDataID != -1, nullptr);
 
-		CDbCache& sDbCache = this->m_mapCache[nID];
+		auto iter = this->m_mapCache.find(nID);
+		if (iter == this->m_mapCache.end())
+			return nullptr;
 
-		return sDbCache.getData(nDataID);
+		auto pDbCache = iter->second;
+
+		return pDbCache->getData(nDataID);
 	}
 
-	void CDbCacheMgr::setData(uint64_t nID, std::shared_ptr<google::protobuf::Message> pData)
+	void CDbCacheMgr::setData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData)
 	{
 		DebugAst(pData != nullptr);
 
@@ -56,12 +66,50 @@ namespace db
 		uint32_t nDataID = this->getDataID(szDataName);
 		DebugAst(nDataID != -1);
 
-		CDbCache& sDbCache = this->m_mapCache[nID];
+		auto pDbCache = this->m_mapCache[nID];
 
-		int32_t nSize = sDbCache.getDataSize();
-		sDbCache.setData(nDataID, pData);
+		int32_t nSize = pDbCache->getDataSize();
+		pDbCache->setData(nDataID, pData);
 		this->m_nDataSize -= nSize;
-		this->m_nDataSize += sDbCache.getDataSize();
+		this->m_nDataSize += pDbCache->getDataSize();
+
+		this->m_mapDirtyCache[nID] = pDbCache;
+	}
+
+	void CDbCacheMgr::addData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData)
+	{
+		DebugAst(pData != nullptr);
+
+		std::string szDataName = pData->GetTypeName();
+		uint32_t nDataID = this->getDataID(szDataName);
+		DebugAst(nDataID != -1);
+
+		DebugAst(this->m_mapCache.find(nID) == this->m_mapCache.end());
+
+		auto pDbCache = std::make_shared<CDbCache>(this);
+		this->m_mapCache[nID] = pDbCache;
+
+		int32_t nSize = pDbCache->getDataSize();
+		pDbCache->addData(nDataID, pData);
+		this->m_nDataSize -= nSize;
+		this->m_nDataSize += pDbCache->getDataSize();
+	}
+
+	void CDbCacheMgr::delData(uint64_t nID, const std::string& szDataName)
+	{
+		auto iter = this->m_mapCache.find(nID);
+		if (iter == this->m_mapCache.end())
+			return;
+
+		uint32_t nDataID = this->getDataID(szDataName);
+		DebugAst(nDataID != -1);
+
+		auto pDbCache = iter->second;
+
+		int32_t nSize = pDbCache->getDataSize();
+		pDbCache->delData(nDataID);
+		this->m_nDataSize -= nSize;
+		this->m_nDataSize += pDbCache->getDataSize();
 	}
 
 	void CDbCacheMgr::cleanData()
@@ -69,7 +117,7 @@ namespace db
 		if (this->m_nDataSize < this->m_nMaxCacheSize)
 			return;
 
-		std::vector<std::unordered_map<uint64_t, CDbCache>::iterator> vecElement;
+		std::vector<std::unordered_map<uint64_t, std::shared_ptr<CDbCache>>::iterator> vecElement;
 		vecElement.reserve(5);
 		for (size_t i = 0; i < 5; ++i)
 		{
@@ -85,25 +133,33 @@ namespace db
 			return;
 
 		int32_t nPos = std::rand() % vecElement.size();
-		CDbCache& sDbCache = vecElement[nPos]->second;
-		this->m_nDataSize -= sDbCache.getDataSize();
+		auto pDbCache = vecElement[nPos]->second;
+		uint64_t nID = vecElement[nPos]->first;
+		this->m_nDataSize -= pDbCache->getDataSize();
 		this->m_mapCache.erase(vecElement[nPos]);
+		this->m_mapDirtyCache.erase(nID);
+		pDbCache->backup(0);
 	}
 
-	void CDbCacheMgr::delData(uint64_t nID, const std::string& szDataName)
+	void CDbCacheMgr::backup(uint64_t nTime)
 	{
-		auto iter = this->m_mapCache.find(nID);
-		if (iter == this->m_mapCache.end())
-			return;
-
-		uint32_t nDataID = this->getDataID(szDataName);
-		DebugAst(nDataID != -1);
-
-		CDbCache& sDbCache = iter->second;
-
-		int32_t nSize = sDbCache.getDataSize();
-		sDbCache.delData(nDataID);
-		this->m_nDataSize -= nSize;
-		this->m_nDataSize += sDbCache.getDataSize();
+		for (auto iter = this->m_mapDirtyCache.begin(); iter != this->m_mapDirtyCache.end();)
+		{
+			if (!iter->second->backup(nTime))
+				this->m_mapDirtyCache.erase(iter);
+			else
+				++iter;
+		}
 	}
+
+	void CDbCacheMgr::flushAllCache()
+	{
+		this->backup(0);
+	}
+
+	CDbCommandHandlerProxy* CDbCacheMgr::getDbCommandHandlerProxy() const
+	{
+		return this->m_pDbCommandHandlerProxy;
+	}
+
 }

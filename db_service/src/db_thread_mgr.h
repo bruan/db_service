@@ -2,7 +2,6 @@
 #include "db_service_base.h"
 #include "db_thread.h"
 #include "db_service.h"
-#include "db_cache_mgr.h"
 
 #include <map>
 #include <vector>
@@ -19,7 +18,6 @@ namespace db
 		std::string	szCharacterset;
 	};
 
-	class CDbThread;
 	class CDbThreadMgr
 	{
 	public:
@@ -47,6 +45,5 @@ namespace db
 		SDbConnectionInfo			m_sDbConnectionInfo;
 		std::mutex					m_tResultLock;
 		std::list<SDbResultInfo>	m_listResultInfo;
-		CDbCacheMgr					m_dbCacheMgr;
 	};
 }

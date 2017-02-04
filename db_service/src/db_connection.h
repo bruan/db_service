@@ -56,6 +56,6 @@ namespace db
 		std::string		escape(const std::string& szSQL);
 
 	private:
-		MYSQL*						m_pMysql;	
+		MYSQL*	m_pMysql;	
 	};
 }
