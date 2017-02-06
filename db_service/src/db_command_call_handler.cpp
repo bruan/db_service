@@ -23,7 +23,7 @@ CDbCommandCallHandler::~CDbCommandCallHandler()
 
 }
 
-uint32_t CDbCommandCallHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandCallHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	const call_command* pCommand = dynamic_cast<const call_command*>(pRequest);
 	DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
@@ -109,7 +109,7 @@ uint32_t CDbCommandCallHandler::onDbCommand(const Message* pRequest, shared_ptr<
 		}
 	}
 
-	pResponse = pResultset;
+	*pResponse = pResultset;
 
 	return kRC_OK;
 }

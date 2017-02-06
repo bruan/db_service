@@ -21,39 +21,40 @@ CDbCache::~CDbCache()
 
 }
 
-shared_ptr<Message> CDbCache::getData(uint32_t nDataID)
+pair<const char*, size_t> CDbCache::getData(uint32_t nDataID)
 {
 	auto iter = this->m_mapCacheInfo.find(nDataID);
 	if (iter == this->m_mapCacheInfo.end())
-		return nullptr;
+		return make_pair(nullptr, 0);
 
-	return iter->second.pData;
+	return make_pair(iter->second.szData.c_str(), iter->second.szData.size());
 }
 
-bool CDbCache::addData(uint32_t nDataID, shared_ptr<Message>& pData)
+bool CDbCache::addData(uint32_t nDataID, string& szData)
 {
-	DebugAstEx(pData != nullptr, false);
-
 	if (this->m_mapCacheInfo.find(nDataID) != this->m_mapCacheInfo.end())
 		return false;
 
-	this->m_mapCacheInfo.insert(make_pair(nDataID, SCacheInfo{ pData, 0 }));
-	this->m_nDataSize += pData->ByteSize();
+	int32_t nSize = (int32_t)szData.size();
+	SCacheInfo& sCacheInfo = this->m_mapCacheInfo[nDataID];
+	sCacheInfo.nTime = 0;
+	sCacheInfo.szData = move(szData);
+	this->m_nDataSize += nSize;
 
 	return true;
 }
 
-bool CDbCache::setData(uint32_t nDataID, shared_ptr<Message>& pData)
+bool CDbCache::setData(uint32_t nDataID, string& szData)
 {
-	DebugAstEx(pData != nullptr, false);
-
 	auto iter = this->m_mapCacheInfo.find(nDataID);
 	if (iter == this->m_mapCacheInfo.end())
-		return this->addData(nDataID, pData);
+		return this->addData(nDataID, szData);
 
-	this->m_nDataSize -= iter->second.pData->ByteSize();
-	iter->second = SCacheInfo{ pData, time(nullptr) };
-	this->m_nDataSize += pData->ByteSize();
+	int32_t nSize = (int32_t)szData.size();
+	this->m_nDataSize -= (int32_t)iter->second.szData.size();
+	iter->second.nTime =time(nullptr);
+	iter->second.szData = move(szData);
+	this->m_nDataSize += nSize;
 
 	return true;
 }
@@ -64,7 +65,7 @@ bool CDbCache::delData(uint32_t nDataID)
 	if (iter == this->m_mapCacheInfo.end())
 		return false;
 
-	this->m_nDataSize -= iter->second.pData->ByteSize();
+	this->m_nDataSize -= (int32_t)iter->second.szData.size();
 	this->m_mapCacheInfo.erase(nDataID);
 
 	return true;
@@ -87,8 +88,24 @@ bool CDbCache::writeback(int64_t nTime)
 		int64_t nDeltaTime = nTime - sCacheInfo.nTime;
 		if (nDeltaTime >= _CACHE_EXPIRED_TIME || nTime == 0)
 		{
-			static shared_ptr<Message> pResponse;
-			uint32_t nErrorCode = m_pDbCacheMgr->getDbThread()->getDbCommandHandlerProxy().onDbCommand(kOT_Update, sCacheInfo.pData, pResponse);
+			const string& szDataName = this->m_pDbCacheMgr->getDataName(iter->first);
+			if (szDataName.empty())
+			{
+				PrintWarning("");
+				continue;
+			}
+			auto pMessage = std::unique_ptr<Message>(createMessage(szDataName));
+			if (nullptr == pMessage)
+			{
+				PrintWarning("");
+				continue;
+			}
+			if (!pMessage->ParseFromString(sCacheInfo.szData))
+			{
+				PrintWarning("");
+				continue;
+			}
+			uint32_t nErrorCode = m_pDbCacheMgr->getDbThread()->getDbCommandHandlerProxy().onDbCommand(kOT_Update, pMessage.get(), nullptr);
 			if (nErrorCode != kRC_OK)
 			{
 				PrintWarning("");

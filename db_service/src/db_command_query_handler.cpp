@@ -20,7 +20,7 @@ CDbCommandQueryHandler::~CDbCommandQueryHandler()
 
 }
 
-uint32_t CDbCommandQueryHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandQueryHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	const query_command* pCommand = dynamic_cast<const query_command*>(pRequest);
 	DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
@@ -62,8 +62,8 @@ uint32_t CDbCommandQueryHandler::onDbCommand(const Message* pRequest, shared_ptr
 	DebugAstEx(pDbRecordset != nullptr, kRC_MYSQL_ERROR);
 
 	string szMessageName = getMessageNameByTableName(pCommand->table_name());
-	pResponse = shared_ptr<Message>(createRepeatMessage(pDbRecordset, szMessageName));
-	DebugAstEx(pResponse != nullptr, kRC_PROTO_ERROR);
+	*pResponse = shared_ptr<Message>(createRepeatMessage(pDbRecordset, szMessageName));
+	DebugAstEx(*pResponse != nullptr, kRC_PROTO_ERROR);
 	
 	return kRC_OK;
 }

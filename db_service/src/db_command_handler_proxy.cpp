@@ -67,7 +67,7 @@ void CDbCommandHandlerProxy::onDisconnect()
 	}
 }
 
-uint32_t CDbCommandHandlerProxy::onDbCommand(uint32_t nType, shared_ptr<Message>& pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandHandlerProxy::onDbCommand(uint32_t nType, Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	string szName = pRequest->GetTypeName();
 	auto iter = this->m_mapDbCommandHandler.find(nType);
@@ -78,7 +78,7 @@ uint32_t CDbCommandHandlerProxy::onDbCommand(uint32_t nType, shared_ptr<Message>
 	if (pDbCommandHandler == nullptr)
 		return kRC_UNKNOWN;
 
-	uint32_t nErrorCode = pDbCommandHandler->onDbCommand(pRequest.get(), pResponse);
+	uint32_t nErrorCode = pDbCommandHandler->onDbCommand(pRequest, pResponse);
 	if (nErrorCode != kRC_OK)
 		return nErrorCode;
 

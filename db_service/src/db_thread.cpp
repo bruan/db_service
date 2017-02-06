@@ -120,7 +120,7 @@ bool CDbThread::onProcess()
 		uint32_t nErrorCode = kRC_OK;
 		if (!this->onPreCache(sDbCommand.nType, sDbCommand.pMessage, pMessage))
 		{
-			nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, pMessage);
+			nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, &pMessage);
 			if (nErrorCode == kRC_LOST_CONNECTION)
 			{
 				unique_lock<mutex> lock(this->m_tCommandLock);
@@ -151,7 +151,7 @@ bool CDbThread::onProcess()
 	return true;
 }
 
-bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared_ptr<Message>& pResponse)
+bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message>& pResponse)
 {
 	if (this->m_dbCacheMgr.getMaxCacheSize() <= 0)
 		return false;
@@ -160,13 +160,26 @@ bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared
 	{
 	case kOT_Select:
 		{
-			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
+			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest);
 			DebugAstEx(pCommand != nullptr, false);
 
-			shared_ptr<Message> pData = this->m_dbCacheMgr.getData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
-			if (pData != nullptr)
+			string szDataName = getMessageNameByTableName(pCommand->table_name());
+			pair<const char*, size_t> sData = this->m_dbCacheMgr.getData(pCommand->id(), szDataName);
+			if (sData.first != nullptr)
 			{
-				pResponse = pData;
+				Message* pMessage = createMessage(szDataName);
+				if (nullptr == pMessage)
+				{
+					PrintWarning("");
+					return false;
+				}
+				if (!pMessage->ParseFromArray(sData.first, (int32_t)sData.second))
+				{
+					PrintWarning("");
+					delete pMessage;
+					return false;
+				}
+				pResponse = shared_ptr<Message>(pMessage);
 				return true;
 			}
 		}
@@ -175,10 +188,14 @@ bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared
 	case kOT_Update:
 		{
 			uint64_t nID = 0;
-			if (!getPrimaryValue(pRequest.get(), nID))
+			if (!getPrimaryValue(pRequest, nID))
 				return false;
 
-			if (this->m_dbCacheMgr.setData(nID, pRequest))
+			std::string szData;
+			if (!pRequest->SerializeToString(&szData))
+				return false;
+
+			if (this->m_dbCacheMgr.setData(nID, pRequest->GetTypeName(), szData))
 				return true;
 		}
 		break;
@@ -186,16 +203,20 @@ bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared
 	case kOT_Insert:
 		{
 			uint64_t nID = 0;
-			if (!getPrimaryValue(pRequest.get(), nID))
+			if (!getPrimaryValue(pRequest, nID))
 				return false;
 
-			this->m_dbCacheMgr.addData(nID, pRequest);
+			std::string szData;
+			if (!pRequest->SerializeToString(&szData))
+				return false;
+
+			this->m_dbCacheMgr.addData(nID, pRequest->GetTypeName(), szData);
 		}
 		break;
 
 	case kOT_Delete:
 		{
-			const delete_command* pCommand = dynamic_cast<const delete_command*>(pRequest.get());
+			const delete_command* pCommand = dynamic_cast<const delete_command*>(pRequest);
 			DebugAstEx(pCommand != nullptr, false);
 
 			this->m_dbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
@@ -206,17 +227,23 @@ bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared
 	return false;
 }
 
-void CDbThread::onPostCache(uint32_t nType, shared_ptr<Message>& pRequest, shared_ptr<Message>& pResponse)
+void CDbThread::onPostCache(uint32_t nType, Message* pRequest, shared_ptr<Message>& pResponse)
 {
 	if (this->m_dbCacheMgr.getMaxCacheSize() <= 0)
 		return;
 
 	if (nType == kOT_Select)
 	{
-		const select_command* pCommand = dynamic_cast<const select_command*>(pRequest.get());
+		DebugAst(pResponse != nullptr);
+
+		const select_command* pCommand = dynamic_cast<const select_command*>(pRequest);
 		DebugAst(pCommand != nullptr);
 
-		this->m_dbCacheMgr.setData(pCommand->id(), pResponse);
+		std::string szData;
+		if (!pResponse->SerializeToString(&szData))
+			return;
+
+		this->m_dbCacheMgr.setData(pCommand->id(), pResponse->GetTypeName(), szData);
 	}
 }
 

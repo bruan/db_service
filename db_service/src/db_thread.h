@@ -35,8 +35,8 @@ namespace db
 		bool		onProcess();
 		void		onDestroy();
 
-		bool		onPreCache(uint32_t nType, std::shared_ptr<google::protobuf::Message>& pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
-		void		onPostCache(uint32_t nType, std::shared_ptr<google::protobuf::Message>& pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
+		bool		onPreCache(uint32_t nType, google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
+		void		onPostCache(uint32_t nType, google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
 		void		flushAllCache();
 
 	private:

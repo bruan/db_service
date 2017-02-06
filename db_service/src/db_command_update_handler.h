@@ -10,6 +10,6 @@ namespace db
 		CDbCommandUpdateHandler();
 		virtual ~CDbCommandUpdateHandler();
 
-		virtual uint32_t	onDbCommand(const google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
+		virtual uint32_t	onDbCommand(const google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>* pResponse);
 	};
 }

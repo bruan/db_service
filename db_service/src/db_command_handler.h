@@ -11,11 +11,10 @@ namespace db
 {
 	struct SDbCommand
 	{
-		uint32_t	nServiceID;
-		uint32_t	nType;
-		uint64_t	nSessionID;
-		std::shared_ptr<google::protobuf::Message>
-					pMessage;
+		uint32_t					nServiceID;
+		uint32_t					nType;
+		uint64_t					nSessionID;
+		google::protobuf::Message*	pMessage;
 	};
 
 	struct SDbResult
@@ -34,7 +33,7 @@ namespace db
 
 		virtual void		onConnect(CDbConnection* pDbConnection) { this->m_pDbConnection = pDbConnection; }
 		virtual void		onDisconnect() { this->m_pDbConnection = nullptr; }
-		virtual uint32_t	onDbCommand(const google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse) = 0;
+		virtual uint32_t	onDbCommand(const google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>* pResponse) = 0;
 
 	protected:
 		CDbConnection*	m_pDbConnection;

@@ -152,7 +152,7 @@ namespace db
 		sDbCommand.nServiceID = nServiceID;
 		sDbCommand.nType = pRequest->type();
 		sDbCommand.nSessionID = pRequest->session_id();
-		sDbCommand.pMessage = shared_ptr<Message>(pMessage);
+		sDbCommand.pMessage = pMessage;
 
 		pDbThreadMgr->query(pRequest->associate_id(), sDbCommand);
 	}

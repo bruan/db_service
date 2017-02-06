@@ -18,7 +18,7 @@ CDbCommandInsertHandler::~CDbCommandInsertHandler()
 
 }
 
-uint32_t CDbCommandInsertHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandInsertHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	string szMessageName = pRequest->GetTypeName();
 	const Message* pMessage = pRequest;

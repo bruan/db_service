@@ -20,7 +20,7 @@ CDbCommandSelectHandler::~CDbCommandSelectHandler()
 
 }
 
-uint32_t CDbCommandSelectHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandSelectHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	const select_command* pCommand = dynamic_cast<const select_command*>(pRequest);
 	DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);
@@ -53,7 +53,7 @@ uint32_t CDbCommandSelectHandler::onDbCommand(const Message* pRequest, shared_pt
 
 	DebugAstEx(fillNormalMessage(pDbRecordset, pMessage.get()), kRC_PROTO_ERROR);
 	
-	pResponse = pMessage;
+	*pResponse = pMessage;
 
 	return kRC_OK;
 }

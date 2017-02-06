@@ -20,7 +20,7 @@ CDbCommandDeleteHandler::~CDbCommandDeleteHandler()
 
 }
 
-uint32_t CDbCommandDeleteHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandDeleteHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	const delete_command* pCommand = dynamic_cast<const delete_command*>(pRequest);
 	DebugAstEx(pCommand != nullptr, kRC_PROTO_ERROR);

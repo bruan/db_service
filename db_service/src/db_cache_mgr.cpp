@@ -7,6 +7,8 @@ using namespace std;
 #define _CLEAN_CACHE_TIME 1
 #define _CHECK_WRITE_BACK_TIME 1
 
+static string s_szErrorName;
+
 CDbCacheMgr::CDbCacheMgr()
 	: m_pDbThread(nullptr)
 	, m_nCurIndex(1)
@@ -41,6 +43,7 @@ uint32_t CDbCacheMgr::getDataID(const string& szDataName)
 	{
 		nDataID = this->m_nCurIndex++;
 		this->m_mapDataIndex[szDataName] = nDataID;
+		this->m_mapDataName[nDataID] = szDataName;
 	}
 	else
 	{
@@ -50,36 +53,42 @@ uint32_t CDbCacheMgr::getDataID(const string& szDataName)
 	return nDataID;
 }
 
-shared_ptr<Message> CDbCacheMgr::getData(uint64_t nID, const string& szDataName)
+const string& CDbCacheMgr::getDataName(uint32_t nIndex) const
+{
+	auto iter = this->m_mapDataName.find(nIndex);
+	if (iter == this->m_mapDataName.end())
+		return s_szErrorName;
+
+	return iter->second;
+}
+
+pair<const char*, size_t> CDbCacheMgr::getData(uint64_t nID, const string& szDataName)
 {
 	uint32_t nDataID = this->getDataID(szDataName);
 
-	DebugAstEx(nDataID != -1, nullptr);
+	DebugAstEx(nDataID != -1, make_pair(nullptr, 0));
 
 	auto iter = this->m_mapCache.find(nID);
 	if (iter == this->m_mapCache.end())
-		return nullptr;
+		return make_pair(nullptr, 0);
 
 	auto pDbCache = iter->second;
 
 	return pDbCache->getData(nDataID);
 }
 
-bool CDbCacheMgr::setData(uint64_t nID, shared_ptr<Message>& pData)
+bool CDbCacheMgr::setData(uint64_t nID, const string& szDataName, string& szData)
 {
 	if (this->m_nMaxCacheSize <= 0)
 		return false;
 
-	DebugAstEx(pData != nullptr, false);
-
-	string szDataName = pData->GetTypeName();
 	uint32_t nDataID = this->getDataID(szDataName);
 	DebugAstEx(nDataID != -1, false);
 
 	auto pDbCache = this->m_mapCache[nID];
 
 	int32_t nSize = pDbCache->getDataSize();
-	if (!pDbCache->setData(nDataID, pData))
+	if (!pDbCache->setData(nDataID, szData))
 		return false;
 
 	this->m_nDataSize -= nSize;
@@ -90,14 +99,11 @@ bool CDbCacheMgr::setData(uint64_t nID, shared_ptr<Message>& pData)
 	return true;
 }
 
-bool CDbCacheMgr::addData(uint64_t nID, shared_ptr<Message>& pData)
+bool CDbCacheMgr::addData(uint64_t nID, const string& szDataName, string& szData)
 {
 	if (this->m_nMaxCacheSize <= 0)
 		return false;
 
-	DebugAstEx(pData != nullptr, false);
-
-	string szDataName = pData->GetTypeName();
 	uint32_t nDataID = this->getDataID(szDataName);
 	DebugAstEx(nDataID != -1, false);
 
@@ -107,7 +113,7 @@ bool CDbCacheMgr::addData(uint64_t nID, shared_ptr<Message>& pData)
 	this->m_mapCache[nID] = pDbCache;
 
 	int32_t nSize = pDbCache->getDataSize();
-	if (!pDbCache->addData(nDataID, pData))
+	if (!pDbCache->addData(nDataID, szData))
 		return false;
 
 	this->m_nDataSize -= nSize;

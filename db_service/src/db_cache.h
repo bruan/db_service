@@ -17,19 +17,19 @@ namespace db
 		CDbCache(CDbCacheMgr* pDbCacheMgr);
 		~CDbCache();
 
-		std::shared_ptr<google::protobuf::Message> 
+		std::pair<const char*, size_t>
 				getData(uint32_t nDataID);
-		bool	setData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
-		bool	addData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
+		bool	setData(uint32_t nDataID, std::string& szData);
+		bool	addData(uint32_t nDataID, std::string& szData);
 		bool	delData(uint32_t nDataID);
-		int32_t getDataSize() const;
+		int32_t	getDataSize() const;
 		bool	writeback(int64_t nTime);
 
 	private:
 		struct SCacheInfo
 		{
-			std::shared_ptr<google::protobuf::Message>	pData;
-			uint64_t									nTime;
+			std::string	szData;
+			uint64_t	nTime;
 		};
 
 		CDbCacheMgr*					m_pDbCacheMgr;

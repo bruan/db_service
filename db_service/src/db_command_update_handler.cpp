@@ -18,7 +18,7 @@ CDbCommandUpdateHandler::~CDbCommandUpdateHandler()
 
 }
 
-uint32_t CDbCommandUpdateHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>& pResponse)
+uint32_t CDbCommandUpdateHandler::onDbCommand(const Message* pRequest, shared_ptr<Message>* pResponse)
 {
 	string szMessageName = pRequest->GetTypeName();
 	const Message* pMessage = pRequest;
