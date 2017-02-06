@@ -22,13 +22,15 @@ namespace db
 		CDbThread();
 		~CDbThread();
 
-		bool		init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize);
+		bool		init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_t nWritebackTime);
 		void		query(const SDbCommand& sDbCommand);
 		void		join();
 		uint32_t	getQueueSize();
 		uint32_t	getQPS();
 		CDbCommandHandlerProxy&
 					getDbCommandHandlerProxy();
+
+		void		setMaxCahceSize(uint64_t nSize);
 
 	private:
 		bool		connectDb(bool bInit);
@@ -37,7 +39,7 @@ namespace db
 
 		bool		onPreCache(uint32_t nType, google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
 		void		onPostCache(uint32_t nType, google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
-		void		flushAllCache();
+		void		flushCache(uint64_t nKey, bool bDel);
 
 	private:
 		std::atomic<uint32_t>	m_quit;

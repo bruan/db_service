@@ -14,6 +14,7 @@ namespace db
 		kOT_Query,
 		kOT_Call,
 		kOT_Nop,
+		kOT_Flush,
 
 		kOT_None,
 	};

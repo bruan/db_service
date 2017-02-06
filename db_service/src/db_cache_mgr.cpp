@@ -16,6 +16,7 @@ CDbCacheMgr::CDbCacheMgr()
 	, m_nMaxCacheSize(0)
 	, m_nLastCleanCacheTime(0)
 	, m_nLastWritebackTime(0)
+	, m_nWritebackTime(0)
 {
 
 }
@@ -25,12 +26,13 @@ CDbCacheMgr::~CDbCacheMgr()
 
 }
 
-bool CDbCacheMgr::init(CDbThread* pDbThread, uint64_t nMaxCacheSize)
+bool CDbCacheMgr::init(CDbThread* pDbThread, uint64_t nMaxCacheSize, uint32_t nWritebackTime)
 {
 	DebugAstEx(pDbThread != nullptr, false);
 
-	this->m_nMaxCacheSize = nMaxCacheSize;
 	this->m_pDbThread = pDbThread;
+	this->m_nMaxCacheSize = nMaxCacheSize;
+	this->m_nWritebackTime = nWritebackTime;
 
 	return true;
 }
@@ -188,7 +190,7 @@ void CDbCacheMgr::writeback(uint64_t nTime)
 	if (this->m_nMaxCacheSize <= 0)
 		return;
 
-	if (this->m_nLastWritebackTime != 0 && this->m_nLastWritebackTime - nTime < _CHECK_WRITE_BACK_TIME)
+	if (this->m_nLastWritebackTime != 0 && this->m_nLastWritebackTime - nTime < this->m_nWritebackTime)
 		return;
 
 	this->m_nLastWritebackTime = nTime;
@@ -202,12 +204,25 @@ void CDbCacheMgr::writeback(uint64_t nTime)
 	}
 }
 
-void CDbCacheMgr::flushAllCache()
+void CDbCacheMgr::flushCache(uint64_t nKey, bool bDel)
 {
 	if (this->m_nMaxCacheSize <= 0)
 		return;
 
-	this->writeback(0);
+	if (nKey != 0)
+	{
+		auto iter = this->m_mapCache.find(nKey);
+		if (iter == this->m_mapCache.end())
+			return;
+
+		iter->second->writeback(0);
+		this->m_mapCache.erase(iter);
+	}
+	else
+	{
+		this->writeback(0);
+		this->m_mapCache.clear();
+	}
 }
 
 CDbThread* CDbCacheMgr::getDbThread() const
@@ -218,6 +233,11 @@ CDbThread* CDbCacheMgr::getDbThread() const
 int64_t CDbCacheMgr::getMaxCacheSize() const
 {
 	return this->m_nMaxCacheSize;
+}
+
+void CDbCacheMgr::setMaxCacheSize(uint64_t nSize)
+{
+	this->m_nMaxCacheSize = nSize;
 }
 
 void CDbCacheMgr::update()

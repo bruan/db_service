@@ -56,14 +56,14 @@ void CDbThread::join()
 	this->m_pThread->join();
 }
 
-bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize)
+bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_t nWritebackTime)
 {
 	DebugAstEx(pDbThreadMgr != nullptr, false);
 	this->m_pDbThreadMgr = pDbThreadMgr;
 	if (!this->m_dbCommandHandlerProxy.init())
 		return false;
 
-	if (!this->m_dbCacheMgr.init(this, nMaxCacheSize))
+	if (!this->m_dbCacheMgr.init(this, nMaxCacheSize, nWritebackTime))
 		return false;
 
 	if (!this->connectDb(true))
@@ -82,7 +82,7 @@ bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize)
 			}
 		}
 
-		this->flushAllCache();
+		this->flushCache(0, true);
 
 		this->m_dbConnection.close();
 		this->m_dbCommandHandlerProxy.onDisconnect();
@@ -115,6 +115,12 @@ bool CDbThread::onProcess()
 	for (auto iter = listCommand.begin(); iter != listCommand.end(); ++iter)
 	{
 		SDbCommand sDbCommand = *iter;
+
+		if (sDbCommand.nType == kOT_Flush)
+		{
+			this->flushCache(sDbCommand.nSessionID, sDbCommand.nServiceID != 0);
+			return true;
+		}
 
 		shared_ptr<Message> pMessage;
 		uint32_t nErrorCode = kRC_OK;
@@ -235,11 +241,6 @@ void CDbThread::onPostCache(uint32_t nType, Message* pRequest, shared_ptr<Messag
 	}
 }
 
-void CDbThread::flushAllCache()
-{
-	this->m_dbCacheMgr.flushAllCache();
-}
-
 void CDbThread::query(const SDbCommand& sDbCommand)
 {
 	unique_lock<mutex> lock(this->m_tCommandLock);
@@ -262,4 +263,14 @@ uint32_t CDbThread::getQPS()
 CDbCommandHandlerProxy& CDbThread::getDbCommandHandlerProxy()
 {
 	return this->m_dbCommandHandlerProxy;
+}
+
+void CDbThread::setMaxCahceSize(uint64_t nSize)
+{
+	this->m_dbCacheMgr.setMaxCacheSize(nSize);
+}
+
+void CDbThread::flushCache(uint64_t nKey, bool bDel)
+{
+	this->m_dbCacheMgr.flushCache(nKey, bDel);
 }

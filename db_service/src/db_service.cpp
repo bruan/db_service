@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <mutex>
 #ifdef _WIN32
 #else
 #include <sys/types.h>
@@ -38,11 +39,23 @@ struct SOnce
 
 static SOnce s_Once;
 static map<uint32_t, db::CDbThreadMgr*>	s_mapDbThreadMgr;
+static mutex s_lock;
+
+static db::CDbThreadMgr* getDbThreadMgr(uint32_t nID)
+{
+	unique_lock<mutex> lock(s_lock);
+
+	auto iter = s_mapDbThreadMgr.find(nID);
+	if (iter == s_mapDbThreadMgr.end())
+		return nullptr;
+
+	return iter->second;
+}
 
 namespace db
 {
 
-	uint32_t create(const string& szHost, uint16_t nPort, const string& szDb, const string& szUser, const string& szPassword, const string& szCharacterset, const string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
+	uint32_t create(const string& szHost, uint16_t nPort, const string& szDb, const string& szUser, const string& szPassword, const string& szCharacterset, const string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize, uint32_t nWritebackTime)
 	{
 		vector<string> vecProto;
 
@@ -83,7 +96,7 @@ namespace db
 			return 0;
 
 		CDbThreadMgr* pDbThreadMgr = new CDbThreadMgr();
-		if (!pDbThreadMgr->init(szHost, nPort, szDb, szUser, szPassword, szCharacterset, nDbThreadCount, nMaxCacheSize))
+		if (!pDbThreadMgr->init(szHost, nPort, szDb, szUser, szPassword, szCharacterset, nDbThreadCount, nMaxCacheSize, nWritebackTime))
 		{
 			delete pDbThreadMgr;
 			return 0;
@@ -97,12 +110,15 @@ namespace db
 
 	void release(uint32_t nID)
 	{
-		auto iter = s_mapDbThreadMgr.find(nID);
-		DebugAst(iter != s_mapDbThreadMgr.end());
-		CDbThreadMgr* pDbThreadMgr = iter->second;
-		s_mapDbThreadMgr.erase(iter);
-		DebugAst(pDbThreadMgr != nullptr);
-
+		CDbThreadMgr* pDbThreadMgr = nullptr;
+		{
+			unique_lock<mutex> lock(s_lock);
+			auto iter = s_mapDbThreadMgr.find(nID);
+			DebugAst(iter != s_mapDbThreadMgr.end());
+			pDbThreadMgr = iter->second;
+			s_mapDbThreadMgr.erase(iter);
+			DebugAst(pDbThreadMgr != nullptr);
+		}
 		pDbThreadMgr->exit();
 
 		delete pDbThreadMgr;
@@ -110,9 +126,7 @@ namespace db
 
 	void getResultInfo(uint32_t nID, list<SDbResultInfo>& listResultInfo)
 	{
-		auto iter = s_mapDbThreadMgr.find(nID);
-		DebugAst(iter != s_mapDbThreadMgr.end());
-		CDbThreadMgr* pDbThreadMgr = iter->second;
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getResultInfo(listResultInfo);
@@ -122,9 +136,7 @@ namespace db
 	{
 		DebugAst(pRequest != nullptr);
 
-		auto iter = s_mapDbThreadMgr.find(nID);
-		DebugAst(iter != s_mapDbThreadMgr.end());
-		CDbThreadMgr* pDbThreadMgr = iter->second;
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
 		static const char* szPrefix = "type.googleapis.com/";
@@ -159,9 +171,7 @@ namespace db
 
 	void getQPS(uint32_t nID, vector<uint32_t>& vecQPS)
 	{
-		auto iter = s_mapDbThreadMgr.find(nID);
-		DebugAst(iter != s_mapDbThreadMgr.end());
-		CDbThreadMgr* pDbThreadMgr = iter->second;
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getQPS(vecQPS);
@@ -169,11 +179,25 @@ namespace db
 
 	void getQueueSize(uint32_t nID, vector<uint32_t>& vecSize)
 	{
-		auto iter = s_mapDbThreadMgr.find(nID);
-		DebugAst(iter != s_mapDbThreadMgr.end());
-		CDbThreadMgr* pDbThreadMgr = iter->second;
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
 		pDbThreadMgr->getQueueSize(vecSize);
+	}
+
+	void setMaxCacheSize(uint32_t nID, uint64_t nSize)
+	{
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
+		DebugAst(pDbThreadMgr != nullptr);
+
+		pDbThreadMgr->setMaxCahceSize(nSize);
+	}
+
+	void flushCache(uint32_t nID, uint64_t nKey, bool bDel)
+	{
+		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
+		DebugAst(pDbThreadMgr != nullptr);
+
+		pDbThreadMgr->flushCache(nKey, bDel);
 	}
 }

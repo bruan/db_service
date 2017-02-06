@@ -17,15 +17,16 @@ namespace db
 		CDbCacheMgr();
 		~CDbCacheMgr();
 
-		bool				init(CDbThread* pDbThread, uint64_t nMaxCacheSize);
+		bool				init(CDbThread* pDbThread, uint64_t nMaxCacheSize, uint32_t nWritebackTime);
 		google::protobuf::Message*
 							getData(uint64_t nID, const std::string& szDataName);
 		bool				setData(uint64_t nID, const google::protobuf::Message* pData);
 		bool				addData(uint64_t nID, const google::protobuf::Message* pData);
 		bool				delData(uint64_t nID, const std::string& szDataName);
 		int64_t				getMaxCacheSize() const;
+		void				setMaxCacheSize(uint64_t nSize);
 		const std::string&	getDataName(uint32_t nIndex) const;
-		void				flushAllCache();
+		void				flushCache(uint64_t nKey, bool bDel);
 		CDbThread*			getDbThread() const;
 		void				update();
 
@@ -45,5 +46,6 @@ namespace db
 		int64_t													m_nMaxCacheSize;
 		int64_t													m_nLastCleanCacheTime;
 		int64_t													m_nLastWritebackTime;
+		uint32_t												m_nWritebackTime;
 	};
 }

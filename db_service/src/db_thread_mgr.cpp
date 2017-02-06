@@ -12,9 +12,10 @@ CDbThreadMgr::~CDbThreadMgr()
 	this->exit();
 }
 
-bool CDbThreadMgr::init(const string& szHost, uint16_t nPort, const string& szDb, const string& szUser, const string& szPassword, const string& szCharacterset, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
+bool CDbThreadMgr::init(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, uint32_t nDbThreadCount, uint64_t nMaxCacheSize, uint32_t nWritebackTime)
 {
 	DebugAstEx(nDbThreadCount > 0, false);
+	DebugAstEx(nWritebackTime > 0, false);
 
 	this->m_sDbConnectionInfo.szHost = szHost;
 	this->m_sDbConnectionInfo.nPort = nPort;
@@ -28,7 +29,7 @@ bool CDbThreadMgr::init(const string& szHost, uint16_t nPort, const string& szDb
 	for (uint32_t i = 0; i < nDbThreadCount; ++i)
 	{
 		this->m_vecDbThread[i] = new CDbThread();
-		if (!this->m_vecDbThread[i]->init(this, nMaxCacheSize))
+		if (!this->m_vecDbThread[i]->init(this, nMaxCacheSize, nWritebackTime))
 			return false;
 	}
 
@@ -89,5 +90,29 @@ void CDbThreadMgr::getQueueSize(vector<uint32_t>& vecSize)
 	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
 	{
 		vecSize[i] = this->m_vecDbThread[i]->getQueueSize();
+	}
+}
+
+void CDbThreadMgr::setMaxCahceSize(uint64_t nSize)
+{
+	nSize = this->m_vecDbThread.size() / nSize;
+
+	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
+	{
+		this->m_vecDbThread[i]->setMaxCahceSize(nSize);
+	}
+}
+
+void CDbThreadMgr::flushCache(uint64_t nKey, bool bDel)
+{
+	SDbCommand sDbCommand;
+	sDbCommand.nType = kOT_Flush;
+	sDbCommand.nSessionID = nKey;
+	sDbCommand.nServiceID = bDel;
+	sDbCommand.pMessage = nullptr;
+
+	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
+	{
+		this->m_vecDbThread[i]->query(sDbCommand);
 	}
 }
