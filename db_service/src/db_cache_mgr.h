@@ -18,10 +18,10 @@ namespace db
 		~CDbCacheMgr();
 
 		bool				init(CDbThread* pDbThread, uint64_t nMaxCacheSize);
-		std::pair<const char*, size_t>
+		google::protobuf::Message*
 							getData(uint64_t nID, const std::string& szDataName);
-		bool				setData(uint64_t nID, const std::string& szDataName, std::string& szData);
-		bool				addData(uint64_t nID, const std::string& szDataName, std::string& szData);
+		bool				setData(uint64_t nID, const google::protobuf::Message* pData);
+		bool				addData(uint64_t nID, const google::protobuf::Message* pData);
 		bool				delData(uint64_t nID, const std::string& szDataName);
 		int64_t				getMaxCacheSize() const;
 		const std::string&	getDataName(uint32_t nIndex) const;

@@ -21,18 +21,36 @@ CDbCache::~CDbCache()
 
 }
 
-pair<const char*, size_t> CDbCache::getData(uint32_t nDataID)
+Message* CDbCache::getData(uint32_t nDataID)
 {
 	auto iter = this->m_mapCacheInfo.find(nDataID);
 	if (iter == this->m_mapCacheInfo.end())
-		return make_pair(nullptr, 0);
+		return nullptr;
 
-	return make_pair(iter->second.szData.c_str(), iter->second.szData.size());
+	const string& szDataName = this->m_pDbCacheMgr->getDataName(nDataID);
+	Message* pMessage = createMessage(szDataName);
+	if (nullptr == pMessage)
+	{
+		PrintWarning("");
+		return nullptr;
+	}
+	if (!pMessage->ParseFromArray(iter->second.szData.c_str(), (int32_t)iter->second.szData.size()))
+	{
+		PrintWarning("");
+		delete pMessage;
+		return nullptr;
+	}
+	
+	return pMessage;
 }
 
-bool CDbCache::addData(uint32_t nDataID, string& szData)
+bool CDbCache::addData(uint32_t nDataID, const Message* pData)
 {
 	if (this->m_mapCacheInfo.find(nDataID) != this->m_mapCacheInfo.end())
+		return false;
+
+	string szData;
+	if (!pData->SerializeToString(&szData))
 		return false;
 
 	int32_t nSize = (int32_t)szData.size();
@@ -44,11 +62,15 @@ bool CDbCache::addData(uint32_t nDataID, string& szData)
 	return true;
 }
 
-bool CDbCache::setData(uint32_t nDataID, string& szData)
+bool CDbCache::setData(uint32_t nDataID, const google::protobuf::Message* pData)
 {
 	auto iter = this->m_mapCacheInfo.find(nDataID);
 	if (iter == this->m_mapCacheInfo.end())
-		return this->addData(nDataID, szData);
+		return this->addData(nDataID, pData);
+
+	string szData;
+	if (!pData->SerializeToString(&szData))
+		return false;
 
 	int32_t nSize = (int32_t)szData.size();
 	this->m_nDataSize -= (int32_t)iter->second.szData.size();

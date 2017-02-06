@@ -17,10 +17,10 @@ namespace db
 		CDbCache(CDbCacheMgr* pDbCacheMgr);
 		~CDbCache();
 
-		std::pair<const char*, size_t>
+		google::protobuf::Message*
 				getData(uint32_t nDataID);
-		bool	setData(uint32_t nDataID, std::string& szData);
-		bool	addData(uint32_t nDataID, std::string& szData);
+		bool	setData(uint32_t nDataID, const google::protobuf::Message* pData);
+		bool	addData(uint32_t nDataID, const google::protobuf::Message* pData);
 		bool	delData(uint32_t nDataID);
 		int32_t	getDataSize() const;
 		bool	writeback(int64_t nTime);

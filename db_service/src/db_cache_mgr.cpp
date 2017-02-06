@@ -62,33 +62,33 @@ const string& CDbCacheMgr::getDataName(uint32_t nIndex) const
 	return iter->second;
 }
 
-pair<const char*, size_t> CDbCacheMgr::getData(uint64_t nID, const string& szDataName)
+Message* CDbCacheMgr::getData(uint64_t nID, const string& szDataName)
 {
 	uint32_t nDataID = this->getDataID(szDataName);
 
-	DebugAstEx(nDataID != -1, make_pair(nullptr, 0));
+	DebugAstEx(nDataID != -1, nullptr);
 
 	auto iter = this->m_mapCache.find(nID);
 	if (iter == this->m_mapCache.end())
-		return make_pair(nullptr, 0);
+		return nullptr;
 
 	auto pDbCache = iter->second;
 
 	return pDbCache->getData(nDataID);
 }
 
-bool CDbCacheMgr::setData(uint64_t nID, const string& szDataName, string& szData)
+bool CDbCacheMgr::setData(uint64_t nID, const google::protobuf::Message* pData)
 {
 	if (this->m_nMaxCacheSize <= 0)
 		return false;
 
-	uint32_t nDataID = this->getDataID(szDataName);
+	uint32_t nDataID = this->getDataID(pData->GetTypeName());
 	DebugAstEx(nDataID != -1, false);
 
 	auto pDbCache = this->m_mapCache[nID];
 
 	int32_t nSize = pDbCache->getDataSize();
-	if (!pDbCache->setData(nDataID, szData))
+	if (!pDbCache->setData(nDataID, pData))
 		return false;
 
 	this->m_nDataSize -= nSize;
@@ -99,12 +99,12 @@ bool CDbCacheMgr::setData(uint64_t nID, const string& szDataName, string& szData
 	return true;
 }
 
-bool CDbCacheMgr::addData(uint64_t nID, const string& szDataName, string& szData)
+bool CDbCacheMgr::addData(uint64_t nID, const google::protobuf::Message* pData)
 {
 	if (this->m_nMaxCacheSize <= 0)
 		return false;
 
-	uint32_t nDataID = this->getDataID(szDataName);
+	uint32_t nDataID = this->getDataID(pData->GetTypeName());
 	DebugAstEx(nDataID != -1, false);
 
 	DebugAstEx(this->m_mapCache.find(nID) == this->m_mapCache.end(), false);
@@ -113,7 +113,7 @@ bool CDbCacheMgr::addData(uint64_t nID, const string& szDataName, string& szData
 	this->m_mapCache[nID] = pDbCache;
 
 	int32_t nSize = pDbCache->getDataSize();
-	if (!pDbCache->addData(nDataID, szData))
+	if (!pDbCache->addData(nDataID, pData))
 		return false;
 
 	this->m_nDataSize -= nSize;

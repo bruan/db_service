@@ -164,21 +164,9 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 			DebugAstEx(pCommand != nullptr, false);
 
 			string szDataName = getMessageNameByTableName(pCommand->table_name());
-			pair<const char*, size_t> sData = this->m_dbCacheMgr.getData(pCommand->id(), szDataName);
-			if (sData.first != nullptr)
+			Message* pMessage = this->m_dbCacheMgr.getData(pCommand->id(), szDataName);
+			if (pMessage != nullptr)
 			{
-				Message* pMessage = createMessage(szDataName);
-				if (nullptr == pMessage)
-				{
-					PrintWarning("");
-					return false;
-				}
-				if (!pMessage->ParseFromArray(sData.first, (int32_t)sData.second))
-				{
-					PrintWarning("");
-					delete pMessage;
-					return false;
-				}
 				pResponse = shared_ptr<Message>(pMessage);
 				return true;
 			}
@@ -195,7 +183,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 			if (!pRequest->SerializeToString(&szData))
 				return false;
 
-			if (this->m_dbCacheMgr.setData(nID, pRequest->GetTypeName(), szData))
+			if (this->m_dbCacheMgr.setData(nID, pRequest))
 				return true;
 		}
 		break;
@@ -210,7 +198,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 			if (!pRequest->SerializeToString(&szData))
 				return false;
 
-			this->m_dbCacheMgr.addData(nID, pRequest->GetTypeName(), szData);
+			this->m_dbCacheMgr.addData(nID, pRequest);
 		}
 		break;
 
@@ -243,7 +231,7 @@ void CDbThread::onPostCache(uint32_t nType, Message* pRequest, shared_ptr<Messag
 		if (!pResponse->SerializeToString(&szData))
 			return;
 
-		this->m_dbCacheMgr.setData(pCommand->id(), pResponse->GetTypeName(), szData);
+		this->m_dbCacheMgr.setData(pCommand->id(), pResponse.get());
 	}
 }
 
