@@ -19,27 +19,32 @@
 #include "proto_src/result_set.pb.h"
 #include "proto_src/nop_command.pb.h"
 
+using namespace std;
+using namespace google::protobuf;
+using namespace proto::db;
+
+struct SOnce
+{
+	SOnce()
+	{
+		select_command	command1;
+		delete_command	command2;
+		query_command	command3;
+		call_command	command4;
+		nop_command		command5;
+		result_set		command6;
+	}
+};
+
+static SOnce s_Once;
+static map<uint32_t, db::CDbThreadMgr*>	s_mapDbThreadMgr;
+
 namespace db
 {
-	struct SOnce
-	{
-		SOnce()
-		{
-			proto::db::select_command command1;
-			proto::db::delete_command command2;
-			proto::db::query_command command3;
-			proto::db::call_command	command4;
-			proto::db::nop_command command5;
-			proto::db::result_set command6;
-		}
-	};
 
-	static SOnce s_Once;
-	static std::map<uint32_t, CDbThreadMgr*>	s_mapDbThreadMgr;
-
-	uint32_t create(const std::string& szHost, uint16_t nPort, const std::string& szDb, const std::string& szUser, const std::string& szPassword, const std::string& szCharacterset, const std::string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
+	uint32_t create(const string& szHost, uint16_t nPort, const string& szDb, const string& szUser, const string& szPassword, const string& szCharacterset, const string& szProtoDir, uint32_t nDbThreadCount, uint64_t nMaxCacheSize)
 	{
-		std::vector<std::string> vecProto;
+		vector<string> vecProto;
 
 #ifdef _WIN32
 		WIN32_FIND_DATAA FindFileData;
@@ -65,7 +70,7 @@ namespace db
 			if (strncmp(pFile->d_name, ".", 1) == 0)
 				continue;
 
-			std::string szName = pFile->d_name;
+			string szName = pFile->d_name;
 			size_t pos = szName.find_last_of(".proto");
 			if (pos + 1 != szName.size())
 				continue;
@@ -103,7 +108,7 @@ namespace db
 		delete pDbThreadMgr;
 	}
 
-	void getResultInfo(uint32_t nID, std::list<SDbResultInfo>& listResultInfo)
+	void getResultInfo(uint32_t nID, list<SDbResultInfo>& listResultInfo)
 	{
 		auto iter = s_mapDbThreadMgr.find(nID);
 		DebugAst(iter != s_mapDbThreadMgr.end());
@@ -113,7 +118,7 @@ namespace db
 		pDbThreadMgr->getResultInfo(listResultInfo);
 	}
 
-	void query(uint32_t nID, uint32_t nServiceID, const proto::db::request* pRequest)
+	void query(uint32_t nID, uint32_t nServiceID, const request* pRequest)
 	{
 		DebugAst(pRequest != nullptr);
 
@@ -125,12 +130,12 @@ namespace db
 		static const char* szPrefix = "type.googleapis.com/";
 		static const size_t nPrefixLen = strlen(szPrefix);
 
-		const std::string& szURL = pRequest->content().type_url();
+		const string& szURL = pRequest->content().type_url();
 		size_t pos = szURL.find(szPrefix);
-		DebugAst(pos != std::string::npos);
-		std::string szMessageName = szURL.substr(pos + nPrefixLen);
+		DebugAst(pos != string::npos);
+		string szMessageName = szURL.substr(pos + nPrefixLen);
 
-		google::protobuf::Message* pMessage = createMessage(szMessageName);
+		Message* pMessage = createMessage(szMessageName);
 		if (pMessage == nullptr)
 		{
 			PrintWarning("create message error %s", szMessageName.c_str());
@@ -147,12 +152,12 @@ namespace db
 		sDbCommand.nServiceID = nServiceID;
 		sDbCommand.nType = pRequest->type();
 		sDbCommand.nSessionID = pRequest->session_id();
-		sDbCommand.pMessage = std::shared_ptr<google::protobuf::Message>(pMessage);
+		sDbCommand.pMessage = shared_ptr<Message>(pMessage);
 
 		pDbThreadMgr->query(pRequest->associate_id(), sDbCommand);
 	}
 
-	void getQPS(uint32_t nID, std::vector<uint32_t>& vecQPS)
+	void getQPS(uint32_t nID, vector<uint32_t>& vecQPS)
 	{
 		auto iter = s_mapDbThreadMgr.find(nID);
 		DebugAst(iter != s_mapDbThreadMgr.end());
@@ -162,7 +167,7 @@ namespace db
 		pDbThreadMgr->getQPS(vecQPS);
 	}
 
-	void getQueueSize(uint32_t nID, std::vector<uint32_t>& vecSize)
+	void getQueueSize(uint32_t nID, vector<uint32_t>& vecSize)
 	{
 		auto iter = s_mapDbThreadMgr.find(nID);
 		DebugAst(iter != s_mapDbThreadMgr.end());

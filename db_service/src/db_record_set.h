@@ -6,7 +6,7 @@
 #include <windows.h>
 #endif
 
-#include "variant.h"
+#include "db_variant.h"
 #include "mysql/mysql.h"
 
 namespace db
@@ -23,7 +23,7 @@ namespace db
 		uint32_t	getFieldCount() const;
 		bool		fatchNextRow();
 		bool		locate(uint64_t nRow);
-		CVariant	getVariantData(uint32_t nCol) const;
+		CDbVariant	getVariantData(uint32_t nCol) const;
 		const char*	getData(uint32_t nCol) const;
 		const char*	getFieldName(uint32_t nCol) const;
 

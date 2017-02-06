@@ -19,11 +19,11 @@ namespace db
 
 		std::shared_ptr<google::protobuf::Message> 
 				getData(uint32_t nDataID);
-		void	setData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
-		void	addData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
-		void	delData(uint32_t nDataID);
+		bool	setData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
+		bool	addData(uint32_t nDataID, std::shared_ptr<google::protobuf::Message>& pData);
+		bool	delData(uint32_t nDataID);
 		int32_t getDataSize() const;
-		bool	backup(int64_t nTime);
+		bool	writeback(int64_t nTime);
 
 	private:
 		struct SCacheInfo

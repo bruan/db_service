@@ -2,154 +2,254 @@
 #include "db_thread_mgr.h"
 #include "db_command_handler.h"
 #include "db_common.h"
+#include "db_protobuf.h"
 
-namespace db
+#include "proto_src\select_command.pb.h"
+#include "proto_src\delete_command.pb.h"
+
+using namespace std;
+using namespace google::protobuf;
+using namespace db;
+using namespace proto::db;
+
+CDbThread::CDbThread()
+	: m_pDbThreadMgr(nullptr)
+	, m_pThread(nullptr)
+	, m_quit(0)
+	, m_nQPS(0)
 {
+}
 
-	CDbThread::CDbThread()
-		: m_pDbThreadMgr(nullptr)
-		, m_pThread(nullptr)
-		, m_quit(0)
-		, m_nQPS(0)
-	{
-	}
+CDbThread::~CDbThread()
+{
+	delete this->m_pThread;
+}
 
-	CDbThread::~CDbThread()
+bool CDbThread::connectDb(bool bInit)
+{
+	do
 	{
-		delete this->m_pThread;
-	}
-
-	bool CDbThread::connectDb(bool bInit)
-	{
-		do
+		if( !this->m_dbConnection.connect( 
+			this->m_pDbThreadMgr->getDbConnectionInfo().szHost,
+			this->m_pDbThreadMgr->getDbConnectionInfo().nPort,
+			this->m_pDbThreadMgr->getDbConnectionInfo().szUser,
+			this->m_pDbThreadMgr->getDbConnectionInfo().szPassword,
+			this->m_pDbThreadMgr->getDbConnectionInfo().szDb,
+			this->m_pDbThreadMgr->getDbConnectionInfo().szCharacterset))
 		{
-			if( !this->m_dbConnection.connect( 
-				this->m_pDbThreadMgr->getDbConnectionInfo().szHost,
-				this->m_pDbThreadMgr->getDbConnectionInfo().nPort,
-				this->m_pDbThreadMgr->getDbConnectionInfo().szUser,
-				this->m_pDbThreadMgr->getDbConnectionInfo().szPassword,
-				this->m_pDbThreadMgr->getDbConnectionInfo().szDb,
-				this->m_pDbThreadMgr->getDbConnectionInfo().szCharacterset))
+			if( bInit )
+				return false;
+
+			//Sleep(1000);
+			continue;
+		}
+		break;
+	} while (1);
+
+	this->m_dbCommandHandlerProxy.onConnect(&this->m_dbConnection);
+	return true;
+}
+
+void CDbThread::join()
+{
+	this->m_quit.store(1, memory_order_release);
+	this->m_pThread->join();
+}
+
+bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize)
+{
+	DebugAstEx(pDbThreadMgr != nullptr, false);
+	this->m_pDbThreadMgr = pDbThreadMgr;
+	if (!this->m_dbCommandHandlerProxy.init())
+		return false;
+
+	if (!this->m_dbCacheMgr.init(this, nMaxCacheSize))
+		return false;
+
+	if (!this->connectDb(true))
+		return false;
+
+	this->m_pThread = new thread([this]()
+	{
+		while (true)
+		{
+			this->onProcess();
+			if (this->m_quit.load(memory_order_acquire))
 			{
-				if( bInit )
-					return false;
-
-				//Sleep(1000);
-				continue;
+				unique_lock<mutex> lock(this->m_tCommandLock);
+				if (this->m_listCommand.empty())
+					break;
 			}
-			break;
-		} while (1);
-
-		this->m_dbCommandHandlerProxy.onConnect(&this->m_dbConnection);
-		return true;
-	}
-
-	void CDbThread::join()
-	{
-		this->m_quit.store(1, std::memory_order_release);
-		this->m_pThread->join();
-	}
-
-	bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize)
-	{
-		DebugAstEx(pDbThreadMgr != nullptr, false);
-		this->m_pDbThreadMgr = pDbThreadMgr;
-		if (!this->m_dbCommandHandlerProxy.init(nMaxCacheSize))
-			return false;
-
-		if (!this->connectDb(true))
-			return false;
-
-		this->m_pThread = new std::thread([this]()
-		{
-			while (true)
-			{
-				this->onProcess();
-				if (this->m_quit.load(std::memory_order_acquire))
-				{
-					std::unique_lock<std::mutex> lock(this->m_tCommandLock);
-					if (this->m_listCommand.empty())
-						break;
-				}
-			}
-
-			this->m_dbCommandHandlerProxy.flushAllCache();
-
-			this->m_dbConnection.close();
-			this->m_dbCommandHandlerProxy.onDisconnect();
-		});
-
-		return true;
-	}
-
-	bool CDbThread::onProcess()
-	{
-		if (!this->m_dbConnection.isConnect())
-		{
-			this->m_dbConnection.close();
-			this->m_dbCommandHandlerProxy.onDisconnect();
-			this->connectDb(false);
 		}
 
-		std::list<SDbCommand> listCommand;
+		this->flushAllCache();
+
+		this->m_dbConnection.close();
+		this->m_dbCommandHandlerProxy.onDisconnect();
+	});
+
+	return true;
+}
+
+bool CDbThread::onProcess()
+{
+	if (!this->m_dbConnection.isConnect())
+	{
+		this->m_dbConnection.close();
+		this->m_dbCommandHandlerProxy.onDisconnect();
+		this->connectDb(false);
+	}
+
+	this->m_dbCacheMgr.update(time(nullptr));
+
+	list<SDbCommand> listCommand;
+	{
+		unique_lock<mutex> lock(this->m_tCommandLock);
+		while (this->m_listCommand.empty())
 		{
-			std::unique_lock<std::mutex> lock(this->m_tCommandLock);
-			while (this->m_listCommand.empty())
-			{
-				this->m_condition.wait(lock);
-			}
-			listCommand.splice(listCommand.end(), this->m_listCommand);
+			this->m_condition.wait(lock);
 		}
+		listCommand.splice(listCommand.end(), this->m_listCommand);
+	}
 
-		for (auto iter = listCommand.begin(); iter != listCommand.end(); ++iter)
+	for (auto iter = listCommand.begin(); iter != listCommand.end(); ++iter)
+	{
+		SDbCommand sDbCommand = *iter;
+
+		shared_ptr<Message> pMessage;
+		uint32_t nErrorCode = kRC_OK;
+		if (!this->onPreCache(sDbCommand.nType, sDbCommand.pMessage, pMessage))
 		{
-			SDbCommand sDbCommand = *iter;
-
-			std::shared_ptr<google::protobuf::Message> pMessage;
-			uint32_t nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, pMessage);
+			nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, pMessage);
 			if (nErrorCode == kRC_LOST_CONNECTION)
 			{
-				std::unique_lock<std::mutex> lock(this->m_tCommandLock);
+				unique_lock<mutex> lock(this->m_tCommandLock);
 				this->m_listCommand.splice(this->m_listCommand.begin(), listCommand, iter, listCommand.end());
 				break;
 			}
-			if (sDbCommand.nSessionID == 0)
-				continue;
+		}
+		this->onPostCache(sDbCommand.nType, sDbCommand.pMessage, pMessage);
 
-			SDbResultInfo sDbResultInfo;
-			sDbResultInfo.pResponse = std::make_shared<proto::db::response>();
-			sDbResultInfo.pResponse->set_session_id(sDbCommand.nSessionID);
-			sDbResultInfo.pResponse->set_err_code(nErrorCode);
-			if (pMessage != nullptr)
-			{
-				std::string* szContent = new std::string;
-				pMessage->SerializeToString(szContent);
-				sDbResultInfo.pResponse->set_name(pMessage->GetTypeName());
-				sDbResultInfo.pResponse->set_allocated_content(szContent);
-			}
+		if (sDbCommand.nSessionID == 0)
+			continue;
 
-			this->m_pDbThreadMgr->addResultInfo(sDbResultInfo);
+		SDbResultInfo sDbResultInfo;
+		sDbResultInfo.pResponse = make_shared<response>();
+		sDbResultInfo.pResponse->set_session_id(sDbCommand.nSessionID);
+		sDbResultInfo.pResponse->set_err_code(nErrorCode);
+		if (pMessage != nullptr)
+		{
+			string* szContent = new string;
+			pMessage->SerializeToString(szContent);
+			sDbResultInfo.pResponse->set_name(pMessage->GetTypeName());
+			sDbResultInfo.pResponse->set_allocated_content(szContent);
 		}
 
-		return true;
+		this->m_pDbThreadMgr->addResultInfo(sDbResultInfo);
 	}
 
-	void CDbThread::query(const SDbCommand& sDbCommand)
+	return true;
+}
+
+bool CDbThread::onPreCache(uint32_t nType, shared_ptr<Message>& pRequest, shared_ptr<Message>& pResponse)
+{
+	if (this->m_dbCacheMgr.getMaxCacheSize() <= 0)
+		return false;
+
+	switch (nType)
 	{
-		std::unique_lock<std::mutex> lock(this->m_tCommandLock);
-		this->m_listCommand.push_back(sDbCommand);
+	case kOT_Select:
+		{
+			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest.get());
+			DebugAstEx(pCommand != nullptr, false);
 
-		this->m_condition.notify_all();
+			shared_ptr<Message> pData = this->m_dbCacheMgr.getData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
+			if (pData != nullptr)
+			{
+				pResponse = pData;
+				return true;
+			}
+		}
+		break;
+
+	case kOT_Update:
+		{
+			uint64_t nID = 0;
+			if (!getPrimaryValue(pRequest.get(), nID))
+				return false;
+
+			if (this->m_dbCacheMgr.setData(nID, pRequest))
+				return true;
+		}
+		break;
+
+	case kOT_Insert:
+		{
+			uint64_t nID = 0;
+			if (!getPrimaryValue(pRequest.get(), nID))
+				return false;
+
+			this->m_dbCacheMgr.addData(nID, pRequest);
+		}
+		break;
+
+	case kOT_Delete:
+		{
+			const delete_command* pCommand = dynamic_cast<const delete_command*>(pRequest.get());
+			DebugAstEx(pCommand != nullptr, false);
+
+			this->m_dbCacheMgr.delData(pCommand->id(), getMessageNameByTableName(pCommand->table_name()));
+		}
+		break;
 	}
 
-	uint32_t CDbThread::getQueueSize()
+	return false;
+}
+
+void CDbThread::onPostCache(uint32_t nType, shared_ptr<Message>& pRequest, shared_ptr<Message>& pResponse)
+{
+	if (this->m_dbCacheMgr.getMaxCacheSize() <= 0)
+		return;
+
+	if (nType == kOT_Select)
 	{
-		std::unique_lock<std::mutex> lock(this->m_tCommandLock);
-		return (uint32_t)this->m_listCommand.size();
-	}
+		const select_command* pCommand = dynamic_cast<const select_command*>(pRequest.get());
+		DebugAst(pCommand != nullptr);
 
-	uint32_t CDbThread::getQPS()
-	{
-		return this->m_nQPS;
+		this->m_dbCacheMgr.setData(pCommand->id(), pResponse);
 	}
+}
+
+void CDbThread::flushCache(shared_ptr<Message>& pRequest)
+{
+	shared_ptr<Message> pResponse;
+	uint32_t nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(kOT_Update, pRequest, pResponse);
+	if (nErrorCode != kRC_OK)
+	{
+		PrintWarning("");
+	}
+}
+
+void CDbThread::flushAllCache()
+{
+	this->m_dbCacheMgr.flushAllCache();
+}
+
+void CDbThread::query(const SDbCommand& sDbCommand)
+{
+	unique_lock<mutex> lock(this->m_tCommandLock);
+	this->m_listCommand.push_back(sDbCommand);
+
+	this->m_condition.notify_all();
+}
+
+uint32_t CDbThread::getQueueSize()
+{
+	unique_lock<mutex> lock(this->m_tCommandLock);
+	return (uint32_t)this->m_listCommand.size();
+}
+
+uint32_t CDbThread::getQPS()
+{
+	return this->m_nQPS;
 }

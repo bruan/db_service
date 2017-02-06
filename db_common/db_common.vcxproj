@@ -55,7 +55,7 @@
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4244;4267;4018;4996;</DisableSpecificWarnings>
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4244;4267;4018;4996;</DisableSpecificWarnings>
     </ClCompile>
-    <ClCompile Include="variant.cpp" />
+    <ClCompile Include="db_variant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="db_client.h" />
@@ -70,7 +70,7 @@
     <ClInclude Include="proto_src\response.pb.h" />
     <ClInclude Include="proto_src\result_set.pb.h" />
     <ClInclude Include="proto_src\select_command.pb.h" />
-    <ClInclude Include="variant.h" />
+    <ClInclude Include="db_variant.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3425B68E-DA85-4323-8227-5C5907579C97}</ProjectGuid>

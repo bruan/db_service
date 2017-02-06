@@ -10,35 +10,37 @@
 
 namespace db
 {
-	class CDbCommandHandlerProxy;
+	class CDbThread;
 	class CDbCacheMgr
 	{
 	public:
 		CDbCacheMgr();
 		~CDbCacheMgr();
 
-		bool		init(CDbCommandHandlerProxy* pDbCommandHandlerProxy, uint64_t nMaxCacheSize);
+		bool		init(CDbThread* pDbThread, uint64_t nMaxCacheSize);
 		std::shared_ptr<google::protobuf::Message>
 					getData(uint64_t nID, const std::string& szDataName);
-		void		setData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData);
-		void		addData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData);
-		void		delData(uint64_t nID, const std::string& szDataName);
-		void		cleanData();
+		bool		setData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData);
+		bool		addData(uint64_t nID, std::shared_ptr<google::protobuf::Message>& pData);
+		bool		delData(uint64_t nID, const std::string& szDataName);
+		int64_t		getMaxCacheSize() const;
 		void		flushAllCache();
-		CDbCommandHandlerProxy*
-					getDbCommandHandlerProxy() const;
+		CDbThread*	getDbThread() const;
+		void		update(int64_t nTime);
 
 	private:
 		uint32_t	getDataID(const std::string& szDataName);
-		void		backup(uint64_t nTime);
+		void		cleanCache(int64_t nTime);
+		void		writeback(uint64_t nTime);
 
 	private:
-		CDbCommandHandlerProxy*									m_pDbCommandHandlerProxy;
+		CDbThread*												m_pDbThread;
 		std::unordered_map<uint64_t, std::shared_ptr<CDbCache>>	m_mapCache;
 		std::map<std::string, uint32_t>							m_mapDataIndex;
 		uint32_t												m_nCurIndex;
 		std::map<uint64_t, std::shared_ptr<CDbCache>>			m_mapDirtyCache;
 		int64_t													m_nDataSize;
 		int64_t													m_nMaxCacheSize;
+		int64_t													m_nLastCleanTime;
 	};
 }

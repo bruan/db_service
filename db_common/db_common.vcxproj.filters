@@ -42,14 +42,14 @@
     <ClCompile Include="db_client.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="variant.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="db_common.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="proto_src\nop_command.pb.cc">
       <Filter>proto_src</Filter>
+    </ClCompile>
+    <ClCompile Include="db_variant.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,11 +86,11 @@
     <ClInclude Include="db_proxy.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="variant.h">
-      <Filter>inc</Filter>
-    </ClInclude>
     <ClInclude Include="proto_src\nop_command.pb.h">
       <Filter>proto_src</Filter>
+    </ClInclude>
+    <ClInclude Include="db_variant.h">
+      <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
