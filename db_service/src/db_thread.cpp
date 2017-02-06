@@ -100,7 +100,7 @@ bool CDbThread::onProcess()
 		this->connectDb(false);
 	}
 
-	this->m_dbCacheMgr.update(time(nullptr));
+	this->m_dbCacheMgr.update();
 
 	list<SDbCommand> listCommand;
 	{
@@ -220,16 +220,6 @@ void CDbThread::onPostCache(uint32_t nType, shared_ptr<Message>& pRequest, share
 	}
 }
 
-void CDbThread::flushCache(shared_ptr<Message>& pRequest)
-{
-	shared_ptr<Message> pResponse;
-	uint32_t nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(kOT_Update, pRequest, pResponse);
-	if (nErrorCode != kRC_OK)
-	{
-		PrintWarning("");
-	}
-}
-
 void CDbThread::flushAllCache()
 {
 	this->m_dbCacheMgr.flushAllCache();
@@ -252,4 +242,9 @@ uint32_t CDbThread::getQueueSize()
 uint32_t CDbThread::getQPS()
 {
 	return this->m_nQPS;
+}
+
+CDbCommandHandlerProxy& CDbThread::getDbCommandHandlerProxy()
+{
+	return this->m_dbCommandHandlerProxy;
 }

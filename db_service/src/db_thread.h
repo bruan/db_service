@@ -27,7 +27,8 @@ namespace db
 		void		join();
 		uint32_t	getQueueSize();
 		uint32_t	getQPS();
-		void		flushCache(std::shared_ptr<google::protobuf::Message>& pRequest);
+		CDbCommandHandlerProxy&
+					getDbCommandHandlerProxy();
 
 	private:
 		bool		connectDb(bool bInit);

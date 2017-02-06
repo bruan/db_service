@@ -86,9 +86,18 @@ bool CDbCache::writeback(int64_t nTime)
 
 		int64_t nDeltaTime = nTime - sCacheInfo.nTime;
 		if (nDeltaTime >= _CACHE_EXPIRED_TIME || nTime == 0)
-			this->m_pDbCacheMgr->getDbThread()->flushCache(sCacheInfo.pData);
+		{
+			static shared_ptr<Message> pResponse;
+			uint32_t nErrorCode = m_pDbCacheMgr->getDbThread()->getDbCommandHandlerProxy().onDbCommand(kOT_Update, sCacheInfo.pData, pResponse);
+			if (nErrorCode != kRC_OK)
+			{
+				PrintWarning("");
+			}
+		}
 		else
+		{
 			bDirty = true;
+		}
 	}
 
 	return bDirty;

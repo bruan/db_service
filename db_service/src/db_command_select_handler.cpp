@@ -37,7 +37,7 @@ uint32_t CDbCommandSelectHandler::onDbCommand(const Message* pRequest, shared_pt
 	string szSQL(oss.str());
 
 #ifdef _DEBUG_SQL
-		PrintInfo("%s", szSQL.c_str());
+	PrintInfo("%s", szSQL.c_str());
 #endif
 
 	CDbRecordset* pDbRecordset = nullptr;

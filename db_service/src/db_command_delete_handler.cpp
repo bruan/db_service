@@ -37,7 +37,7 @@ uint32_t CDbCommandDeleteHandler::onDbCommand(const Message* pRequest, shared_pt
 	string szSQL(oss.str());
 
 #ifdef _DEBUG_SQL
-		PrintInfo("%s", szSQL.c_str());
+	PrintInfo("%s", szSQL.c_str());
 #endif
 
 	uint32_t nErrorType = this->m_pDbConnection->execute(szSQL, nullptr);

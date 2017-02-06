@@ -92,7 +92,7 @@ uint32_t CDbCommandUpdateHandler::onDbCommand(const Message* pRequest, shared_pt
 	string szSQL = oss.str();
 
 #ifdef _DEBUG_SQL
-		PrintInfo("%s", szSQL.c_str());
+	PrintInfo("%s", szSQL.c_str());
 #endif
 
 	uint32_t nErrorType = this->m_pDbConnection->execute(szSQL, nullptr);
@@ -101,5 +101,5 @@ uint32_t CDbCommandUpdateHandler::onDbCommand(const Message* pRequest, shared_pt
 	else if (nErrorType != kMET_OK)
 		return kRC_MYSQL_ERROR;
 	
-	return (this->m_pDbConnection->getAffectedRow() == 1 || this->m_pDbConnection->getAffectedRow() == 2) ? kRC_OK : kRC_MYSQL_ERROR;
+	return (this->m_pDbConnection->getAffectedRow() >= 1) ? kRC_OK : kRC_MYSQL_ERROR;
 }

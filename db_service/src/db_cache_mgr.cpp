@@ -5,13 +5,15 @@ using namespace db;
 using namespace std;
 
 #define _CLEAN_CACHE_TIME 1
+#define _CHECK_WRITE_BACK_TIME 1
 
 CDbCacheMgr::CDbCacheMgr()
 	: m_pDbThread(nullptr)
 	, m_nCurIndex(1)
 	, m_nDataSize(0)
 	, m_nMaxCacheSize(0)
-	, m_nLastCleanTime(0)
+	, m_nLastCleanCacheTime(0)
+	, m_nLastWritebackTime(0)
 {
 
 }
@@ -143,13 +145,13 @@ void CDbCacheMgr::cleanCache(int64_t nTime)
 	if (this->m_nMaxCacheSize <= 0)
 		return;
 
-	if (this->m_nLastCleanTime != 0 && this->m_nLastCleanTime - nTime < _CLEAN_CACHE_TIME)
+	if (this->m_nLastCleanCacheTime != 0 && this->m_nLastCleanCacheTime - nTime < _CLEAN_CACHE_TIME)
 		return;
 
 	if (this->m_nDataSize < this->m_nMaxCacheSize)
 		return;
 
-	this->m_nMaxCacheSize = nTime;
+	this->m_nLastCleanCacheTime = nTime;
 
 	vector<unordered_map<uint64_t, shared_ptr<CDbCache>>::iterator> vecElement;
 	vecElement.reserve(5);
@@ -180,6 +182,11 @@ void CDbCacheMgr::writeback(uint64_t nTime)
 	if (this->m_nMaxCacheSize <= 0)
 		return;
 
+	if (this->m_nLastWritebackTime != 0 && this->m_nLastWritebackTime - nTime < _CHECK_WRITE_BACK_TIME)
+		return;
+
+	this->m_nLastWritebackTime = nTime;
+
 	for (auto iter = this->m_mapDirtyCache.begin(); iter != this->m_mapDirtyCache.end();)
 	{
 		if (!iter->second->writeback(nTime))
@@ -207,8 +214,10 @@ int64_t CDbCacheMgr::getMaxCacheSize() const
 	return this->m_nMaxCacheSize;
 }
 
-void CDbCacheMgr::update(int64_t nTime)
+void CDbCacheMgr::update()
 {
-	this->cleanCache(nTime);
-	this->writeback(nTime);
+	int64_t nCurTime = time(nullptr);
+
+	this->cleanCache(nCurTime);
+	this->writeback(nCurTime);
 }

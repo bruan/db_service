@@ -26,7 +26,7 @@ namespace db
 		int64_t		getMaxCacheSize() const;
 		void		flushAllCache();
 		CDbThread*	getDbThread() const;
-		void		update(int64_t nTime);
+		void		update();
 
 	private:
 		uint32_t	getDataID(const std::string& szDataName);
@@ -41,6 +41,7 @@ namespace db
 		std::map<uint64_t, std::shared_ptr<CDbCache>>			m_mapDirtyCache;
 		int64_t													m_nDataSize;
 		int64_t													m_nMaxCacheSize;
-		int64_t													m_nLastCleanTime;
+		int64_t													m_nLastCleanCacheTime;
+		int64_t													m_nLastWritebackTime;
 	};
 }
