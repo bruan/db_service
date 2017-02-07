@@ -1,9 +1,9 @@
 # db_service
-这个库主要用于网游服务器的数据库操作
-###提供简单的select，update，delete，insert，自定义的query，call
-###其中select，update，delete，insert支持缓存功能，读写都有缓存，游戏游戏服务器中写的比例相对较高，这里的写缓存用writeback方式实现。
-###自定义的query，call查询条件的参数做了防SQL注入，当然简单的SQL也是做了防SQL注入
-###采用连接池的方式处理SQL操作，为了防止出现SQL操作的时序问题，一般会根据主键来确定哪个连接。
+###这个库主要用于网游服务器的数据库操作
+	提供简单的select，update，delete，insert，自定义的query，call
+	其中select，update，delete，insert支持缓存功能，读写都有缓存，游戏游戏服务器中写的比例相对较高，这里的写缓存用writeback方式实现。
+	自定义的query，call查询条件的参数做了防SQL注入，当然简单的SQL也是做了防SQL注入
+	采用连接池的方式处理SQL操作，为了防止出现SQL操作的时序问题，一般会根据主键来确定哪个连接。
 
 ###例子：
 SQL
