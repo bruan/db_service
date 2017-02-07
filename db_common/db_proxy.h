@@ -34,6 +34,7 @@ namespace db
 		bool			call(uint32_t nAssociateID, const std::string& szSQL, const std::vector<CDbVariant>& vecArg);
 		bool			call_r(CDbClient* pDbClient, uint32_t nAssociateID, const std::string& szSQL, const std::vector<CDbVariant>& vecArg, uint64_t nContext, const DbCallback& callback);
 		bool			nop(CDbClient* pDbClient, uint32_t nAssociateID, uint64_t nContext, const DbCallback& callback);
+		bool			flush(CDbClient* pDbClient, uint64_t nID, EFlushCacheType eType);
 
 		void			onMessage(const google::protobuf::Message* pMessage);
 

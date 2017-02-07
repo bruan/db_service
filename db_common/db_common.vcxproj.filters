@@ -51,6 +51,9 @@
     <ClCompile Include="db_variant.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="proto_src\flush_command.pb.cc">
+      <Filter>proto_src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="proto_src\call_command.pb.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="db_variant.h">
       <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="proto_src\flush_command.pb.h">
+      <Filter>proto_src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

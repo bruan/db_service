@@ -30,6 +30,7 @@ namespace db
 		bool call_r(uint32_t nAssociateID, const std::string& szSQL, const std::vector<CDbVariant>& vecArg, uint64_t nContext, const DbCallback& callback);
 
 		bool nop(uint32_t nAssociateID, uint64_t nContext, const DbCallback& callback);
+		bool flush(uint64_t nID, EFlushCacheType eType);
 
 	private:
 		CDbProxy* m_pDbProxy;

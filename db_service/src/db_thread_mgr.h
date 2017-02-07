@@ -41,8 +41,7 @@ namespace db
 		void		getQueueSize(std::vector<uint32_t>& vecSize);
 
 		void		setMaxCahceSize(uint64_t nSize);
-		void		flushCache(uint64_t nKey, bool bDel);
-
+		
 	private:
 		std::vector<CDbThread*>		m_vecDbThread;
 		SDbConnectionInfo			m_sDbConnectionInfo;

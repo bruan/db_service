@@ -68,3 +68,8 @@ bool CDbClient::nop(uint32_t nAssociateID, uint64_t nContext, const DbCallback& 
 {
 	return this->m_pDbProxy->nop(this, nAssociateID, nContext, callback);
 }
+
+bool CDbClient::flush(uint64_t nID, EFlushCacheType eType)
+{
+	return this->m_pDbProxy->flush(this, nID, eType);
+}

@@ -6,6 +6,7 @@
 
 #include "proto_src\select_command.pb.h"
 #include "proto_src\delete_command.pb.h"
+#include "proto_src\flush_command.pb.h"
 
 using namespace std;
 using namespace google::protobuf;
@@ -116,10 +117,15 @@ bool CDbThread::onProcess()
 	{
 		SDbCommand sDbCommand = *iter;
 
-		if (sDbCommand.nType == kOT_Flush)
+		if (sDbCommand.nType == kOT_FLUSH)
 		{
-			this->flushCache(sDbCommand.nSessionID, sDbCommand.nServiceID != 0);
-			return true;
+			const flush_command* pCommand = dynamic_cast<const flush_command*>(sDbCommand.pMessage);
+			if (pCommand == nullptr)
+				continue;
+
+			this->flushCache(pCommand->id(), pCommand->type() == kFCT_DEL);
+			delete pCommand;
+			continue;
 		}
 
 		shared_ptr<Message> pMessage;
@@ -164,7 +170,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 
 	switch (nType)
 	{
-	case kOT_Select:
+	case kOT_SELECT:
 		{
 			const proto::db::select_command* pCommand = dynamic_cast<const proto::db::select_command*>(pRequest);
 			DebugAstEx(pCommand != nullptr, false);
@@ -179,7 +185,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 		}
 		break;
 
-	case kOT_Update:
+	case kOT_UPDATE:
 		{
 			uint64_t nID = 0;
 			if (!getPrimaryValue(pRequest, nID))
@@ -194,7 +200,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 		}
 		break;
 
-	case kOT_Insert:
+	case kOT_INSERT:
 		{
 			uint64_t nID = 0;
 			if (!getPrimaryValue(pRequest, nID))
@@ -208,7 +214,7 @@ bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message
 		}
 		break;
 
-	case kOT_Delete:
+	case kOT_DELETE:
 		{
 			const delete_command* pCommand = dynamic_cast<const delete_command*>(pRequest);
 			DebugAstEx(pCommand != nullptr, false);
@@ -226,7 +232,7 @@ void CDbThread::onPostCache(uint32_t nType, Message* pRequest, shared_ptr<Messag
 	if (this->m_dbCacheMgr.getMaxCacheSize() <= 0)
 		return;
 
-	if (nType == kOT_Select)
+	if (nType == kOT_SELECT)
 	{
 		DebugAst(pResponse != nullptr);
 

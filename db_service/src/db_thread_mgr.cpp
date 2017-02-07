@@ -48,9 +48,28 @@ void CDbThreadMgr::exit()
 
 void CDbThreadMgr::query(uint32_t nThreadIndex, const SDbCommand& sDbCommand)
 {
-	nThreadIndex = nThreadIndex % this->m_vecDbThread.size();
+	if (sDbCommand.nType != kOT_FLUSH)
+	{
+		nThreadIndex = nThreadIndex % this->m_vecDbThread.size();
 
-	this->m_vecDbThread[nThreadIndex]->query(sDbCommand);
+		this->m_vecDbThread[nThreadIndex]->query(sDbCommand);
+	}
+	else
+	{
+		if (nThreadIndex == 0)
+		{
+			for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
+			{
+				this->m_vecDbThread[i]->query(sDbCommand);
+			}
+		}
+		else
+		{
+			nThreadIndex = nThreadIndex % this->m_vecDbThread.size();
+
+			this->m_vecDbThread[nThreadIndex]->query(sDbCommand);
+		}
+	}
 }
 
 uint32_t CDbThreadMgr::getThreadCount() const
@@ -100,19 +119,5 @@ void CDbThreadMgr::setMaxCahceSize(uint64_t nSize)
 	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
 	{
 		this->m_vecDbThread[i]->setMaxCahceSize(nSize);
-	}
-}
-
-void CDbThreadMgr::flushCache(uint64_t nKey, bool bDel)
-{
-	SDbCommand sDbCommand;
-	sDbCommand.nType = kOT_Flush;
-	sDbCommand.nSessionID = nKey;
-	sDbCommand.nServiceID = bDel;
-	sDbCommand.pMessage = nullptr;
-
-	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
-	{
-		this->m_vecDbThread[i]->query(sDbCommand);
 	}
 }

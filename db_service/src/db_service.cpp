@@ -19,6 +19,7 @@
 #include "proto_src/call_command.pb.h"
 #include "proto_src/result_set.pb.h"
 #include "proto_src/nop_command.pb.h"
+#include "proto_src/flush_command.pb.h"
 
 using namespace std;
 using namespace google::protobuf;
@@ -33,7 +34,8 @@ struct SOnce
 		query_command	command3;
 		call_command	command4;
 		nop_command		command5;
-		result_set		command6;
+		flush_command	command6;
+		result_set		command7;
 	}
 };
 
@@ -193,11 +195,19 @@ namespace db
 		pDbThreadMgr->setMaxCahceSize(nSize);
 	}
 
-	void flushCache(uint32_t nID, uint64_t nKey, bool bDel)
+	void flushCache(uint32_t nID, uint64_t nKey, EFlushCacheType eType)
 	{
 		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
-		pDbThreadMgr->flushCache(nKey, bDel);
+		SDbCommand sDbCommand;
+		sDbCommand.nType = kOT_FLUSH;
+		sDbCommand.nSessionID = 0;
+		sDbCommand.nServiceID = 0;
+		flush_command* pMessage = new flush_command();
+		pMessage->set_id(nKey);
+		pMessage->set_type(eType);
+
+		pDbThreadMgr->query((uint32_t)nID, sDbCommand);
 	}
 }

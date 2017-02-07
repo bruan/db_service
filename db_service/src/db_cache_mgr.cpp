@@ -109,7 +109,8 @@ bool CDbCacheMgr::addData(uint64_t nID, const google::protobuf::Message* pData)
 	uint32_t nDataID = this->getDataID(pData->GetTypeName());
 	DebugAstEx(nDataID != -1, false);
 
-	DebugAstEx(this->m_mapCache.find(nID) == this->m_mapCache.end(), false);
+	if (this->m_mapCache.find(nID) != this->m_mapCache.end())
+		return false;
 
 	auto pDbCache = make_shared<CDbCache>(this);
 	this->m_mapCache[nID] = pDbCache;

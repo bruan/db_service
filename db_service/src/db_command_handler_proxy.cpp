@@ -19,13 +19,13 @@ using namespace db;
 
 CDbCommandHandlerProxy::CDbCommandHandlerProxy()
 {
-	this->m_mapDbCommandHandler[kOT_Call]	= new CDbCommandCallHandler();
-	this->m_mapDbCommandHandler[kOT_Delete] = new CDbCommandDeleteHandler();
-	this->m_mapDbCommandHandler[kOT_Insert] = new CDbCommandInsertHandler();
-	this->m_mapDbCommandHandler[kOT_Query]	= new CDbCommandQueryHandler();
-	this->m_mapDbCommandHandler[kOT_Select] = new CDbCommandSelectHandler();
-	this->m_mapDbCommandHandler[kOT_Update] = new CDbCommandUpdateHandler();
-	this->m_mapDbCommandHandler[kOT_Nop]	= new CDbCommandNOPHandler();
+	this->m_mapDbCommandHandler[kOT_CALL]	= new CDbCommandCallHandler();
+	this->m_mapDbCommandHandler[kOT_DELETE] = new CDbCommandDeleteHandler();
+	this->m_mapDbCommandHandler[kOT_INSERT] = new CDbCommandInsertHandler();
+	this->m_mapDbCommandHandler[kOT_QUERY]	= new CDbCommandQueryHandler();
+	this->m_mapDbCommandHandler[kOT_SELECT] = new CDbCommandSelectHandler();
+	this->m_mapDbCommandHandler[kOT_UPDATE] = new CDbCommandUpdateHandler();
+	this->m_mapDbCommandHandler[kOT_NOP]	= new CDbCommandNOPHandler();
 }
 
 CDbCommandHandlerProxy::~CDbCommandHandlerProxy()

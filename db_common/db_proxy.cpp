@@ -7,6 +7,7 @@
 #include "proto_src/call_command.pb.h"
 #include "proto_src/result_set.pb.h"
 #include "proto_src/nop_command.pb.h"
+#include "proto_src/flush_command.pb.h"
 
 using namespace std;
 using namespace google::protobuf;
@@ -21,7 +22,8 @@ struct SOnce
 		delete_command	command2;
 		query_command	command3;
 		call_command	command4;
-		result_set		command5;
+		flush_command	command5;
+		result_set		command6;
 	}
 };
 
@@ -114,7 +116,7 @@ bool CDbProxy::select(CDbClient* pDbClient, uint64_t nID, const string& szTableN
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Select);
+	request.set_type(kOT_SELECT);
 	request.mutable_content()->PackFrom(command);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -137,7 +139,7 @@ bool CDbProxy::update(const Message* pMessage)
 	request request;
 	request.set_session_id(0);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Update);
+	request.set_type(kOT_UPDATE);
 	request.mutable_content()->PackFrom(*pMessage);
 
 	return this->sendRequest(&request);
@@ -156,7 +158,7 @@ bool CDbProxy::update_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Update);
+	request.set_type(kOT_UPDATE);
 	request.mutable_content()->PackFrom(*pMessage);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -179,7 +181,7 @@ bool CDbProxy::remove(uint64_t nID, const string& szTableName)
 	request request;
 	request.set_session_id(0);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Delete);
+	request.set_type(kOT_DELETE);
 	request.mutable_content()->PackFrom(command);
 
 	return this->sendRequest(&request);
@@ -198,7 +200,7 @@ bool CDbProxy::remove_r(CDbClient* pDbClient, uint64_t nID, const string& szTabl
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Delete);
+	request.set_type(kOT_DELETE);
 	request.mutable_content()->PackFrom(command);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -221,7 +223,7 @@ bool CDbProxy::insert(const Message* pMessage)
 	request request;
 	request.set_session_id(0);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Insert);
+	request.set_type(kOT_INSERT);
 	request.mutable_content()->PackFrom(*pMessage);
 
 	return this->sendRequest(&request);
@@ -240,7 +242,7 @@ bool CDbProxy::insert_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
-	request.set_type(kOT_Insert);
+	request.set_type(kOT_INSERT);
 	request.mutable_content()->PackFrom(*pMessage);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -272,7 +274,7 @@ bool CDbProxy::query(CDbClient* pDbClient, uint32_t nAssociateID, const string& 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id(nAssociateID);
-	request.set_type(kOT_Query);
+	request.set_type(kOT_QUERY);
 	request.mutable_content()->PackFrom(command);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -299,7 +301,7 @@ bool CDbProxy::call(uint32_t nAssociateID, const string& szSQL, const vector<CDb
 	request request;
 	request.set_session_id(0);
 	request.set_associate_id(nAssociateID);
-	request.set_type(kOT_Call);
+	request.set_type(kOT_CALL);
 	request.mutable_content()->PackFrom(command);
 
 	return this->sendRequest(&request);
@@ -322,7 +324,7 @@ bool CDbProxy::call_r(CDbClient* pDbClient, uint32_t nAssociateID, const string&
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id(nAssociateID);
-	request.set_type(kOT_Call);
+	request.set_type(kOT_CALL);
 	request.mutable_content()->PackFrom(command);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -347,7 +349,7 @@ bool CDbProxy::nop(CDbClient* pDbClient, uint32_t nAssociateID, uint64_t nContex
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id(nAssociateID);
-	request.set_type(kOT_Nop);
+	request.set_type(kOT_NOP);
 	request.mutable_content()->PackFrom(command);
 
 	SPendingResponseInfo sPendingResponseInfo;
@@ -357,6 +359,24 @@ bool CDbProxy::nop(CDbClient* pDbClient, uint32_t nAssociateID, uint64_t nContex
 	sPendingResponseInfo.nContext = nContext;
 
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+
+	return this->sendRequest(&request);
+}
+
+bool CDbProxy::flush(CDbClient* pDbClient, uint64_t nID, EFlushCacheType eType)
+{
+	if (pDbClient == nullptr)
+		return false;
+
+	flush_command command;
+	command.set_id(nID);
+	command.set_type(eType);
+
+	request request;
+	request.set_session_id(0);
+	request.set_associate_id((uint32_t)nID);
+	request.set_type(kOT_FLUSH);
+	request.mutable_content()->PackFrom(command);
 
 	return this->sendRequest(&request);
 }

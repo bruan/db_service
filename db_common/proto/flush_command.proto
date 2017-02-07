@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package proto.db;
+
+message flush_command {
+	uint64 id = 1;
+	uint32 type = 2;
+}

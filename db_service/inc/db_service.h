@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "db_common.h"
+
 #include "proto_src/request.pb.h"
 #include "proto_src/response.pb.h"
 
@@ -21,7 +23,7 @@ namespace db
 	void		release(uint32_t nID);
 	void		getResultInfo(uint32_t nID, std::list<SDbResultInfo>& listResultInfo);
 	void		setMaxCacheSize(uint32_t nID, uint64_t nSize);
-	void		flushCache(uint32_t nID, uint64_t nKey, bool bDel);
+	void		flushCache(uint32_t nID, uint64_t nKey, EFlushCacheType eType);
 	void		getQPS(uint32_t nID, std::vector<uint32_t>& vecQPS);
 	void		getQueueSize(uint32_t nID, std::vector<uint32_t>& vecSize);
 }

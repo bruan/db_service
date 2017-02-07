@@ -127,7 +127,7 @@ bool CDbCache::writeback(int64_t nTime)
 				PrintWarning("");
 				continue;
 			}
-			uint32_t nErrorCode = m_pDbCacheMgr->getDbThread()->getDbCommandHandlerProxy().onDbCommand(kOT_Update, pMessage.get(), nullptr);
+			uint32_t nErrorCode = m_pDbCacheMgr->getDbThread()->getDbCommandHandlerProxy().onDbCommand(kOT_UPDATE, pMessage.get(), nullptr);
 			if (nErrorCode != kRC_OK)
 			{
 				PrintWarning("");
