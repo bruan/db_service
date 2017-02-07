@@ -48,6 +48,8 @@ void CDbThreadMgr::exit()
 
 void CDbThreadMgr::query(uint32_t nThreadIndex, const SDbCommand& sDbCommand)
 {
+	DebugAst(!this->m_vecDbThread.empty());
+
 	if (sDbCommand.nType != kOT_FLUSH)
 	{
 		nThreadIndex = nThreadIndex % this->m_vecDbThread.size();
