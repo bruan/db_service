@@ -114,7 +114,7 @@ void CDbThreadMgr::getQueueSize(vector<uint32_t>& vecSize)
 	}
 }
 
-void CDbThreadMgr::setMaxCahceSize(uint64_t nSize)
+void CDbThreadMgr::setMaxCacheSize(uint64_t nSize)
 {
 	nSize = this->m_vecDbThread.size() / nSize;
 

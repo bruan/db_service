@@ -192,7 +192,7 @@ namespace db
 		CDbThreadMgr* pDbThreadMgr = getDbThreadMgr(nID);
 		DebugAst(pDbThreadMgr != nullptr);
 
-		pDbThreadMgr->setMaxCahceSize(nSize);
+		pDbThreadMgr->setMaxCacheSize(nSize);
 	}
 
 	void flushCache(uint32_t nID, uint64_t nKey, EFlushCacheType eType)

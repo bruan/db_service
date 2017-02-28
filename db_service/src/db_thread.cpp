@@ -15,7 +15,6 @@ using namespace proto::db;
 
 CDbThread::CDbThread()
 	: m_pDbThreadMgr(nullptr)
-	, m_pThread(nullptr)
 	, m_quit(0)
 	, m_nQPS(0)
 {
@@ -23,14 +22,13 @@ CDbThread::CDbThread()
 
 CDbThread::~CDbThread()
 {
-	delete this->m_pThread;
 }
 
 bool CDbThread::connectDb(bool bInit)
 {
 	do
 	{
-		if( !this->m_dbConnection.connect( 
+		if (!this->m_dbConnection.connect( 
 			this->m_pDbThreadMgr->getDbConnectionInfo().szHost,
 			this->m_pDbThreadMgr->getDbConnectionInfo().nPort,
 			this->m_pDbThreadMgr->getDbConnectionInfo().szUser,
@@ -38,7 +36,7 @@ bool CDbThread::connectDb(bool bInit)
 			this->m_pDbThreadMgr->getDbConnectionInfo().szDb,
 			this->m_pDbThreadMgr->getDbConnectionInfo().szCharacterset))
 		{
-			if( bInit )
+			if (bInit)
 				return false;
 
 			//Sleep(1000);
@@ -54,7 +52,7 @@ bool CDbThread::connectDb(bool bInit)
 void CDbThread::join()
 {
 	this->m_quit.store(1, memory_order_release);
-	this->m_pThread->join();
+	this->m_thread.join();
 }
 
 bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_t nWritebackTime)
@@ -70,7 +68,7 @@ bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_
 	if (!this->connectDb(true))
 		return false;
 
-	this->m_pThread = new thread([this]()
+	this->m_thread = thread([this]()
 	{
 		while (true)
 		{
@@ -271,7 +269,7 @@ CDbCommandHandlerProxy& CDbThread::getDbCommandHandlerProxy()
 	return this->m_dbCommandHandlerProxy;
 }
 
-void CDbThread::setMaxCahceSize(uint64_t nSize)
+void CDbThread::setMaxCacheSize(uint64_t nSize)
 {
 	this->m_dbCacheMgr.setMaxCacheSize(nSize);
 }

@@ -40,7 +40,7 @@ namespace db
 		void		getQPS(std::vector<uint32_t>& vecQPS);
 		void		getQueueSize(std::vector<uint32_t>& vecSize);
 
-		void		setMaxCahceSize(uint64_t nSize);
+		void		setMaxCacheSize(uint64_t nSize);
 		
 	private:
 		std::vector<CDbThread*>		m_vecDbThread;

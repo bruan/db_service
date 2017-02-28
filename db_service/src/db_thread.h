@@ -30,7 +30,7 @@ namespace db
 		CDbCommandHandlerProxy&
 					getDbCommandHandlerProxy();
 
-		void		setMaxCahceSize(uint64_t nSize);
+		void		setMaxCacheSize(uint64_t nSize);
 
 	private:
 		bool		connectDb(bool bInit);
@@ -45,7 +45,7 @@ namespace db
 		std::atomic<uint32_t>	m_quit;
 		std::condition_variable	m_condition;
 		std::mutex				m_tCommandLock;
-		std::thread*			m_pThread;
+		std::thread				m_thread;
 		std::list<SDbCommand>	m_listCommand;
 		CDbConnection			m_dbConnection;
 		CDbCommandHandlerProxy	m_dbCommandHandlerProxy;
