@@ -120,6 +120,6 @@ void CDbThreadMgr::setMaxCacheSize(uint64_t nSize)
 
 	for (size_t i = 0; i < this->m_vecDbThread.size(); ++i)
 	{
-		this->m_vecDbThread[i]->setMaxCahceSize(nSize);
+		this->m_vecDbThread[i]->setMaxCacheSize(nSize);
 	}
 }

@@ -84,13 +84,14 @@ bool CDbCacheMgr::setData(uint64_t nID, const google::protobuf::Message* pData)
 	if (this->m_nMaxCacheSize <= 0)
 		return false;
 
-	uint32_t nDataID = this->getDataID(pData->GetTypeName());
+	const string szDataName = pData->GetTypeName();
+	uint32_t nDataID = this->getDataID(szDataName);
 	DebugAstEx(nDataID != -1, false);
 
 	auto pDbCache = this->m_mapCache[nID];
 
 	int32_t nSize = pDbCache->getDataSize();
-	if (!pDbCache->setData(nDataID, pData))
+	if (!pDbCache->setData(nDataID, szDataName, pData))
 		return false;
 
 	this->m_nDataSize -= nSize;

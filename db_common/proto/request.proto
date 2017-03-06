@@ -1,12 +1,12 @@
-syntax = "proto3";
+syntax = "proto2";
 
 import "google/protobuf/any.proto";
 
 package proto.db;
 
 message request {
-	uint64 session_id = 1;
-	uint32 associate_id = 2;
-	uint32 type = 3;
-	google.protobuf.Any content = 4;
+	required uint64 session_id = 1;
+	required uint32 associate_id = 2;
+	required uint32 type = 3;
+	required google.protobuf.Any content = 4;
 }

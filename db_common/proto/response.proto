@@ -1,10 +1,10 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package proto.db;
 
 message response {
-	uint64 session_id = 1;
-	uint32 err_code = 2;
-	string name = 3;
-	bytes content = 4;
+	required uint64 session_id = 1;
+	required uint32 err_code = 2;
+	required string name = 3;
+	required bytes content = 4;
 }

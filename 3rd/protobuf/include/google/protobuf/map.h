@@ -28,12 +28,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// This file defines the map container and its helpers to support protobuf maps.
-//
-// The Map and MapIterator types are provided by this header file.
-// Please avoid using other types defined here, unless they are public
-// types within Map or MapIterator, such as Map::value_type.
-
 #ifndef GOOGLE_PROTOBUF_MAP_H__
 #define GOOGLE_PROTOBUF_MAP_H__
 
@@ -56,6 +50,9 @@
 namespace google {
 namespace protobuf {
 
+// The Map and MapIterator types are provided by this header file.
+// Please avoid using other types defined here, unless they are public
+// types within Map or MapIterator, such as Map::value_type.
 template <typename Key, typename T>
 class Map;
 
@@ -565,7 +562,7 @@ class Map {
   void Init() {
     if (old_style_)
       deprecated_elements_ = Arena::Create<DeprecatedInnerMap>(
-          arena_, 0, hasher(), std::equal_to<Key>(),
+          arena_, 0, hasher(), equal_to<Key>(),
           MapAllocator<std::pair<const Key, MapPair<Key, T>*> >(arena_));
     else
       elements_ =
@@ -596,7 +593,7 @@ class Map {
       // If arena is not given, malloc needs to be called which doesn't
       // construct element object.
       if (arena_ == NULL) {
-        return static_cast<pointer>(::operator new(n * sizeof(value_type)));
+        return reinterpret_cast<pointer>(malloc(n * sizeof(value_type)));
       } else {
         return reinterpret_cast<pointer>(
             Arena::CreateArray<uint8>(arena_, n * sizeof(value_type)));
@@ -605,11 +602,7 @@ class Map {
 
     void deallocate(pointer p, size_type n) {
       if (arena_ == NULL) {
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-        ::operator delete(p, n * sizeof(value_type));
-#else
-        ::operator delete(p);
-#endif
+        free(p);
       }
     }
 
@@ -1257,7 +1250,7 @@ class Map {
     // Return whether table_[b] is a linked list that seems awfully long.
     // Requires table_[b] to point to a non-empty linked list.
     bool TableEntryIsTooLong(size_type b) {
-      const size_type kMaxLength = 8;
+      const int kMaxLength = 8;
       size_type count = 0;
       Node* node = static_cast<Node*>(table_[b]);
       do {
@@ -1355,7 +1348,7 @@ class Map {
     GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(InnerMap);
   };  // end of class InnerMap
 
-  typedef hash_map<Key, value_type*, hash<Key>, std::equal_to<Key>,
+  typedef hash_map<Key, value_type*, hash<Key>, equal_to<Key>,
                    MapAllocator<std::pair<const Key, MapPair<Key, T>*> > >
       DeprecatedInnerMap;
 

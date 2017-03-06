@@ -165,62 +165,62 @@ namespace db
 		case FieldDescriptor::TYPE_INT32:
 		case FieldDescriptor::TYPE_SINT32:
 		case FieldDescriptor::TYPE_SFIXED32:
-		{
-			int32_t nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				int32_t nValue = pReflection->GetInt32(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_UINT32:
 		case FieldDescriptor::TYPE_FIXED32:
-		{
-			uint32_t nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				uint32_t nValue = pReflection->GetUInt32(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_INT64:
 		case FieldDescriptor::TYPE_SINT64:
 		case FieldDescriptor::TYPE_SFIXED64:
-		{
-			int64_t nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				int64_t nValue = pReflection->GetInt64(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_UINT64:
 		case FieldDescriptor::TYPE_FIXED64:
-		{
-			uint64_t nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				uint64_t nValue = pReflection->GetUInt64(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_DOUBLE:
-		{
-			double nValue = pReflection->GetDouble(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				double nValue = pReflection->GetDouble(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_FLOAT:
-		{
-			float nValue = pReflection->GetFloat(*pMessage, pFieldDescriptor);
-			ostringstream oss;
-			oss << nValue;
-			szValue = oss.str();
-		}
-		break;
+			{
+				float nValue = pReflection->GetFloat(*pMessage, pFieldDescriptor);
+				ostringstream oss;
+				oss << nValue;
+				szValue = oss.str();
+			}
+			break;
 
 		case FieldDescriptor::TYPE_STRING:
 		case FieldDescriptor::TYPE_BYTES:
@@ -336,6 +336,9 @@ namespace db
 			{
 				ESerializeType eSerializeType = (ESerializeType)pFieldDescriptor->options().GetExtension(serialize_type);
 
+				if (!pReflection->HasField(*pMessage, pFieldDescriptor))
+					continue;
+
 #ifdef GetMessage
 #undef GetMessage
 #endif
@@ -343,34 +346,34 @@ namespace db
 				switch (eSerializeType)
 				{
 				case eST_Protobuf_Bin:
-				{
-					const Message& subMessage = pReflection->GetMessage(*pMessage, pFieldDescriptor);
-					szBuf.resize(subMessage.ByteSize());
-					if (subMessage.ByteSize() > 0 && !subMessage.SerializeToArray(&szBuf[0], (int32_t)szBuf.size()))
 					{
-						PrintWarning("SerializeToArray fail.[%s:%s]", pMessage->GetTypeName().c_str(), pFieldDescriptor->type_name());
-						return false;
+						const Message& subMessage = pReflection->GetMessage(*pMessage, pFieldDescriptor);
+						szBuf.resize(subMessage.ByteSize());
+						if (subMessage.ByteSize() > 0 && !subMessage.SerializeToArray(&szBuf[0], (int32_t)szBuf.size()))
+						{
+							PrintWarning("SerializeToArray fail.[%s:%s]", pMessage->GetTypeName().c_str(), pFieldDescriptor->type_name());
+							return false;
+						}
 					}
-				}
-				break;
+					break;
 
 				case eST_Json:
-				{
-					const Message& subMessage = pReflection->GetMessage(*pMessage, pFieldDescriptor);
-
-					if (!util::MessageToJsonString(subMessage, &szBuf).ok())
 					{
-						PrintWarning("MessageToJsonString fail.[%s:%s]", pMessage->GetTypeName().c_str(), pFieldDescriptor->type_name());
-						return false;
+						const Message& subMessage = pReflection->GetMessage(*pMessage, pFieldDescriptor);
+
+						if (!util::MessageToJsonString(subMessage, &szBuf).ok())
+						{
+							PrintWarning("MessageToJsonString fail.[%s:%s]", pMessage->GetTypeName().c_str(), pFieldDescriptor->type_name());
+							return false;
+						}
 					}
-				}
-				break;
+					break;
 
 				default:
-				{
-					PrintWarning("Message[%s] field[%s] hasn't serialize type.", pMessage->GetTypeName().c_str(), pFieldDescriptor->name().c_str());
-					return false;
-				}
+					{
+						PrintWarning("Message[%s] field[%s] hasn't serialize type.", pMessage->GetTypeName().c_str(), pFieldDescriptor->name().c_str());
+						return false;
+					}
 				}
 
 				SFieldInfo sFieldInfo;
@@ -415,20 +418,20 @@ namespace db
 			switch (eSerializeType)
 			{
 			case eST_Protobuf_Bin:
-			{
-				Message* pSubMessage = pReflection->MutableMessage(pMessage, pFieldDescriptor);
-				DebugAstEx(pSubMessage != nullptr, false);
-				DebugAstEx(pSubMessage->ParseFromString(szValue), false);
-			}
-			break;
+				{
+					Message* pSubMessage = pReflection->MutableMessage(pMessage, pFieldDescriptor);
+					DebugAstEx(pSubMessage != nullptr, false);
+					DebugAstEx(pSubMessage->ParseFromString(szValue), false);
+				}
+				break;
 
 			case eST_Json:
-			{
-				Message* pSubMessage = pReflection->MutableMessage(pMessage, pFieldDescriptor);
-				DebugAstEx(pSubMessage != nullptr, false);
-				DebugAstEx(util::JsonStringToMessage(szValue, pSubMessage).ok(), false);
-			}
-			break;
+				{
+					Message* pSubMessage = pReflection->MutableMessage(pMessage, pFieldDescriptor);
+					DebugAstEx(pSubMessage != nullptr, false);
+					DebugAstEx(util::JsonStringToMessage(szValue, pSubMessage).ok(), false);
+				}
+				break;
 
 			default:
 				DebugAstEx(false, false);

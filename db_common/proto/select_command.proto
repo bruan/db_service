@@ -1,8 +1,8 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package proto.db;
 
 message select_command {
-	uint64 id = 1;
-	string table_name = 2;
+	required uint64 id = 1;
+	required string table_name = 2;
 }

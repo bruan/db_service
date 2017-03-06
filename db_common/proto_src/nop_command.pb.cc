@@ -42,19 +42,20 @@ void protobuf_AssignDesc_nop_5fcommand_2eproto() {
   nop_command_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       nop_command_descriptor_,
-      nop_command::internal_default_instance(),
+      nop_command::default_instance_,
       nop_command_offsets_,
-      -1,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(nop_command, _has_bits_[0]),
       -1,
       -1,
       sizeof(nop_command),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(nop_command, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(nop_command, _internal_metadata_),
+      -1);
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_nop_5fcommand_2eproto);
 }
@@ -63,61 +64,39 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      nop_command_descriptor_, nop_command::internal_default_instance());
+      nop_command_descriptor_, &nop_command::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_nop_5fcommand_2eproto() {
-  nop_command_default_instance_.Shutdown();
+  delete nop_command::default_instance_;
   delete nop_command_reflection_;
 }
 
-void protobuf_InitDefaults_nop_5fcommand_2eproto_impl() {
+void protobuf_AddDesc_nop_5fcommand_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_nop_5fcommand_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  nop_command_default_instance_.DefaultConstruct();
-  nop_command_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_nop_5fcommand_2eproto_once_);
-void protobuf_InitDefaults_nop_5fcommand_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_nop_5fcommand_2eproto_once_,
-                 &protobuf_InitDefaults_nop_5fcommand_2eproto_impl);
-}
-void protobuf_AddDesc_nop_5fcommand_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_nop_5fcommand_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\021nop_command.proto\022\010proto.db\"\r\n\013nop_com"
-    "mandb\006proto3", 52);
+    "mand", 44);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "nop_command.proto", &protobuf_RegisterTypes);
+  nop_command::default_instance_ = new nop_command();
+  nop_command::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_nop_5fcommand_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_nop_5fcommand_2eproto_once_);
-void protobuf_AddDesc_nop_5fcommand_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_nop_5fcommand_2eproto_once_,
-                 &protobuf_AddDesc_nop_5fcommand_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_nop_5fcommand_2eproto {
   StaticDescriptorInitializer_nop_5fcommand_2eproto() {
     protobuf_AddDesc_nop_5fcommand_2eproto();
   }
 } static_descriptor_initializer_nop_5fcommand_2eproto_;
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
 
 // ===================================================================
 
@@ -126,7 +105,6 @@ static void MergeFromFail(int line) {
 
 nop_command::nop_command()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_nop_5fcommand_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.nop_command)
 }
@@ -138,13 +116,13 @@ nop_command::nop_command(const nop_command& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.nop_command)
 }
 
 void nop_command::SharedCtor() {
-  dirty_ = false;
   _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
 nop_command::~nop_command() {
@@ -153,6 +131,8 @@ nop_command::~nop_command() {
 }
 
 void nop_command::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void nop_command::SetCachedSize(int size) const {
@@ -166,11 +146,11 @@ const ::google::protobuf::Descriptor* nop_command::descriptor() {
 }
 
 const nop_command& nop_command::default_instance() {
-  protobuf_InitDefaults_nop_5fcommand_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_nop_5fcommand_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<nop_command> nop_command_default_instance_;
+nop_command* nop_command::default_instance_ = NULL;
 
 nop_command* nop_command::New(::google::protobuf::Arena* arena) const {
   nop_command* n = new nop_command;
@@ -182,6 +162,10 @@ nop_command* nop_command::New(::google::protobuf::Arena* arena) const {
 
 void nop_command::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.db.nop_command)
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  if (_internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->Clear();
+  }
 }
 
 bool nop_command::MergePartialFromCodedStream(
@@ -199,7 +183,8 @@ bool nop_command::MergePartialFromCodedStream(
         ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
       goto success;
     }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
   }
 success:
   // @@protoc_insertion_point(parse_success:proto.db.nop_command)
@@ -213,32 +198,45 @@ failure:
 void nop_command::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.db.nop_command)
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
   // @@protoc_insertion_point(serialize_end:proto.db.nop_command)
 }
 
 ::google::protobuf::uint8* nop_command::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.nop_command)
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.nop_command)
   return target;
 }
 
-size_t nop_command::ByteSizeLong() const {
+int nop_command::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.nop_command)
-  size_t total_size = 0;
+  int total_size = 0;
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void nop_command::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.nop_command)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const nop_command* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const nop_command* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const nop_command>(
           &from);
   if (source == NULL) {
@@ -246,21 +244,18 @@ void nop_command::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.nop_command)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void nop_command::MergeFrom(const nop_command& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.nop_command)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void nop_command::UnsafeMergeFrom(const nop_command& from) {
-  GOOGLE_DCHECK(&from != this);
+  if (from._internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+  }
 }
 
 void nop_command::CopyFrom(const ::google::protobuf::Message& from) {
@@ -274,7 +269,7 @@ void nop_command::CopyFrom(const nop_command& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.nop_command)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool nop_command::IsInitialized() const {
@@ -302,9 +297,6 @@ void nop_command::InternalSwap(nop_command* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // nop_command
 
-inline const nop_command* nop_command::internal_default_instance() {
-  return &nop_command_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

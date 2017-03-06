@@ -1,8 +1,8 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package proto.db;
 
 message flush_command {
-	uint64 id = 1;
-	uint32 type = 2;
+	required uint64 id = 1;
+	required uint32 type = 2;
 }

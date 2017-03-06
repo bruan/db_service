@@ -35,7 +35,7 @@ void protobuf_AssignDesc_db_5foption_2eproto() {
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_db_5foption_2eproto);
 }
@@ -50,44 +50,31 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void protobuf_ShutdownFile_db_5foption_2eproto() {
 }
 
-void protobuf_InitDefaults_db_5foption_2eproto_impl() {
+void protobuf_AddDesc_db_5foption_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_db_5foption_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::protobuf_InitDefaults_google_2fprotobuf_2fdescriptor_2eproto();
-  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
-    ::google::protobuf::MessageOptions::internal_default_instance(),
-    50000, 9, false, false);
-  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
-    ::google::protobuf::FieldOptions::internal_default_instance(),
-    50001, 13, false, false);
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_db_5foption_2eproto_once_);
-void protobuf_InitDefaults_db_5foption_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_db_5foption_2eproto_once_,
-                 &protobuf_InitDefaults_db_5foption_2eproto_impl);
-}
-void protobuf_AddDesc_db_5foption_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_db_5foption_2eproto();
+  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2fdescriptor_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\017db_option.proto\032 google/protobuf/descr"
     "iptor.proto:6\n\013primary_key\022\037.google.prot"
     "obuf.MessageOptions\030\320\206\003 \001(\t:7\n\016serialize"
     "_type\022\035.google.protobuf.FieldOptions\030\321\206\003"
-    " \001(\rb\006proto3", 172);
+    " \001(\r", 164);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "db_option.proto", &protobuf_RegisterTypes);
-  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2fdescriptor_2eproto();
+  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
+    &::google::protobuf::MessageOptions::default_instance(),
+    50000, 9, false, false);
+  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
+    &::google::protobuf::FieldOptions::default_instance(),
+    50001, 13, false, false);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_db_5foption_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_db_5foption_2eproto_once_);
-void protobuf_AddDesc_db_5foption_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_db_5foption_2eproto_once_,
-                 &protobuf_AddDesc_db_5foption_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_db_5foption_2eproto {
   StaticDescriptorInitializer_db_5foption_2eproto() {

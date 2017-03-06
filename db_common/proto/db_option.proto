@@ -1,10 +1,11 @@
-syntax = "proto3";
+syntax = "proto2";
+
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
-	string primary_key = 50000;
+	optional string primary_key = 50000;
 }
 
 extend google.protobuf.FieldOptions {
-	uint32 serialize_type = 50001;
+	optional uint32 serialize_type = 50001;
 }

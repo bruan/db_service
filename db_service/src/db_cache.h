@@ -19,7 +19,7 @@ namespace db
 
 		google::protobuf::Message*
 				getData(uint32_t nDataID);
-		bool	setData(uint32_t nDataID, const google::protobuf::Message* pData);
+		bool	setData(uint32_t nDataID, const std::string& szDataName, const google::protobuf::Message* pData);
 		bool	addData(uint32_t nDataID, const google::protobuf::Message* pData);
 		bool	delData(uint32_t nDataID);
 		int32_t	getDataSize() const;

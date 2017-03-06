@@ -1,8 +1,8 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package proto.db;
 
 message call_command {
-	string sql = 1;
+	required string sql = 1;
 	repeated bytes args = 2;
 }

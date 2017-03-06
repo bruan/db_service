@@ -53,13 +53,14 @@ void protobuf_AssignDesc_player_5fextend_2eproto() {
   player_extend_data_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_extend_data_descriptor_,
-      player_extend_data::internal_default_instance(),
+      player_extend_data::default_instance_,
       player_extend_data_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_extend_data),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data, _is_default_instance_));
   player_extend_data_set_descriptor_ = file->message_type(1);
   static const int player_extend_data_set_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data_set, data_),
@@ -67,13 +68,14 @@ void protobuf_AssignDesc_player_5fextend_2eproto() {
   player_extend_data_set_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_extend_data_set_descriptor_,
-      player_extend_data_set::internal_default_instance(),
+      player_extend_data_set::default_instance_,
       player_extend_data_set_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_extend_data_set),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data_set, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data_set, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_data_set, _is_default_instance_));
   player_extend_descriptor_ = file->message_type(2);
   static const int player_extend_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend, id_),
@@ -82,13 +84,14 @@ void protobuf_AssignDesc_player_5fextend_2eproto() {
   player_extend_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_extend_descriptor_,
-      player_extend::internal_default_instance(),
+      player_extend::default_instance_,
       player_extend_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_extend),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend, _is_default_instance_));
   player_extend_set_descriptor_ = file->message_type(3);
   static const int player_extend_set_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_set, data_set_),
@@ -96,19 +99,20 @@ void protobuf_AssignDesc_player_5fextend_2eproto() {
   player_extend_set_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_extend_set_descriptor_,
-      player_extend_set::internal_default_instance(),
+      player_extend_set::default_instance_,
       player_extend_set_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_extend_set),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_set, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_set, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_extend_set, _is_default_instance_));
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_player_5fextend_2eproto);
 }
@@ -117,51 +121,36 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_extend_data_descriptor_, player_extend_data::internal_default_instance());
+      player_extend_data_descriptor_, &player_extend_data::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_extend_data_set_descriptor_, player_extend_data_set::internal_default_instance());
+      player_extend_data_set_descriptor_, &player_extend_data_set::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_extend_descriptor_, player_extend::internal_default_instance());
+      player_extend_descriptor_, &player_extend::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_extend_set_descriptor_, player_extend_set::internal_default_instance());
+      player_extend_set_descriptor_, &player_extend_set::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_player_5fextend_2eproto() {
-  player_extend_data_default_instance_.Shutdown();
+  delete player_extend_data::default_instance_;
   delete player_extend_data_reflection_;
-  player_extend_data_set_default_instance_.Shutdown();
+  delete player_extend_data_set::default_instance_;
   delete player_extend_data_set_reflection_;
-  player_extend_default_instance_.Shutdown();
+  delete player_extend::default_instance_;
   delete player_extend_reflection_;
-  player_extend_set_default_instance_.Shutdown();
+  delete player_extend_set::default_instance_;
   delete player_extend_set_reflection_;
 }
 
-void protobuf_InitDefaults_player_5fextend_2eproto_impl() {
+void protobuf_AddDesc_player_5fextend_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_player_5fextend_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::protobuf_InitDefaults_db_5foption_2eproto();
-  player_extend_data_default_instance_.DefaultConstruct();
-  player_extend_data_set_default_instance_.DefaultConstruct();
-  player_extend_default_instance_.DefaultConstruct();
-  player_extend_set_default_instance_.DefaultConstruct();
-  player_extend_data_default_instance_.get_mutable()->InitAsDefaultInstance();
-  player_extend_data_set_default_instance_.get_mutable()->InitAsDefaultInstance();
-  player_extend_default_instance_.get_mutable()->InitAsDefaultInstance();
-  player_extend_set_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_player_5fextend_2eproto_once_);
-void protobuf_InitDefaults_player_5fextend_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_player_5fextend_2eproto_once_,
-                 &protobuf_InitDefaults_player_5fextend_2eproto_impl);
-}
-void protobuf_AddDesc_player_5fextend_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_player_5fextend_2eproto();
+  ::protobuf_AddDesc_db_5foption_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\023player_extend.proto\022\010proto.db\032\017db_opti"
     "on.proto\"2\n\022player_extend_data\022\r\n\005data1\030"
@@ -174,31 +163,23 @@ void protobuf_AddDesc_player_5fextend_2eproto_impl() {
     "er_extendb\006proto3", 337);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "player_extend.proto", &protobuf_RegisterTypes);
-  ::protobuf_AddDesc_db_5foption_2eproto();
+  player_extend_data::default_instance_ = new player_extend_data();
+  player_extend_data_set::default_instance_ = new player_extend_data_set();
+  player_extend::default_instance_ = new player_extend();
+  player_extend_set::default_instance_ = new player_extend_set();
+  player_extend_data::default_instance_->InitAsDefaultInstance();
+  player_extend_data_set::default_instance_->InitAsDefaultInstance();
+  player_extend::default_instance_->InitAsDefaultInstance();
+  player_extend_set::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_player_5fextend_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_player_5fextend_2eproto_once_);
-void protobuf_AddDesc_player_5fextend_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_player_5fextend_2eproto_once_,
-                 &protobuf_AddDesc_player_5fextend_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_player_5fextend_2eproto {
   StaticDescriptorInitializer_player_5fextend_2eproto() {
     protobuf_AddDesc_player_5fextend_2eproto();
   }
 } static_descriptor_initializer_player_5fextend_2eproto_;
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
 
 // ===================================================================
 
@@ -209,27 +190,27 @@ const int player_extend_data::kData2FieldNumber;
 
 player_extend_data::player_extend_data()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fextend_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_extend_data)
 }
 
 void player_extend_data::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 player_extend_data::player_extend_data(const player_extend_data& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_extend_data)
 }
 
 void player_extend_data::SharedCtor() {
-  dirty_ = false;
-  ::memset(&data1_, 0, reinterpret_cast<char*>(&data2_) -
-    reinterpret_cast<char*>(&data1_) + sizeof(data2_));
+    _is_default_instance_ = false;
   _cached_size_ = 0;
+  data1_ = 0u;
+  data2_ = 0u;
 }
 
 player_extend_data::~player_extend_data() {
@@ -238,6 +219,8 @@ player_extend_data::~player_extend_data() {
 }
 
 void player_extend_data::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void player_extend_data::SetCachedSize(int size) const {
@@ -251,11 +234,11 @@ const ::google::protobuf::Descriptor* player_extend_data::descriptor() {
 }
 
 const player_extend_data& player_extend_data::default_instance() {
-  protobuf_InitDefaults_player_5fextend_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fextend_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_extend_data> player_extend_data_default_instance_;
+player_extend_data* player_extend_data::default_instance_ = NULL;
 
 player_extend_data* player_extend_data::New(::google::protobuf::Arena* arena) const {
   player_extend_data* n = new player_extend_data;
@@ -279,7 +262,7 @@ void player_extend_data::Clear() {
 #endif
 
 #define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
+  ::memset(&first, 0,\
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
@@ -303,10 +286,10 @@ bool player_extend_data::MergePartialFromCodedStream(
       // optional uint32 data1 = 1;
       case 1: {
         if (tag == 8) {
-
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &data1_)));
+
         } else {
           goto handle_unusual;
         }
@@ -318,10 +301,10 @@ bool player_extend_data::MergePartialFromCodedStream(
       case 2: {
         if (tag == 16) {
          parse_data2:
-
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &data2_)));
+
         } else {
           goto handle_unusual;
         }
@@ -368,7 +351,6 @@ void player_extend_data::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_extend_data::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_extend_data)
   // optional uint32 data1 = 1;
   if (this->data1() != 0) {
@@ -384,9 +366,9 @@ void player_extend_data::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_extend_data::ByteSizeLong() const {
+int player_extend_data::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_extend_data)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional uint32 data1 = 1;
   if (this->data1() != 0) {
@@ -402,17 +384,18 @@ size_t player_extend_data::ByteSizeLong() const {
         this->data2());
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_extend_data::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_extend_data)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_extend_data* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_extend_data* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_extend_data>(
           &from);
   if (source == NULL) {
@@ -420,21 +403,15 @@ void player_extend_data::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_extend_data)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_extend_data::MergeFrom(const player_extend_data& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_extend_data)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_extend_data::UnsafeMergeFrom(const player_extend_data& from) {
-  GOOGLE_DCHECK(&from != this);
   if (from.data1() != 0) {
     set_data1(from.data1());
   }
@@ -454,7 +431,7 @@ void player_extend_data::CopyFrom(const player_extend_data& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_extend_data)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_extend_data::IsInitialized() const {
@@ -487,38 +464,31 @@ void player_extend_data::InternalSwap(player_extend_data* other) {
 // optional uint32 data1 = 1;
 void player_extend_data::clear_data1() {
   data1_ = 0u;
-dirty_ = true;
 }
-::google::protobuf::uint32 player_extend_data::data1() const {
+ ::google::protobuf::uint32 player_extend_data::data1() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend_data.data1)
   return data1_;
 }
-void player_extend_data::set_data1(::google::protobuf::uint32 value) {
+ void player_extend_data::set_data1(::google::protobuf::uint32 value) {
   
   data1_ = value;
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_extend_data.data1)
 }
 
 // optional uint32 data2 = 2;
 void player_extend_data::clear_data2() {
   data2_ = 0u;
-dirty_ = true;
 }
-::google::protobuf::uint32 player_extend_data::data2() const {
+ ::google::protobuf::uint32 player_extend_data::data2() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend_data.data2)
   return data2_;
 }
-void player_extend_data::set_data2(::google::protobuf::uint32 value) {
+ void player_extend_data::set_data2(::google::protobuf::uint32 value) {
   
   data2_ = value;
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_extend_data.data2)
 }
 
-inline const player_extend_data* player_extend_data::internal_default_instance() {
-  return &player_extend_data_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -529,24 +499,24 @@ const int player_extend_data_set::kDataFieldNumber;
 
 player_extend_data_set::player_extend_data_set()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fextend_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_extend_data_set)
 }
 
 void player_extend_data_set::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 player_extend_data_set::player_extend_data_set(const player_extend_data_set& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_extend_data_set)
 }
 
 void player_extend_data_set::SharedCtor() {
-  dirty_ = false;
+    _is_default_instance_ = false;
   _cached_size_ = 0;
 }
 
@@ -556,6 +526,8 @@ player_extend_data_set::~player_extend_data_set() {
 }
 
 void player_extend_data_set::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void player_extend_data_set::SetCachedSize(int size) const {
@@ -569,11 +541,11 @@ const ::google::protobuf::Descriptor* player_extend_data_set::descriptor() {
 }
 
 const player_extend_data_set& player_extend_data_set::default_instance() {
-  protobuf_InitDefaults_player_5fextend_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fextend_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_extend_data_set> player_extend_data_set_default_instance_;
+player_extend_data_set* player_extend_data_set::default_instance_ = NULL;
 
 player_extend_data_set* player_extend_data_set::New(::google::protobuf::Arena* arena) const {
   player_extend_data_set* n = new player_extend_data_set;
@@ -649,7 +621,6 @@ void player_extend_data_set::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_extend_data_set::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_extend_data_set)
   // repeated .proto.db.player_extend_data data = 1;
   for (unsigned int i = 0, n = this->data_size(); i < n; i++) {
@@ -662,32 +633,30 @@ void player_extend_data_set::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_extend_data_set::ByteSizeLong() const {
+int player_extend_data_set::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_extend_data_set)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // repeated .proto.db.player_extend_data data = 1;
-  {
-    unsigned int count = this->data_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->data(i));
-    }
+  total_size += 1 * this->data_size();
+  for (int i = 0; i < this->data_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->data(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_extend_data_set::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_extend_data_set)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_extend_data_set* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_extend_data_set* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_extend_data_set>(
           &from);
   if (source == NULL) {
@@ -695,21 +664,15 @@ void player_extend_data_set::MergeFrom(const ::google::protobuf::Message& from) 
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_extend_data_set)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_extend_data_set::MergeFrom(const player_extend_data_set& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_extend_data_set)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_extend_data_set::UnsafeMergeFrom(const player_extend_data_set& from) {
-  GOOGLE_DCHECK(&from != this);
   data_.MergeFrom(from.data_);
 }
 
@@ -724,7 +687,7 @@ void player_extend_data_set::CopyFrom(const player_extend_data_set& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_extend_data_set)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_extend_data_set::IsInitialized() const {
@@ -759,7 +722,6 @@ int player_extend_data_set::data_size() const {
 }
 void player_extend_data_set::clear_data() {
   data_.Clear();
-dirty_ = true;
 }
 const ::proto::db::player_extend_data& player_extend_data_set::data(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend_data_set.data)
@@ -784,9 +746,6 @@ player_extend_data_set::data() const {
   return data_;
 }
 
-inline const player_extend_data_set* player_extend_data_set::internal_default_instance() {
-  return &player_extend_data_set_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -798,29 +757,28 @@ const int player_extend::kDataSetFieldNumber;
 
 player_extend::player_extend()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fextend_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_extend)
 }
 
 void player_extend::InitAsDefaultInstance() {
-  data_set_ = const_cast< ::proto::db::player_extend_data_set*>(
-      ::proto::db::player_extend_data_set::internal_default_instance());
+  _is_default_instance_ = true;
+  data_set_ = const_cast< ::proto::db::player_extend_data_set*>(&::proto::db::player_extend_data_set::default_instance());
 }
 
 player_extend::player_extend(const player_extend& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_extend)
 }
 
 void player_extend::SharedCtor() {
-  dirty_ = false;
-  data_set_ = NULL;
-  id_ = 0u;
+    _is_default_instance_ = false;
   _cached_size_ = 0;
+  id_ = 0u;
+  data_set_ = NULL;
 }
 
 player_extend::~player_extend() {
@@ -829,7 +787,7 @@ player_extend::~player_extend() {
 }
 
 void player_extend::SharedDtor() {
-  if (this != &player_extend_default_instance_.get()) {
+  if (this != default_instance_) {
     delete data_set_;
   }
 }
@@ -845,11 +803,11 @@ const ::google::protobuf::Descriptor* player_extend::descriptor() {
 }
 
 const player_extend& player_extend::default_instance() {
-  protobuf_InitDefaults_player_5fextend_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fextend_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_extend> player_extend_default_instance_;
+player_extend* player_extend::default_instance_ = NULL;
 
 player_extend* player_extend::New(::google::protobuf::Arena* arena) const {
   player_extend* n = new player_extend;
@@ -879,10 +837,10 @@ bool player_extend::MergePartialFromCodedStream(
       // optional uint32 id = 1;
       case 1: {
         if (tag == 8) {
-
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &id_)));
+
         } else {
           goto handle_unusual;
         }
@@ -943,7 +901,6 @@ void player_extend::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_extend::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_extend)
   // optional uint32 id = 1;
   if (this->id() != 0) {
@@ -961,9 +918,9 @@ void player_extend::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_extend::ByteSizeLong() const {
+int player_extend::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_extend)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional uint32 id = 1;
   if (this->id() != 0) {
@@ -979,17 +936,18 @@ size_t player_extend::ByteSizeLong() const {
         *this->data_set_);
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_extend::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_extend)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_extend* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_extend* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_extend>(
           &from);
   if (source == NULL) {
@@ -997,21 +955,15 @@ void player_extend::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_extend)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_extend::MergeFrom(const player_extend& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_extend)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_extend::UnsafeMergeFrom(const player_extend& from) {
-  GOOGLE_DCHECK(&from != this);
   if (from.id() != 0) {
     set_id(from.id());
   }
@@ -1031,7 +983,7 @@ void player_extend::CopyFrom(const player_extend& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_extend)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_extend::IsInitialized() const {
@@ -1064,32 +1016,28 @@ void player_extend::InternalSwap(player_extend* other) {
 // optional uint32 id = 1;
 void player_extend::clear_id() {
   id_ = 0u;
-dirty_ = true;
 }
-::google::protobuf::uint32 player_extend::id() const {
+ ::google::protobuf::uint32 player_extend::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend.id)
   return id_;
 }
-void player_extend::set_id(::google::protobuf::uint32 value) {
+ void player_extend::set_id(::google::protobuf::uint32 value) {
   
   id_ = value;
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_extend.id)
 }
 
 // optional .proto.db.player_extend_data_set data_set = 2;
 bool player_extend::has_data_set() const {
-  return this != internal_default_instance() && data_set_ != NULL;
+  return !_is_default_instance_ && data_set_ != NULL;
 }
 void player_extend::clear_data_set() {
   if (GetArenaNoVirtual() == NULL && data_set_ != NULL) delete data_set_;
   data_set_ = NULL;
-dirty_ = true;
 }
 const ::proto::db::player_extend_data_set& player_extend::data_set() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend.data_set)
-  return data_set_ != NULL ? *data_set_
-                         : *::proto::db::player_extend_data_set::internal_default_instance();
+  return data_set_ != NULL ? *data_set_ : *default_instance_->data_set_;
 }
 ::proto::db::player_extend_data_set* player_extend::mutable_data_set() {
   
@@ -1117,9 +1065,6 @@ void player_extend::set_allocated_data_set(::proto::db::player_extend_data_set* 
   // @@protoc_insertion_point(field_set_allocated:proto.db.player_extend.data_set)
 }
 
-inline const player_extend* player_extend::internal_default_instance() {
-  return &player_extend_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -1130,24 +1075,24 @@ const int player_extend_set::kDataSetFieldNumber;
 
 player_extend_set::player_extend_set()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fextend_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_extend_set)
 }
 
 void player_extend_set::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 player_extend_set::player_extend_set(const player_extend_set& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_extend_set)
 }
 
 void player_extend_set::SharedCtor() {
-  dirty_ = false;
+    _is_default_instance_ = false;
   _cached_size_ = 0;
 }
 
@@ -1157,6 +1102,8 @@ player_extend_set::~player_extend_set() {
 }
 
 void player_extend_set::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void player_extend_set::SetCachedSize(int size) const {
@@ -1170,11 +1117,11 @@ const ::google::protobuf::Descriptor* player_extend_set::descriptor() {
 }
 
 const player_extend_set& player_extend_set::default_instance() {
-  protobuf_InitDefaults_player_5fextend_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fextend_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_extend_set> player_extend_set_default_instance_;
+player_extend_set* player_extend_set::default_instance_ = NULL;
 
 player_extend_set* player_extend_set::New(::google::protobuf::Arena* arena) const {
   player_extend_set* n = new player_extend_set;
@@ -1250,7 +1197,6 @@ void player_extend_set::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_extend_set::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_extend_set)
   // repeated .proto.db.player_extend data_set = 1;
   for (unsigned int i = 0, n = this->data_set_size(); i < n; i++) {
@@ -1263,32 +1209,30 @@ void player_extend_set::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_extend_set::ByteSizeLong() const {
+int player_extend_set::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_extend_set)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // repeated .proto.db.player_extend data_set = 1;
-  {
-    unsigned int count = this->data_set_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->data_set(i));
-    }
+  total_size += 1 * this->data_set_size();
+  for (int i = 0; i < this->data_set_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->data_set(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_extend_set::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_extend_set)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_extend_set* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_extend_set* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_extend_set>(
           &from);
   if (source == NULL) {
@@ -1296,21 +1240,15 @@ void player_extend_set::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_extend_set)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_extend_set::MergeFrom(const player_extend_set& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_extend_set)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_extend_set::UnsafeMergeFrom(const player_extend_set& from) {
-  GOOGLE_DCHECK(&from != this);
   data_set_.MergeFrom(from.data_set_);
 }
 
@@ -1325,7 +1263,7 @@ void player_extend_set::CopyFrom(const player_extend_set& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_extend_set)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_extend_set::IsInitialized() const {
@@ -1360,7 +1298,6 @@ int player_extend_set::data_set_size() const {
 }
 void player_extend_set::clear_data_set() {
   data_set_.Clear();
-dirty_ = true;
 }
 const ::proto::db::player_extend& player_extend_set::data_set(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend_set.data_set)
@@ -1385,9 +1322,6 @@ player_extend_set::data_set() const {
   return data_set_;
 }
 
-inline const player_extend_set* player_extend_set::internal_default_instance() {
-  return &player_extend_set_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

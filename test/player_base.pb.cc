@@ -47,13 +47,14 @@ void protobuf_AssignDesc_player_5fbase_2eproto() {
   player_base_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_base_descriptor_,
-      player_base::internal_default_instance(),
+      player_base::default_instance_,
       player_base_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_base),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base, _is_default_instance_));
   player_base_set_descriptor_ = file->message_type(1);
   static const int player_base_set_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base_set, data_set_),
@@ -61,19 +62,20 @@ void protobuf_AssignDesc_player_5fbase_2eproto() {
   player_base_set_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       player_base_set_descriptor_,
-      player_base_set::internal_default_instance(),
+      player_base_set::default_instance_,
       player_base_set_offsets_,
       -1,
       -1,
       -1,
       sizeof(player_base_set),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base_set, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base_set, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(player_base_set, _is_default_instance_));
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_player_5fbase_2eproto);
 }
@@ -82,40 +84,28 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_base_descriptor_, player_base::internal_default_instance());
+      player_base_descriptor_, &player_base::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      player_base_set_descriptor_, player_base_set::internal_default_instance());
+      player_base_set_descriptor_, &player_base_set::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_player_5fbase_2eproto() {
-  player_base_default_instance_.Shutdown();
+  delete player_base::default_instance_;
   delete player_base_reflection_;
-  player_base_set_default_instance_.Shutdown();
+  delete player_base_set::default_instance_;
   delete player_base_set_reflection_;
 }
 
-void protobuf_InitDefaults_player_5fbase_2eproto_impl() {
+void protobuf_AddDesc_player_5fbase_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_player_5fbase_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::protobuf_InitDefaults_db_5foption_2eproto();
-  ::google::protobuf::internal::GetEmptyString();
-  player_base_default_instance_.DefaultConstruct();
-  player_base_set_default_instance_.DefaultConstruct();
-  player_base_default_instance_.get_mutable()->InitAsDefaultInstance();
-  player_base_set_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_player_5fbase_2eproto_once_);
-void protobuf_InitDefaults_player_5fbase_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_player_5fbase_2eproto_once_,
-                 &protobuf_InitDefaults_player_5fbase_2eproto_impl);
-}
-void protobuf_AddDesc_player_5fbase_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_player_5fbase_2eproto();
+  ::protobuf_AddDesc_db_5foption_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\021player_base.proto\022\010proto.db\032\017db_option"
     ".proto\"/\n\013player_base\022\n\n\002id\030\001 \001(\017\022\014\n\004nam"
@@ -124,31 +114,19 @@ void protobuf_AddDesc_player_5fbase_2eproto_impl() {
     "to3", 163);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "player_base.proto", &protobuf_RegisterTypes);
-  ::protobuf_AddDesc_db_5foption_2eproto();
+  player_base::default_instance_ = new player_base();
+  player_base_set::default_instance_ = new player_base_set();
+  player_base::default_instance_->InitAsDefaultInstance();
+  player_base_set::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_player_5fbase_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_player_5fbase_2eproto_once_);
-void protobuf_AddDesc_player_5fbase_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_player_5fbase_2eproto_once_,
-                 &protobuf_AddDesc_player_5fbase_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_player_5fbase_2eproto {
   StaticDescriptorInitializer_player_5fbase_2eproto() {
     protobuf_AddDesc_player_5fbase_2eproto();
   }
 } static_descriptor_initializer_player_5fbase_2eproto_;
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
 
 // ===================================================================
 
@@ -159,27 +137,28 @@ const int player_base::kNameFieldNumber;
 
 player_base::player_base()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fbase_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_base)
 }
 
 void player_base::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 player_base::player_base(const player_base& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_base)
 }
 
 void player_base::SharedCtor() {
-  dirty_ = false;
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  id_ = 0;
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  id_ = 0;
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 player_base::~player_base() {
@@ -189,6 +168,8 @@ player_base::~player_base() {
 
 void player_base::SharedDtor() {
   name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+  }
 }
 
 void player_base::SetCachedSize(int size) const {
@@ -202,11 +183,11 @@ const ::google::protobuf::Descriptor* player_base::descriptor() {
 }
 
 const player_base& player_base::default_instance() {
-  protobuf_InitDefaults_player_5fbase_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fbase_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_base> player_base_default_instance_;
+player_base* player_base::default_instance_ = NULL;
 
 player_base* player_base::New(::google::protobuf::Arena* arena) const {
   player_base* n = new player_base;
@@ -235,10 +216,10 @@ bool player_base::MergePartialFromCodedStream(
       // optional sfixed32 id = 1;
       case 1: {
         if (tag == 13) {
-
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_SFIXED32>(
                  input, &id_)));
+
         } else {
           goto handle_unusual;
         }
@@ -299,7 +280,6 @@ void player_base::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_base::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_base)
   // optional sfixed32 id = 1;
   if (this->id() != 0) {
@@ -317,9 +297,9 @@ void player_base::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_base::ByteSizeLong() const {
+int player_base::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_base)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional sfixed32 id = 1;
   if (this->id() != 0) {
@@ -333,17 +313,18 @@ size_t player_base::ByteSizeLong() const {
         this->name());
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_base::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_base)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_base* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_base* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_base>(
           &from);
   if (source == NULL) {
@@ -351,21 +332,15 @@ void player_base::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_base)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_base::MergeFrom(const player_base& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_base)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_base::UnsafeMergeFrom(const player_base& from) {
-  GOOGLE_DCHECK(&from != this);
   if (from.id() != 0) {
     set_id(from.id());
   }
@@ -386,7 +361,7 @@ void player_base::CopyFrom(const player_base& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_base)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_base::IsInitialized() const {
@@ -419,72 +394,61 @@ void player_base::InternalSwap(player_base* other) {
 // optional sfixed32 id = 1;
 void player_base::clear_id() {
   id_ = 0;
-dirty_ = true;
 }
-::google::protobuf::int32 player_base::id() const {
+ ::google::protobuf::int32 player_base::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.id)
   return id_;
 }
-void player_base::set_id(::google::protobuf::int32 value) {
+ void player_base::set_id(::google::protobuf::int32 value) {
   
   id_ = value;
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_base.id)
 }
 
 // optional bytes name = 2;
 void player_base::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-dirty_ = true;
 }
-const ::std::string& player_base::name() const {
+ const ::std::string& player_base::name() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.name)
   return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void player_base::set_name(const ::std::string& value) {
+ void player_base::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.player_base.name)
 }
-void player_base::set_name(const char* value) {
+ void player_base::set_name(const char* value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.player_base.name)
 }
-void player_base::set_name(const void* value, size_t size) {
+ void player_base::set_name(const void* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.player_base.name)
 }
-::std::string* player_base::mutable_name() {
+ ::std::string* player_base::mutable_name() {
   
   // @@protoc_insertion_point(field_mutable:proto.db.player_base.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* player_base::release_name() {
+ ::std::string* player_base::release_name() {
   // @@protoc_insertion_point(field_release:proto.db.player_base.name)
   
-  dirty_ = true;
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void player_base::set_allocated_name(::std::string* name) {
+ void player_base::set_allocated_name(::std::string* name) {
   if (name != NULL) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_allocated:proto.db.player_base.name)
 }
 
-inline const player_base* player_base::internal_default_instance() {
-  return &player_base_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -495,24 +459,24 @@ const int player_base_set::kDataSetFieldNumber;
 
 player_base_set::player_base_set()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_player_5fbase_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.player_base_set)
 }
 
 void player_base_set::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 player_base_set::player_base_set(const player_base_set& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.player_base_set)
 }
 
 void player_base_set::SharedCtor() {
-  dirty_ = false;
+    _is_default_instance_ = false;
   _cached_size_ = 0;
 }
 
@@ -522,6 +486,8 @@ player_base_set::~player_base_set() {
 }
 
 void player_base_set::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void player_base_set::SetCachedSize(int size) const {
@@ -535,11 +501,11 @@ const ::google::protobuf::Descriptor* player_base_set::descriptor() {
 }
 
 const player_base_set& player_base_set::default_instance() {
-  protobuf_InitDefaults_player_5fbase_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_player_5fbase_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<player_base_set> player_base_set_default_instance_;
+player_base_set* player_base_set::default_instance_ = NULL;
 
 player_base_set* player_base_set::New(::google::protobuf::Arena* arena) const {
   player_base_set* n = new player_base_set;
@@ -615,7 +581,6 @@ void player_base_set::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* player_base_set::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.player_base_set)
   // repeated .proto.db.player_base data_set = 1;
   for (unsigned int i = 0, n = this->data_set_size(); i < n; i++) {
@@ -628,32 +593,30 @@ void player_base_set::SerializeWithCachedSizes(
   return target;
 }
 
-size_t player_base_set::ByteSizeLong() const {
+int player_base_set::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.player_base_set)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // repeated .proto.db.player_base data_set = 1;
-  {
-    unsigned int count = this->data_set_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->data_set(i));
-    }
+  total_size += 1 * this->data_set_size();
+  for (int i = 0; i < this->data_set_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->data_set(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void player_base_set::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.player_base_set)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const player_base_set* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const player_base_set* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const player_base_set>(
           &from);
   if (source == NULL) {
@@ -661,21 +624,15 @@ void player_base_set::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.player_base_set)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void player_base_set::MergeFrom(const player_base_set& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.player_base_set)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void player_base_set::UnsafeMergeFrom(const player_base_set& from) {
-  GOOGLE_DCHECK(&from != this);
   data_set_.MergeFrom(from.data_set_);
 }
 
@@ -690,7 +647,7 @@ void player_base_set::CopyFrom(const player_base_set& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.player_base_set)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool player_base_set::IsInitialized() const {
@@ -725,7 +682,6 @@ int player_base_set::data_set_size() const {
 }
 void player_base_set::clear_data_set() {
   data_set_.Clear();
-dirty_ = true;
 }
 const ::proto::db::player_base& player_base_set::data_set(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.player_base_set.data_set)
@@ -750,9 +706,6 @@ player_base_set::data_set() const {
   return data_set_;
 }
 
-inline const player_base_set* player_base_set::internal_default_instance() {
-  return &player_base_set_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

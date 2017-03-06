@@ -62,14 +62,95 @@ bool CDbCache::addData(uint32_t nDataID, const Message* pData)
 	return true;
 }
 
-bool CDbCache::setData(uint32_t nDataID, const google::protobuf::Message* pData)
+bool CDbCache::setData(uint32_t nDataID, const string& szDataName, const google::protobuf::Message* pData)
 {
 	auto iter = this->m_mapCacheInfo.find(nDataID);
 	if (iter == this->m_mapCacheInfo.end())
 		return this->addData(nDataID, pData);
 
+	Message* pDstData = createMessage(szDataName);
+	if (nullptr == pDstData)
+		return false;
+	
+	DEFER(delete pDstData;);
+
+	if (!pDstData->ParseFromString(iter->second.szData))
+		return false;
+
+	const Descriptor* pSrcDescriptor = pData->GetDescriptor();
+	DebugAstEx(pSrcDescriptor != nullptr, false);
+
+	const google::protobuf::Reflection* pSrcReflection = pData->GetReflection();
+	DebugAstEx(pSrcReflection != nullptr, false);
+
+	const Descriptor* pDstDescriptor = pDstData->GetDescriptor();
+	DebugAstEx(pDstDescriptor != nullptr, false);
+
+	const Reflection* pDstReflection = pDstData->GetReflection();
+	DebugAstEx(pDstReflection != nullptr, false);
+
+	for (int32_t i = 0; i < pSrcDescriptor->field_count(); ++i)
+	{
+		const FieldDescriptor* pSrcFieldDescriptor = pSrcDescriptor->field(i);
+		DebugAstEx(pSrcFieldDescriptor != nullptr, false);
+		const FieldDescriptor* pDstFieldDescriptor = pDstDescriptor->FindFieldByName(pSrcFieldDescriptor->name());
+		DebugAstEx(pDstFieldDescriptor != nullptr, false);
+
+		switch (pSrcFieldDescriptor->type())
+		{
+		case FieldDescriptor::TYPE_INT32:
+		case FieldDescriptor::TYPE_SINT32:
+		case FieldDescriptor::TYPE_SFIXED32:
+			pDstReflection->SetInt32(pDstData, pDstFieldDescriptor, pSrcReflection->GetInt32(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_UINT32:
+		case FieldDescriptor::TYPE_FIXED32:
+			pDstReflection->SetUInt32(pDstData, pDstFieldDescriptor, pSrcReflection->GetUInt32(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_INT64:
+		case FieldDescriptor::TYPE_SINT64:
+		case FieldDescriptor::TYPE_SFIXED64:
+			pDstReflection->SetInt64(pDstData, pDstFieldDescriptor, pSrcReflection->GetInt64(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_UINT64:
+		case FieldDescriptor::TYPE_FIXED64:
+			pDstReflection->SetUInt64(pDstData, pDstFieldDescriptor, pSrcReflection->GetUInt64(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_DOUBLE:
+			pDstReflection->SetDouble(pDstData, pDstFieldDescriptor, pSrcReflection->GetDouble(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_FLOAT:
+			pDstReflection->SetFloat(pDstData, pDstFieldDescriptor, pSrcReflection->GetFloat(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_STRING:
+		case FieldDescriptor::TYPE_BYTES:
+			pDstReflection->SetString(pDstData, pDstFieldDescriptor, pSrcReflection->GetString(*pData, pSrcFieldDescriptor));
+			break;
+
+		case FieldDescriptor::TYPE_MESSAGE:
+			{
+#ifdef GetMessage
+#undef GetMessage
+#endif
+				Message* pDstSubMessage = pDstReflection->MutableMessage(pDstData, pDstFieldDescriptor);
+				const Message& srcSubMessage = pSrcReflection->GetMessage(*pData, pSrcFieldDescriptor);
+				pDstSubMessage->CopyFrom(srcSubMessage);
+			}
+			break;
+
+		default:
+			DebugAstEx(false, false);
+		}
+	}
+
 	string szData;
-	if (!pData->SerializeToString(&szData))
+	if (!pDstData->SerializeToString(&szData))
 		return false;
 
 	int32_t nSize = (int32_t)szData.size();

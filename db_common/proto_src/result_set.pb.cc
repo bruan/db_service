@@ -46,13 +46,14 @@ void protobuf_AssignDesc_result_5fset_2eproto() {
   row_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       row_descriptor_,
-      row::internal_default_instance(),
+      row::default_instance_,
       row_offsets_,
-      -1,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(row, _has_bits_[0]),
       -1,
       -1,
       sizeof(row),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(row, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(row, _internal_metadata_),
+      -1);
   result_set_descriptor_ = file->message_type(1);
   static const int result_set_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(result_set, field_name_),
@@ -61,19 +62,20 @@ void protobuf_AssignDesc_result_5fset_2eproto() {
   result_set_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       result_set_descriptor_,
-      result_set::internal_default_instance(),
+      result_set::default_instance_,
       result_set_offsets_,
-      -1,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(result_set, _has_bits_[0]),
       -1,
       -1,
       sizeof(result_set),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(result_set, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(result_set, _internal_metadata_),
+      -1);
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_result_5fset_2eproto);
 }
@@ -82,71 +84,46 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      row_descriptor_, row::internal_default_instance());
+      row_descriptor_, &row::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      result_set_descriptor_, result_set::internal_default_instance());
+      result_set_descriptor_, &result_set::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_result_5fset_2eproto() {
-  row_default_instance_.Shutdown();
+  delete row::default_instance_;
   delete row_reflection_;
-  result_set_default_instance_.Shutdown();
+  delete result_set::default_instance_;
   delete result_set_reflection_;
 }
 
-void protobuf_InitDefaults_result_5fset_2eproto_impl() {
+void protobuf_AddDesc_result_5fset_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_result_5fset_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::internal::GetEmptyString();
-  row_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  result_set_default_instance_.DefaultConstruct();
-  row_default_instance_.get_mutable()->InitAsDefaultInstance();
-  result_set_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_result_5fset_2eproto_once_);
-void protobuf_InitDefaults_result_5fset_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_result_5fset_2eproto_once_,
-                 &protobuf_InitDefaults_result_5fset_2eproto_impl);
-}
-void protobuf_AddDesc_result_5fset_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_result_5fset_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\020result_set.proto\022\010proto.db\"\024\n\003row\022\r\n\005v"
     "alue\030\001 \003(\014\"=\n\nresult_set\022\022\n\nfield_name\030\001"
-    " \003(\t\022\033\n\004rows\030\002 \003(\0132\r.proto.db.rowb\006proto"
-    "3", 121);
+    " \003(\t\022\033\n\004rows\030\002 \003(\0132\r.proto.db.row", 113);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "result_set.proto", &protobuf_RegisterTypes);
+  row::default_instance_ = new row();
+  result_set::default_instance_ = new result_set();
+  row::default_instance_->InitAsDefaultInstance();
+  result_set::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_result_5fset_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_result_5fset_2eproto_once_);
-void protobuf_AddDesc_result_5fset_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_result_5fset_2eproto_once_,
-                 &protobuf_AddDesc_result_5fset_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_result_5fset_2eproto {
   StaticDescriptorInitializer_result_5fset_2eproto() {
     protobuf_AddDesc_result_5fset_2eproto();
   }
 } static_descriptor_initializer_result_5fset_2eproto_;
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
 
 // ===================================================================
 
@@ -156,7 +133,6 @@ const int row::kValueFieldNumber;
 
 row::row()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_result_5fset_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.row)
 }
@@ -168,13 +144,14 @@ row::row(const row& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.row)
 }
 
 void row::SharedCtor() {
-  dirty_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
 row::~row() {
@@ -183,6 +160,8 @@ row::~row() {
 }
 
 void row::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void row::SetCachedSize(int size) const {
@@ -196,11 +175,11 @@ const ::google::protobuf::Descriptor* row::descriptor() {
 }
 
 const row& row::default_instance() {
-  protobuf_InitDefaults_result_5fset_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_result_5fset_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<row> row_default_instance_;
+row* row::default_instance_ = NULL;
 
 row* row::New(::google::protobuf::Arena* arena) const {
   row* n = new row;
@@ -213,6 +192,10 @@ row* row::New(::google::protobuf::Arena* arena) const {
 void row::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.db.row)
   value_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  if (_internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->Clear();
+  }
 }
 
 bool row::MergePartialFromCodedStream(
@@ -246,7 +229,8 @@ bool row::MergePartialFromCodedStream(
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
         break;
       }
     }
@@ -269,12 +253,15 @@ void row::SerializeWithCachedSizes(
       1, this->value(i), output);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
   // @@protoc_insertion_point(serialize_end:proto.db.row)
 }
 
 ::google::protobuf::uint8* row::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.row)
   // repeated bytes value = 1;
   for (int i = 0; i < this->value_size(); i++) {
@@ -282,33 +269,42 @@ void row::SerializeWithCachedSizes(
       WriteBytesToArray(1, this->value(i), target);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.row)
   return target;
 }
 
-size_t row::ByteSizeLong() const {
+int row::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.row)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // repeated bytes value = 1;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->value_size());
+  total_size += 1 * this->value_size();
   for (int i = 0; i < this->value_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->value(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void row::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.row)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const row* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const row* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const row>(
           &from);
   if (source == NULL) {
@@ -316,22 +312,19 @@ void row::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.row)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void row::MergeFrom(const row& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.row)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void row::UnsafeMergeFrom(const row& from) {
-  GOOGLE_DCHECK(&from != this);
-  value_.UnsafeMergeFrom(from.value_);
+  value_.MergeFrom(from.value_);
+  if (from._internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+  }
 }
 
 void row::CopyFrom(const ::google::protobuf::Message& from) {
@@ -345,7 +338,7 @@ void row::CopyFrom(const row& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.row)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool row::IsInitialized() const {
@@ -359,6 +352,7 @@ void row::Swap(row* other) {
 }
 void row::InternalSwap(row* other) {
   value_.UnsafeArenaSwap(&other->value_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -380,66 +374,55 @@ int row::value_size() const {
 }
 void row::clear_value() {
   value_.Clear();
-dirty_ = true;
 }
-const ::std::string& row::value(int index) const {
+ const ::std::string& row::value(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.row.value)
   return value_.Get(index);
 }
-::std::string* row::mutable_value(int index) {
+ ::std::string* row::mutable_value(int index) {
   // @@protoc_insertion_point(field_mutable:proto.db.row.value)
   return value_.Mutable(index);
 }
-void row::set_value(int index, const ::std::string& value) {
+ void row::set_value(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:proto.db.row.value)
-  dirty_ = true;
   value_.Mutable(index)->assign(value);
 }
-void row::set_value(int index, const char* value) {
+ void row::set_value(int index, const char* value) {
   value_.Mutable(index)->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.row.value)
 }
-void row::set_value(int index, const void* value, size_t size) {
+ void row::set_value(int index, const void* value, size_t size) {
   value_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.row.value)
 }
-::std::string* row::add_value() {
+ ::std::string* row::add_value() {
   // @@protoc_insertion_point(field_add_mutable:proto.db.row.value)
-  dirty_ = true;
   return value_.Add();
 }
-void row::add_value(const ::std::string& value) {
+ void row::add_value(const ::std::string& value) {
   value_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add:proto.db.row.value)
 }
-void row::add_value(const char* value) {
+ void row::add_value(const char* value) {
   value_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.row.value)
 }
-void row::add_value(const void* value, size_t size) {
+ void row::add_value(const void* value, size_t size) {
   value_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.row.value)
 }
-const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 row::value() const {
   // @@protoc_insertion_point(field_list:proto.db.row.value)
   return value_;
 }
-::google::protobuf::RepeatedPtrField< ::std::string>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 row::mutable_value() {
   // @@protoc_insertion_point(field_mutable_list:proto.db.row.value)
   return &value_;
 }
 
-inline const row* row::internal_default_instance() {
-  return &row_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -451,7 +434,6 @@ const int result_set::kRowsFieldNumber;
 
 result_set::result_set()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_result_5fset_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.result_set)
 }
@@ -463,13 +445,14 @@ result_set::result_set(const result_set& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.result_set)
 }
 
 void result_set::SharedCtor() {
-  dirty_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
 result_set::~result_set() {
@@ -478,6 +461,8 @@ result_set::~result_set() {
 }
 
 void result_set::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void result_set::SetCachedSize(int size) const {
@@ -491,11 +476,11 @@ const ::google::protobuf::Descriptor* result_set::descriptor() {
 }
 
 const result_set& result_set::default_instance() {
-  protobuf_InitDefaults_result_5fset_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_result_5fset_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<result_set> result_set_default_instance_;
+result_set* result_set::default_instance_ = NULL;
 
 result_set* result_set::New(::google::protobuf::Arena* arena) const {
   result_set* n = new result_set;
@@ -509,6 +494,10 @@ void result_set::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.db.result_set)
   field_name_.Clear();
   rows_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  if (_internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->Clear();
+  }
 }
 
 bool result_set::MergePartialFromCodedStream(
@@ -527,11 +516,11 @@ bool result_set::MergePartialFromCodedStream(
          parse_field_name:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->add_field_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
             this->field_name(this->field_name_size() - 1).data(),
             this->field_name(this->field_name_size() - 1).length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.result_set.field_name"));
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "proto.db.result_set.field_name");
         } else {
           goto handle_unusual;
         }
@@ -564,7 +553,8 @@ bool result_set::MergePartialFromCodedStream(
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
         break;
       }
     }
@@ -583,9 +573,9 @@ void result_set::SerializeWithCachedSizes(
   // @@protoc_insertion_point(serialize_start:proto.db.result_set)
   // repeated string field_name = 1;
   for (int i = 0; i < this->field_name_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->field_name(i).data(), this->field_name(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.result_set.field_name");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       1, this->field_name(i), output);
@@ -597,18 +587,21 @@ void result_set::SerializeWithCachedSizes(
       2, this->rows(i), output);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
   // @@protoc_insertion_point(serialize_end:proto.db.result_set)
 }
 
 ::google::protobuf::uint8* result_set::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.result_set)
   // repeated string field_name = 1;
   for (int i = 0; i < this->field_name_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->field_name(i).data(), this->field_name(i).length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.result_set.field_name");
     target = ::google::protobuf::internal::WireFormatLite::
       WriteStringToArray(1, this->field_name(i), target);
@@ -621,44 +614,50 @@ void result_set::SerializeWithCachedSizes(
         2, this->rows(i), false, target);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.result_set)
   return target;
 }
 
-size_t result_set::ByteSizeLong() const {
+int result_set::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.db.result_set)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // repeated string field_name = 1;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->field_name_size());
+  total_size += 1 * this->field_name_size();
   for (int i = 0; i < this->field_name_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
       this->field_name(i));
   }
 
   // repeated .proto.db.row rows = 2;
-  {
-    unsigned int count = this->rows_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->rows(i));
-    }
+  total_size += 1 * this->rows_size();
+  for (int i = 0; i < this->rows_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->rows(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void result_set::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.result_set)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const result_set* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const result_set* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const result_set>(
           &from);
   if (source == NULL) {
@@ -666,23 +665,20 @@ void result_set::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.result_set)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void result_set::MergeFrom(const result_set& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.result_set)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void result_set::UnsafeMergeFrom(const result_set& from) {
-  GOOGLE_DCHECK(&from != this);
-  field_name_.UnsafeMergeFrom(from.field_name_);
+  field_name_.MergeFrom(from.field_name_);
   rows_.MergeFrom(from.rows_);
+  if (from._internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+  }
 }
 
 void result_set::CopyFrom(const ::google::protobuf::Message& from) {
@@ -696,7 +692,7 @@ void result_set::CopyFrom(const result_set& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.result_set)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool result_set::IsInitialized() const {
@@ -711,6 +707,7 @@ void result_set::Swap(result_set* other) {
 void result_set::InternalSwap(result_set* other) {
   field_name_.UnsafeArenaSwap(&other->field_name_);
   rows_.UnsafeArenaSwap(&other->rows_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -732,58 +729,50 @@ int result_set::field_name_size() const {
 }
 void result_set::clear_field_name() {
   field_name_.Clear();
-dirty_ = true;
 }
-const ::std::string& result_set::field_name(int index) const {
+ const ::std::string& result_set::field_name(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.result_set.field_name)
   return field_name_.Get(index);
 }
-::std::string* result_set::mutable_field_name(int index) {
+ ::std::string* result_set::mutable_field_name(int index) {
   // @@protoc_insertion_point(field_mutable:proto.db.result_set.field_name)
   return field_name_.Mutable(index);
 }
-void result_set::set_field_name(int index, const ::std::string& value) {
+ void result_set::set_field_name(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:proto.db.result_set.field_name)
-  dirty_ = true;
   field_name_.Mutable(index)->assign(value);
 }
-void result_set::set_field_name(int index, const char* value) {
+ void result_set::set_field_name(int index, const char* value) {
   field_name_.Mutable(index)->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.result_set.field_name)
 }
-void result_set::set_field_name(int index, const char* value, size_t size) {
+ void result_set::set_field_name(int index, const char* value, size_t size) {
   field_name_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.result_set.field_name)
 }
-::std::string* result_set::add_field_name() {
+ ::std::string* result_set::add_field_name() {
   // @@protoc_insertion_point(field_add_mutable:proto.db.result_set.field_name)
-  dirty_ = true;
   return field_name_.Add();
 }
-void result_set::add_field_name(const ::std::string& value) {
+ void result_set::add_field_name(const ::std::string& value) {
   field_name_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add:proto.db.result_set.field_name)
 }
-void result_set::add_field_name(const char* value) {
+ void result_set::add_field_name(const char* value) {
   field_name_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.result_set.field_name)
 }
-void result_set::add_field_name(const char* value, size_t size) {
+ void result_set::add_field_name(const char* value, size_t size) {
   field_name_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.result_set.field_name)
 }
-const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 result_set::field_name() const {
   // @@protoc_insertion_point(field_list:proto.db.result_set.field_name)
   return field_name_;
 }
-::google::protobuf::RepeatedPtrField< ::std::string>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 result_set::mutable_field_name() {
   // @@protoc_insertion_point(field_mutable_list:proto.db.result_set.field_name)
   return &field_name_;
@@ -795,7 +784,6 @@ int result_set::rows_size() const {
 }
 void result_set::clear_rows() {
   rows_.Clear();
-dirty_ = true;
 }
 const ::proto::db::row& result_set::rows(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.result_set.rows)
@@ -820,9 +808,6 @@ result_set::rows() const {
   return rows_;
 }
 
-inline const result_set* result_set::internal_default_instance() {
-  return &result_set_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

@@ -45,19 +45,20 @@ void protobuf_AssignDesc_query_5fcommand_2eproto() {
   query_command_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       query_command_descriptor_,
-      query_command::internal_default_instance(),
+      query_command::default_instance_,
       query_command_offsets_,
-      -1,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(query_command, _has_bits_[0]),
       -1,
       -1,
       sizeof(query_command),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(query_command, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(query_command, _internal_metadata_),
+      -1);
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_query_5fcommand_2eproto);
 }
@@ -66,63 +67,40 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      query_command_descriptor_, query_command::internal_default_instance());
+      query_command_descriptor_, &query_command::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_query_5fcommand_2eproto() {
-  query_command_default_instance_.Shutdown();
+  delete query_command::default_instance_;
   delete query_command_reflection_;
 }
 
-void protobuf_InitDefaults_query_5fcommand_2eproto_impl() {
+void protobuf_AddDesc_query_5fcommand_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_query_5fcommand_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::internal::GetEmptyString();
-  query_command_default_instance_.DefaultConstruct();
-  query_command_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_query_5fcommand_2eproto_once_);
-void protobuf_InitDefaults_query_5fcommand_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_query_5fcommand_2eproto_once_,
-                 &protobuf_InitDefaults_query_5fcommand_2eproto_impl);
-}
-void protobuf_AddDesc_query_5fcommand_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_query_5fcommand_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\023query_command.proto\022\010proto.db\"G\n\rquery"
-    "_command\022\022\n\ntable_name\030\001 \001(\t\022\024\n\014where_cl"
-    "ause\030\002 \001(\t\022\014\n\004args\030\003 \003(\014b\006proto3", 112);
+    "_command\022\022\n\ntable_name\030\001 \002(\t\022\024\n\014where_cl"
+    "ause\030\002 \002(\t\022\014\n\004args\030\003 \003(\014", 104);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "query_command.proto", &protobuf_RegisterTypes);
+  query_command::default_instance_ = new query_command();
+  query_command::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_query_5fcommand_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_query_5fcommand_2eproto_once_);
-void protobuf_AddDesc_query_5fcommand_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_query_5fcommand_2eproto_once_,
-                 &protobuf_AddDesc_query_5fcommand_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_query_5fcommand_2eproto {
   StaticDescriptorInitializer_query_5fcommand_2eproto() {
     protobuf_AddDesc_query_5fcommand_2eproto();
   }
 } static_descriptor_initializer_query_5fcommand_2eproto_;
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
 
 // ===================================================================
 
@@ -134,7 +112,6 @@ const int query_command::kArgsFieldNumber;
 
 query_command::query_command()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_query_5fcommand_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.db.query_command)
 }
@@ -146,15 +123,16 @@ query_command::query_command(const query_command& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:proto.db.query_command)
 }
 
 void query_command::SharedCtor() {
-  dirty_ = false;
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
   table_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   where_clause_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
 query_command::~query_command() {
@@ -165,6 +143,8 @@ query_command::~query_command() {
 void query_command::SharedDtor() {
   table_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   where_clause_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+  }
 }
 
 void query_command::SetCachedSize(int size) const {
@@ -178,11 +158,11 @@ const ::google::protobuf::Descriptor* query_command::descriptor() {
 }
 
 const query_command& query_command::default_instance() {
-  protobuf_InitDefaults_query_5fcommand_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_query_5fcommand_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<query_command> query_command_default_instance_;
+query_command* query_command::default_instance_ = NULL;
 
 query_command* query_command::New(::google::protobuf::Arena* arena) const {
   query_command* n = new query_command;
@@ -194,9 +174,19 @@ query_command* query_command::New(::google::protobuf::Arena* arena) const {
 
 void query_command::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.db.query_command)
-  table_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  where_clause_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (_has_bits_[0 / 32] & 3u) {
+    if (has_table_name()) {
+      table_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    }
+    if (has_where_clause()) {
+      where_clause_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    }
+  }
   args_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  if (_internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->Clear();
+  }
 }
 
 bool query_command::MergePartialFromCodedStream(
@@ -209,15 +199,15 @@ bool query_command::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string table_name = 1;
+      // required string table_name = 1;
       case 1: {
         if (tag == 10) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_table_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
             this->table_name().data(), this->table_name().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.query_command.table_name"));
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "proto.db.query_command.table_name");
         } else {
           goto handle_unusual;
         }
@@ -225,16 +215,16 @@ bool query_command::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string where_clause = 2;
+      // required string where_clause = 2;
       case 2: {
         if (tag == 18) {
          parse_where_clause:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_where_clause()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
             this->where_clause().data(), this->where_clause().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.db.query_command.where_clause"));
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "proto.db.query_command.where_clause");
         } else {
           goto handle_unusual;
         }
@@ -263,7 +253,8 @@ bool query_command::MergePartialFromCodedStream(
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
         break;
       }
     }
@@ -280,21 +271,21 @@ failure:
 void query_command::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.db.query_command)
-  // optional string table_name = 1;
-  if (this->table_name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+  // required string table_name = 1;
+  if (has_table_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->table_name().data(), this->table_name().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.query_command.table_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->table_name(), output);
   }
 
-  // optional string where_clause = 2;
-  if (this->where_clause().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+  // required string where_clause = 2;
+  if (has_where_clause()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->where_clause().data(), this->where_clause().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.query_command.where_clause");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->where_clause(), output);
@@ -306,29 +297,32 @@ void query_command::SerializeWithCachedSizes(
       3, this->args(i), output);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
   // @@protoc_insertion_point(serialize_end:proto.db.query_command)
 }
 
 ::google::protobuf::uint8* query_command::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:proto.db.query_command)
-  // optional string table_name = 1;
-  if (this->table_name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+  // required string table_name = 1;
+  if (has_table_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->table_name().data(), this->table_name().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.query_command.table_name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->table_name(), target);
   }
 
-  // optional string where_clause = 2;
-  if (this->where_clause().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+  // required string where_clause = 2;
+  if (has_where_clause()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->where_clause().data(), this->where_clause().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
       "proto.db.query_command.where_clause");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
@@ -341,47 +335,76 @@ void query_command::SerializeWithCachedSizes(
       WriteBytesToArray(3, this->args(i), target);
   }
 
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
   // @@protoc_insertion_point(serialize_to_array_end:proto.db.query_command)
   return target;
 }
 
-size_t query_command::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.db.query_command)
-  size_t total_size = 0;
+int query_command::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:proto.db.query_command)
+  int total_size = 0;
 
-  // optional string table_name = 1;
-  if (this->table_name().size() > 0) {
+  if (has_table_name()) {
+    // required string table_name = 1;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->table_name());
   }
 
-  // optional string where_clause = 2;
-  if (this->where_clause().size() > 0) {
+  if (has_where_clause()) {
+    // required string where_clause = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->where_clause());
   }
 
+  return total_size;
+}
+int query_command::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.db.query_command)
+  int total_size = 0;
+
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required string table_name = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->table_name());
+
+    // required string where_clause = 2;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->where_clause());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
   // repeated bytes args = 3;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->args_size());
+  total_size += 1 * this->args_size();
   for (int i = 0; i < this->args_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->args(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void query_command::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:proto.db.query_command)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const query_command* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const query_command* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const query_command>(
           &from);
   if (source == NULL) {
@@ -389,29 +412,28 @@ void query_command::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:proto.db.query_command)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void query_command::MergeFrom(const query_command& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:proto.db.query_command)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void query_command::UnsafeMergeFrom(const query_command& from) {
-  GOOGLE_DCHECK(&from != this);
-  args_.UnsafeMergeFrom(from.args_);
-  if (from.table_name().size() > 0) {
-
-    table_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.table_name_);
+  args_.MergeFrom(from.args_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_table_name()) {
+      set_has_table_name();
+      table_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.table_name_);
+    }
+    if (from.has_where_clause()) {
+      set_has_where_clause();
+      where_clause_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.where_clause_);
+    }
   }
-  if (from.where_clause().size() > 0) {
-
-    where_clause_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.where_clause_);
+  if (from._internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->MergeFrom(from.unknown_fields());
   }
 }
 
@@ -426,10 +448,11 @@ void query_command::CopyFrom(const query_command& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:proto.db.query_command)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool query_command::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
 }
@@ -442,6 +465,7 @@ void query_command::InternalSwap(query_command* other) {
   table_name_.Swap(&other->table_name_);
   where_clause_.Swap(&other->where_clause_);
   args_.UnsafeArenaSwap(&other->args_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -457,103 +481,111 @@ void query_command::InternalSwap(query_command* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // query_command
 
-// optional string table_name = 1;
+// required string table_name = 1;
+bool query_command::has_table_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void query_command::set_has_table_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void query_command::clear_has_table_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
 void query_command::clear_table_name() {
   table_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-dirty_ = true;
+  clear_has_table_name();
 }
-const ::std::string& query_command::table_name() const {
+ const ::std::string& query_command::table_name() const {
   // @@protoc_insertion_point(field_get:proto.db.query_command.table_name)
   return table_name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void query_command::set_table_name(const ::std::string& value) {
-  
+ void query_command::set_table_name(const ::std::string& value) {
+  set_has_table_name();
   table_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.query_command.table_name)
 }
-void query_command::set_table_name(const char* value) {
-  
+ void query_command::set_table_name(const char* value) {
+  set_has_table_name();
   table_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.query_command.table_name)
 }
-void query_command::set_table_name(const char* value, size_t size) {
-  
+ void query_command::set_table_name(const char* value, size_t size) {
+  set_has_table_name();
   table_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.query_command.table_name)
 }
-::std::string* query_command::mutable_table_name() {
-  
+ ::std::string* query_command::mutable_table_name() {
+  set_has_table_name();
   // @@protoc_insertion_point(field_mutable:proto.db.query_command.table_name)
   return table_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* query_command::release_table_name() {
+ ::std::string* query_command::release_table_name() {
   // @@protoc_insertion_point(field_release:proto.db.query_command.table_name)
-  
-  dirty_ = true;
+  clear_has_table_name();
   return table_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void query_command::set_allocated_table_name(::std::string* table_name) {
+ void query_command::set_allocated_table_name(::std::string* table_name) {
   if (table_name != NULL) {
-    
+    set_has_table_name();
   } else {
-    
+    clear_has_table_name();
   }
   table_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), table_name);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_allocated:proto.db.query_command.table_name)
 }
 
-// optional string where_clause = 2;
+// required string where_clause = 2;
+bool query_command::has_where_clause() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void query_command::set_has_where_clause() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void query_command::clear_has_where_clause() {
+  _has_bits_[0] &= ~0x00000002u;
+}
 void query_command::clear_where_clause() {
   where_clause_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-dirty_ = true;
+  clear_has_where_clause();
 }
-const ::std::string& query_command::where_clause() const {
+ const ::std::string& query_command::where_clause() const {
   // @@protoc_insertion_point(field_get:proto.db.query_command.where_clause)
   return where_clause_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void query_command::set_where_clause(const ::std::string& value) {
-  
+ void query_command::set_where_clause(const ::std::string& value) {
+  set_has_where_clause();
   where_clause_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set:proto.db.query_command.where_clause)
 }
-void query_command::set_where_clause(const char* value) {
-  
+ void query_command::set_where_clause(const char* value) {
+  set_has_where_clause();
   where_clause_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.query_command.where_clause)
 }
-void query_command::set_where_clause(const char* value, size_t size) {
-  
+ void query_command::set_where_clause(const char* value, size_t size) {
+  set_has_where_clause();
   where_clause_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.query_command.where_clause)
 }
-::std::string* query_command::mutable_where_clause() {
-  
+ ::std::string* query_command::mutable_where_clause() {
+  set_has_where_clause();
   // @@protoc_insertion_point(field_mutable:proto.db.query_command.where_clause)
   return where_clause_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* query_command::release_where_clause() {
+ ::std::string* query_command::release_where_clause() {
   // @@protoc_insertion_point(field_release:proto.db.query_command.where_clause)
-  
-  dirty_ = true;
+  clear_has_where_clause();
   return where_clause_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void query_command::set_allocated_where_clause(::std::string* where_clause) {
+ void query_command::set_allocated_where_clause(::std::string* where_clause) {
   if (where_clause != NULL) {
-    
+    set_has_where_clause();
   } else {
-    
+    clear_has_where_clause();
   }
   where_clause_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), where_clause);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_allocated:proto.db.query_command.where_clause)
 }
 
@@ -563,66 +595,55 @@ int query_command::args_size() const {
 }
 void query_command::clear_args() {
   args_.Clear();
-dirty_ = true;
 }
-const ::std::string& query_command::args(int index) const {
+ const ::std::string& query_command::args(int index) const {
   // @@protoc_insertion_point(field_get:proto.db.query_command.args)
   return args_.Get(index);
 }
-::std::string* query_command::mutable_args(int index) {
+ ::std::string* query_command::mutable_args(int index) {
   // @@protoc_insertion_point(field_mutable:proto.db.query_command.args)
   return args_.Mutable(index);
 }
-void query_command::set_args(int index, const ::std::string& value) {
+ void query_command::set_args(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:proto.db.query_command.args)
-  dirty_ = true;
   args_.Mutable(index)->assign(value);
 }
-void query_command::set_args(int index, const char* value) {
+ void query_command::set_args(int index, const char* value) {
   args_.Mutable(index)->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_char:proto.db.query_command.args)
 }
-void query_command::set_args(int index, const void* value, size_t size) {
+ void query_command::set_args(int index, const void* value, size_t size) {
   args_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_set_pointer:proto.db.query_command.args)
 }
-::std::string* query_command::add_args() {
+ ::std::string* query_command::add_args() {
   // @@protoc_insertion_point(field_add_mutable:proto.db.query_command.args)
-  dirty_ = true;
   return args_.Add();
 }
-void query_command::add_args(const ::std::string& value) {
+ void query_command::add_args(const ::std::string& value) {
   args_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add:proto.db.query_command.args)
 }
-void query_command::add_args(const char* value) {
+ void query_command::add_args(const char* value) {
   args_.Add()->assign(value);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_char:proto.db.query_command.args)
 }
-void query_command::add_args(const void* value, size_t size) {
+ void query_command::add_args(const void* value, size_t size) {
   args_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  dirty_ = true;
   // @@protoc_insertion_point(field_add_pointer:proto.db.query_command.args)
 }
-const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 query_command::args() const {
   // @@protoc_insertion_point(field_list:proto.db.query_command.args)
   return args_;
 }
-::google::protobuf::RepeatedPtrField< ::std::string>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 query_command::mutable_args() {
   // @@protoc_insertion_point(field_mutable_list:proto.db.query_command.args)
   return &args_;
 }
 
-inline const query_command* query_command::internal_default_instance() {
-  return &query_command_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

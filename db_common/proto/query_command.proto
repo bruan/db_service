@@ -1,9 +1,9 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package proto.db;
 
 message query_command {
-	string table_name = 1;
-	string where_clause = 2;
+	required string table_name = 1;
+	required string where_clause = 2;
 	repeated bytes args = 3;
 }
