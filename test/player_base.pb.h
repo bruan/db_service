@@ -55,6 +55,14 @@ class player_base : public ::google::protobuf::Message /* @@protoc_insertion_poi
     return *this;
   }
 
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
   static const player_base& default_instance();
 
@@ -104,12 +112,14 @@ class player_base : public ::google::protobuf::Message /* @@protoc_insertion_poi
   // accessors -------------------------------------------------------
 
   // optional sfixed32 id = 1;
+  bool has_id() const;
   void clear_id();
   static const int kIdFieldNumber = 1;
   ::google::protobuf::int32 id() const;
   void set_id(::google::protobuf::int32 value);
 
   // optional bytes name = 2;
+  bool has_name() const;
   void clear_name();
   static const int kNameFieldNumber = 2;
   const ::std::string& name() const;
@@ -122,12 +132,16 @@ class player_base : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   // @@protoc_insertion_point(class_scope:proto.db.player_base)
  private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_name();
+  inline void clear_has_name();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::int32 id_;
-  mutable int _cached_size_;
   friend void  protobuf_AddDesc_player_5fbase_2eproto();
   friend void protobuf_AssignDesc_player_5fbase_2eproto();
   friend void protobuf_ShutdownFile_player_5fbase_2eproto();
@@ -147,6 +161,14 @@ class player_base_set : public ::google::protobuf::Message /* @@protoc_insertion
   inline player_base_set& operator=(const player_base_set& from) {
     CopyFrom(from);
     return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
@@ -213,9 +235,9 @@ class player_base_set : public ::google::protobuf::Message /* @@protoc_insertion
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::RepeatedPtrField< ::proto::db::player_base > data_set_;
+  ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::proto::db::player_base > data_set_;
   friend void  protobuf_AddDesc_player_5fbase_2eproto();
   friend void protobuf_AssignDesc_player_5fbase_2eproto();
   friend void protobuf_ShutdownFile_player_5fbase_2eproto();
@@ -232,58 +254,78 @@ class player_base_set : public ::google::protobuf::Message /* @@protoc_insertion
 // player_base
 
 // optional sfixed32 id = 1;
+inline bool player_base::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void player_base::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void player_base::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
 inline void player_base::clear_id() {
   id_ = 0;
+  clear_has_id();
 }
 inline ::google::protobuf::int32 player_base::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.id)
   return id_;
 }
 inline void player_base::set_id(::google::protobuf::int32 value) {
-  
+  set_has_id();
   id_ = value;
   // @@protoc_insertion_point(field_set:proto.db.player_base.id)
 }
 
 // optional bytes name = 2;
+inline bool player_base::has_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void player_base::set_has_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void player_base::clear_has_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
 inline void player_base::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
 }
 inline const ::std::string& player_base::name() const {
   // @@protoc_insertion_point(field_get:proto.db.player_base.name)
   return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void player_base::set_name(const ::std::string& value) {
-  
+  set_has_name();
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.db.player_base.name)
 }
 inline void player_base::set_name(const char* value) {
-  
+  set_has_name();
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.db.player_base.name)
 }
 inline void player_base::set_name(const void* value, size_t size) {
-  
+  set_has_name();
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.db.player_base.name)
 }
 inline ::std::string* player_base::mutable_name() {
-  
+  set_has_name();
   // @@protoc_insertion_point(field_mutable:proto.db.player_base.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* player_base::release_name() {
   // @@protoc_insertion_point(field_release:proto.db.player_base.name)
-  
+  clear_has_name();
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void player_base::set_allocated_name(::std::string* name) {
   if (name != NULL) {
-    
+    set_has_name();
   } else {
-    
+    clear_has_name();
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
   // @@protoc_insertion_point(field_set_allocated:proto.db.player_base.name)

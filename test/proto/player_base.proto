@@ -1,4 +1,4 @@
-syntax = "proto3";
+syntax = "proto2";
 
 import "db_option.proto";
 
@@ -6,8 +6,8 @@ package proto.db;
 
 message player_base {
 	option (primary_key) = "id";
-	sfixed32 id = 1;
-	bytes name = 2;
+	optional sfixed32 id = 1;
+	optional bytes name = 2;
 }
 
 message player_base_set {

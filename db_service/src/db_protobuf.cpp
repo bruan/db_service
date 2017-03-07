@@ -245,69 +245,69 @@ namespace db
 		case FieldDescriptor::TYPE_INT32:
 		case FieldDescriptor::TYPE_SINT32:
 		case FieldDescriptor::TYPE_SFIXED32:
-		{
-			int32_t nValue = 0;
-			istringstream iss(szValue);
-			iss >> nValue;
-			pReflection->SetInt32(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				int32_t nValue = 0;
+				istringstream iss(szValue);
+				iss >> nValue;
+				pReflection->SetInt32(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_UINT32:
 		case FieldDescriptor::TYPE_FIXED32:
-		{
-			uint32_t nValue = 0;
-			istringstream iss(szValue);
-			iss >> nValue;
-			pReflection->SetUInt32(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				uint32_t nValue = 0;
+				istringstream iss(szValue);
+				iss >> nValue;
+				pReflection->SetUInt32(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_INT64:
 		case FieldDescriptor::TYPE_SINT64:
 		case FieldDescriptor::TYPE_SFIXED64:
-		{
-			int64_t nValue = 0;
-			istringstream iss(szValue);
-			iss >> nValue;
-			pReflection->SetInt64(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				int64_t nValue = 0;
+				istringstream iss(szValue);
+				iss >> nValue;
+				pReflection->SetInt64(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_UINT64:
 		case FieldDescriptor::TYPE_FIXED64:
-		{
-			uint64_t nValue = 0;
-			istringstream iss(szValue);
-			iss >> nValue;
-			pReflection->SetUInt64(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				uint64_t nValue = 0;
+				istringstream iss(szValue);
+				iss >> nValue;
+				pReflection->SetUInt64(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_DOUBLE:
-		{
-			double nValue = 0.0;
-			istringstream oss(szValue);
-			oss >> nValue;
-			pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				double nValue = 0.0;
+				istringstream oss(szValue);
+				oss >> nValue;
+				pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_FLOAT:
-		{
-			float nValue = 0.0f;
-			istringstream oss(szValue);
-			oss >> nValue;
-			pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
-		}
-		break;
+			{
+				float nValue = 0.0f;
+				istringstream oss(szValue);
+				oss >> nValue;
+				pReflection->SetDouble(pMessage, pFieldDescriptor, nValue);
+			}
+			break;
 
 		case FieldDescriptor::TYPE_STRING:
 		case FieldDescriptor::TYPE_BYTES:
-		{
-			pReflection->SetString(pMessage, pFieldDescriptor, szValue);
-		}
-		break;
+			{
+				pReflection->SetString(pMessage, pFieldDescriptor, szValue);
+			}
+			break;
 
 		default:
 			DebugAstEx(false, false);
@@ -332,12 +332,12 @@ namespace db
 			DebugAstEx(pFieldDescriptor != nullptr, false);
 			DebugAstEx(pFieldDescriptor->label() == FieldDescriptor::LABEL_OPTIONAL, false);
 
+			if (!pReflection->HasField(*pMessage, pFieldDescriptor))
+				continue;
+
 			if (pFieldDescriptor->type() == FieldDescriptor::TYPE_MESSAGE)
 			{
 				ESerializeType eSerializeType = (ESerializeType)pFieldDescriptor->options().GetExtension(serialize_type);
-
-				if (!pReflection->HasField(*pMessage, pFieldDescriptor))
-					continue;
 
 #ifdef GetMessage
 #undef GetMessage

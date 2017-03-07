@@ -1,12 +1,12 @@
-syntax = "proto3";
+syntax = "proto2";
 
 import "db_option.proto";
 
 package proto.db;
 
 message player_extend_data {
-	uint32 data1 = 1;
-	uint32 data2 = 2;
+	optional uint32 data1 = 1;
+	optional uint32 data2 = 2;
 }
 
 message player_extend_data_set {
@@ -15,8 +15,8 @@ message player_extend_data_set {
 
 message player_extend {
 	option (primary_key) = "id";
-	uint32 id = 1;
-	player_extend_data_set data_set = 2[(serialize_type) = 1];
+	optional uint32 id = 1;
+	optional player_extend_data_set data_set = 2[(serialize_type) = 1];
 }
 
 message player_extend_set {

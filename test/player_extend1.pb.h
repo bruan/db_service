@@ -58,6 +58,14 @@ class player_extend1_data : public ::google::protobuf::Message /* @@protoc_inser
     return *this;
   }
 
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
   static const player_extend1_data& default_instance();
 
@@ -107,12 +115,14 @@ class player_extend1_data : public ::google::protobuf::Message /* @@protoc_inser
   // accessors -------------------------------------------------------
 
   // optional uint32 data1 = 1;
+  bool has_data1() const;
   void clear_data1();
   static const int kData1FieldNumber = 1;
   ::google::protobuf::uint32 data1() const;
   void set_data1(::google::protobuf::uint32 value);
 
   // optional uint32 data2 = 2;
+  bool has_data2() const;
   void clear_data2();
   static const int kData2FieldNumber = 2;
   ::google::protobuf::uint32 data2() const;
@@ -120,12 +130,16 @@ class player_extend1_data : public ::google::protobuf::Message /* @@protoc_inser
 
   // @@protoc_insertion_point(class_scope:proto.db.player_extend1_data)
  private:
+  inline void set_has_data1();
+  inline void clear_has_data1();
+  inline void set_has_data2();
+  inline void clear_has_data2();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
   ::google::protobuf::uint32 data1_;
   ::google::protobuf::uint32 data2_;
-  mutable int _cached_size_;
   friend void  protobuf_AddDesc_player_5fextend1_2eproto();
   friend void protobuf_AssignDesc_player_5fextend1_2eproto();
   friend void protobuf_ShutdownFile_player_5fextend1_2eproto();
@@ -145,6 +159,14 @@ class player_extend1_data_set : public ::google::protobuf::Message /* @@protoc_i
   inline player_extend1_data_set& operator=(const player_extend1_data_set& from) {
     CopyFrom(from);
     return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
@@ -211,9 +233,9 @@ class player_extend1_data_set : public ::google::protobuf::Message /* @@protoc_i
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::RepeatedPtrField< ::proto::db::player_extend1_data > data_;
+  ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::proto::db::player_extend1_data > data_;
   friend void  protobuf_AddDesc_player_5fextend1_2eproto();
   friend void protobuf_AssignDesc_player_5fextend1_2eproto();
   friend void protobuf_ShutdownFile_player_5fextend1_2eproto();
@@ -233,6 +255,14 @@ class player_extend1 : public ::google::protobuf::Message /* @@protoc_insertion_
   inline player_extend1& operator=(const player_extend1& from) {
     CopyFrom(from);
     return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
@@ -284,6 +314,7 @@ class player_extend1 : public ::google::protobuf::Message /* @@protoc_insertion_
   // accessors -------------------------------------------------------
 
   // optional uint32 id = 1;
+  bool has_id() const;
   void clear_id();
   static const int kIdFieldNumber = 1;
   ::google::protobuf::uint32 id() const;
@@ -300,12 +331,16 @@ class player_extend1 : public ::google::protobuf::Message /* @@protoc_insertion_
 
   // @@protoc_insertion_point(class_scope:proto.db.player_extend1)
  private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_data_set();
+  inline void clear_has_data_set();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
   ::google::protobuf::Any* data_set_;
   ::google::protobuf::uint32 id_;
-  mutable int _cached_size_;
   friend void  protobuf_AddDesc_player_5fextend1_2eproto();
   friend void protobuf_AssignDesc_player_5fextend1_2eproto();
   friend void protobuf_ShutdownFile_player_5fextend1_2eproto();
@@ -325,6 +360,14 @@ class player_extend1_set : public ::google::protobuf::Message /* @@protoc_insert
   inline player_extend1_set& operator=(const player_extend1_set& from) {
     CopyFrom(from);
     return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
@@ -391,9 +434,9 @@ class player_extend1_set : public ::google::protobuf::Message /* @@protoc_insert
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::RepeatedPtrField< ::proto::db::player_extend1 > data_set_;
+  ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::proto::db::player_extend1 > data_set_;
   friend void  protobuf_AddDesc_player_5fextend1_2eproto();
   friend void protobuf_AssignDesc_player_5fextend1_2eproto();
   friend void protobuf_ShutdownFile_player_5fextend1_2eproto();
@@ -410,29 +453,49 @@ class player_extend1_set : public ::google::protobuf::Message /* @@protoc_insert
 // player_extend1_data
 
 // optional uint32 data1 = 1;
+inline bool player_extend1_data::has_data1() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void player_extend1_data::set_has_data1() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void player_extend1_data::clear_has_data1() {
+  _has_bits_[0] &= ~0x00000001u;
+}
 inline void player_extend1_data::clear_data1() {
   data1_ = 0u;
+  clear_has_data1();
 }
 inline ::google::protobuf::uint32 player_extend1_data::data1() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend1_data.data1)
   return data1_;
 }
 inline void player_extend1_data::set_data1(::google::protobuf::uint32 value) {
-  
+  set_has_data1();
   data1_ = value;
   // @@protoc_insertion_point(field_set:proto.db.player_extend1_data.data1)
 }
 
 // optional uint32 data2 = 2;
+inline bool player_extend1_data::has_data2() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void player_extend1_data::set_has_data2() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void player_extend1_data::clear_has_data2() {
+  _has_bits_[0] &= ~0x00000002u;
+}
 inline void player_extend1_data::clear_data2() {
   data2_ = 0u;
+  clear_has_data2();
 }
 inline ::google::protobuf::uint32 player_extend1_data::data2() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend1_data.data2)
   return data2_;
 }
 inline void player_extend1_data::set_data2(::google::protobuf::uint32 value) {
-  
+  set_has_data2();
   data2_ = value;
   // @@protoc_insertion_point(field_set:proto.db.player_extend1_data.data2)
 }
@@ -476,33 +539,49 @@ player_extend1_data_set::data() const {
 // player_extend1
 
 // optional uint32 id = 1;
+inline bool player_extend1::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void player_extend1::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void player_extend1::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
 inline void player_extend1::clear_id() {
   id_ = 0u;
+  clear_has_id();
 }
 inline ::google::protobuf::uint32 player_extend1::id() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend1.id)
   return id_;
 }
 inline void player_extend1::set_id(::google::protobuf::uint32 value) {
-  
+  set_has_id();
   id_ = value;
   // @@protoc_insertion_point(field_set:proto.db.player_extend1.id)
 }
 
 // optional .google.protobuf.Any data_set = 2;
 inline bool player_extend1::has_data_set() const {
-  return !_is_default_instance_ && data_set_ != NULL;
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void player_extend1::set_has_data_set() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void player_extend1::clear_has_data_set() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void player_extend1::clear_data_set() {
-  if (GetArenaNoVirtual() == NULL && data_set_ != NULL) delete data_set_;
-  data_set_ = NULL;
+  if (data_set_ != NULL) data_set_->::google::protobuf::Any::Clear();
+  clear_has_data_set();
 }
 inline const ::google::protobuf::Any& player_extend1::data_set() const {
   // @@protoc_insertion_point(field_get:proto.db.player_extend1.data_set)
   return data_set_ != NULL ? *data_set_ : *default_instance_->data_set_;
 }
 inline ::google::protobuf::Any* player_extend1::mutable_data_set() {
-  
+  set_has_data_set();
   if (data_set_ == NULL) {
     data_set_ = new ::google::protobuf::Any;
   }
@@ -511,7 +590,7 @@ inline ::google::protobuf::Any* player_extend1::mutable_data_set() {
 }
 inline ::google::protobuf::Any* player_extend1::release_data_set() {
   // @@protoc_insertion_point(field_release:proto.db.player_extend1.data_set)
-  
+  clear_has_data_set();
   ::google::protobuf::Any* temp = data_set_;
   data_set_ = NULL;
   return temp;
@@ -520,9 +599,9 @@ inline void player_extend1::set_allocated_data_set(::google::protobuf::Any* data
   delete data_set_;
   data_set_ = data_set;
   if (data_set) {
-    
+    set_has_data_set();
   } else {
-    
+    clear_has_data_set();
   }
   // @@protoc_insertion_point(field_set_allocated:proto.db.player_extend1.data_set)
 }
