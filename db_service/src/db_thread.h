@@ -34,7 +34,7 @@ namespace db
 
 	private:
 		bool		connectDb(bool bInit);
-		bool		onProcess();
+		void		onProcess();
 		void		onDestroy();
 
 		bool		onPreCache(uint32_t nType, google::protobuf::Message* pRequest, std::shared_ptr<google::protobuf::Message>& pResponse);
@@ -42,7 +42,7 @@ namespace db
 		void		flushCache(uint64_t nKey, bool bDel);
 
 	private:
-		std::atomic<uint32_t>	m_quit;
+		volatile uint32_t		m_quit;
 		std::condition_variable	m_condition;
 		std::mutex				m_tCommandLock;
 		std::thread				m_thread;

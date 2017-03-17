@@ -51,7 +51,7 @@ bool CDbThread::connectDb(bool bInit)
 
 void CDbThread::join()
 {
-	this->m_quit.store(1, memory_order_release);
+	this->m_quit = 1;
 	this->m_thread.join();
 }
 
@@ -73,7 +73,7 @@ bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_
 		while (true)
 		{
 			this->onProcess();
-			if (this->m_quit.load(memory_order_acquire))
+			if (this->m_quit == 0)
 			{
 				unique_lock<mutex> lock(this->m_tCommandLock);
 				if (this->m_listCommand.empty())
@@ -90,7 +90,7 @@ bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_
 	return true;
 }
 
-bool CDbThread::onProcess()
+void CDbThread::onProcess()
 {
 	if (!this->m_dbConnection.isConnect())
 	{
@@ -106,11 +106,13 @@ bool CDbThread::onProcess()
 		unique_lock<mutex> lock(this->m_tCommandLock);
 		while (this->m_listCommand.empty())
 		{
-			this->m_condition.wait(lock);
+			if (std::cv_status::timeout == this->m_condition.wait_for(lock, std::chrono::seconds(1)))
+				return;
 		}
+
 		listCommand.splice(listCommand.end(), this->m_listCommand);
 	}
-
+	
 	for (auto iter = listCommand.begin(); iter != listCommand.end(); ++iter)
 	{
 		SDbCommand sDbCommand = *iter;
@@ -157,8 +159,6 @@ bool CDbThread::onProcess()
 
 		this->m_pDbThreadMgr->addResultInfo(sDbResultInfo);
 	}
-
-	return true;
 }
 
 bool CDbThread::onPreCache(uint32_t nType, Message* pRequest, shared_ptr<Message>& pResponse)
