@@ -8,5 +8,6 @@ message request {
 	required uint64 session_id = 1;
 	required uint32 associate_id = 2;
 	required uint32 type = 3;
-	required google.protobuf.Any content = 4;
+	required uint32 timeout = 4;
+	required google.protobuf.Any content = 5;
 }

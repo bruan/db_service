@@ -149,16 +149,15 @@ namespace db
 		DebugAst(pos != string::npos);
 		string szMessageName = szURL.substr(pos + nPrefixLen);
 
-		Message* pMessage = createMessage(szMessageName);
+		auto pMessage = shared_ptr<Message>(createMessage(szMessageName));
 		if (pMessage == nullptr)
 		{
 			PrintWarning("create message error %s", szMessageName.c_str());
 			return;
 		}
-		if (!pRequest->content().UnpackTo(pMessage))
+		if (!pRequest->content().UnpackTo(pMessage.get()))
 		{
 			PrintWarning("unpack message error %s", szMessageName.c_str());
-			delete pMessage;
 			return;
 		}
 
@@ -167,6 +166,10 @@ namespace db
 		sDbCommand.nType = pRequest->type();
 		sDbCommand.nSessionID = pRequest->session_id();
 		sDbCommand.pMessage = pMessage;
+		if (pRequest->timeout() != 0)
+			sDbCommand.nTimeout = (int64_t)(pRequest->timeout() / 2 + time(nullptr));
+		else
+			sDbCommand.nTimeout = 0;
 
 		pDbThreadMgr->query(pRequest->associate_id(), sDbCommand);
 	}

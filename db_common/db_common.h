@@ -22,6 +22,7 @@ namespace db
 	enum EResultCode
 	{
 		kRC_OK = 0,
+		kRC_TIME_OUT,
 		kRC_PROTO_ERROR,
 		kRC_MYSQL_ERROR,
 		kRC_SQLPARM_ERROR,

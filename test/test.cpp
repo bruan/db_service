@@ -28,6 +28,7 @@
 #include <unistd.h>
 #endif
 using namespace std;
+#include <thread>
 
 class CMyDbProxy : public db::CDbProxy
 {
@@ -96,7 +97,7 @@ int main(int argc, char* argv[])
 		msg2.set_name("ÕÅÈý");
 		dbClient.update(&msg2);
 		std::string aa = msg2.SerializeAsString();
-		dbClient.select(100, "player_base", 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+		dbClient.select(100, "player_base", 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
 		{
 			const proto::db::player_base* pBase = dynamic_cast<const proto::db::player_base*>(pMessage);
 			if (nullptr == pBase)
@@ -105,39 +106,39 @@ int main(int argc, char* argv[])
 			cout << "id: " << pBase->id() << " name: " << pBase->name() << endl;
 		});
 
-		std::vector<db::CDbVariant> vecArgs;
-		vecArgs.push_back(100);
-		dbClient.query(0, "player_base", "id={0}", vecArgs, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
-		{
-			const proto::db::player_base_set* pBaseSet = dynamic_cast<const proto::db::player_base_set*>(pMessage);
-			if (nullptr == pBaseSet)
-				return;
-
-			for (int32_t i = 0; i < pBaseSet->data_set_size(); ++i)
-			{
-				const proto::db::player_base& base = pBaseSet->data_set(i);
-				cout << "id: " << base.id() << " name: " << base.name() << endl;
-			}
-		});
-
-		vecArgs.clear();
-		vecArgs.push_back(200);
-		dbClient.call_r(0, "select *from player_base where id = {0}", vecArgs, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
-		{
-			const proto::db::result_set* pResultset = dynamic_cast<const proto::db::result_set*>(pMessage);
-			if (nullptr == pResultset)
-				return;
-
-			for (int32_t i = 0; i < pResultset->rows_size(); ++i)
-			{
-				const proto::db::row& row = pResultset->rows(i);
-				for (int32_t j = 0; j < row.value_size(); ++j)
-				{
-					cout << "name: " << pResultset->field_name(j) << " value: " << row.value(j);
-				}
-				cout << endl;
-			}
-		});
+// 		std::vector<db::CDbVariant> vecArgs;
+// 		vecArgs.push_back(100);
+// 		dbClient.query(0, "player_base", "id={0}", vecArgs, 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+// 		{
+// 			const proto::db::player_base_set* pBaseSet = dynamic_cast<const proto::db::player_base_set*>(pMessage);
+// 			if (nullptr == pBaseSet)
+// 				return;
+// 
+// 			for (int32_t i = 0; i < pBaseSet->data_set_size(); ++i)
+// 			{
+// 				const proto::db::player_base& base = pBaseSet->data_set(i);
+// 				cout << "id: " << base.id() << " name: " << base.name() << endl;
+// 			}
+// 		});
+// 
+// 		vecArgs.clear();
+// 		vecArgs.push_back(200);
+// 		dbClient.call_r(0, "select *from player_base where id = {0}", vecArgs, 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+// 		{
+// 			const proto::db::result_set* pResultset = dynamic_cast<const proto::db::result_set*>(pMessage);
+// 			if (nullptr == pResultset)
+// 				return;
+// 
+// 			for (int32_t i = 0; i < pResultset->rows_size(); ++i)
+// 			{
+// 				const proto::db::row& row = pResultset->rows(i);
+// 				for (int32_t j = 0; j < row.value_size(); ++j)
+// 				{
+// 					cout << "name: " << pResultset->field_name(j) << " value: " << row.value(j);
+// 				}
+// 				cout << endl;
+// 			}
+// 		});
 	}
 	{
 		proto::db::player_extend msg1;
@@ -161,7 +162,7 @@ int main(int argc, char* argv[])
 		pData->set_data2(1999);
 		dbClient.update(&msg2);
 
-		dbClient.select(100, "player_extend", 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+		dbClient.select(100, "player_extend", 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
 		{
 			const proto::db::player_extend* pBase = dynamic_cast<const proto::db::player_extend*>(pMessage);
 			if (nullptr == pBase)
@@ -176,7 +177,7 @@ int main(int argc, char* argv[])
 
 		std::vector<db::CDbVariant> vecArgs;
 		vecArgs.push_back(100);
-		dbClient.query(0, "player_extend", "id={0}", vecArgs, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+		dbClient.query(0, "player_extend", "id={0}", vecArgs, 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
 		{
 			const proto::db::player_extend_set* pBaseSet = dynamic_cast<const proto::db::player_extend_set*>(pMessage);
 			if (nullptr == pBaseSet)
@@ -208,7 +209,7 @@ int main(int argc, char* argv[])
 
 		dbClient.update(&msg1);
 
-		dbClient.select(100, "player_extend1", 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
+		dbClient.select(100, "player_extend1", 10, 0, [](uint32_t nErrCode, const google::protobuf::Message* pMessage, uint64_t nContext)
 		{
 			const proto::db::player_extend1* pBase = dynamic_cast<const proto::db::player_extend1*>(pMessage);
 			if (nullptr == pBase)
@@ -245,7 +246,7 @@ int main(int argc, char* argv[])
 	{
 		myDbProxy.update();
 #ifdef _WIN32
-		Sleep(100);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 #endif
 	}
 

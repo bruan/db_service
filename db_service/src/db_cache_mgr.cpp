@@ -203,7 +203,7 @@ void CDbCacheMgr::writeback(uint64_t nTime)
 	for (auto iter = this->m_mapDirtyCache.begin(); iter != this->m_mapDirtyCache.end();)
 	{
 		if (!iter->second->writeback(nTime))
-			this->m_mapDirtyCache.erase(iter);
+			this->m_mapDirtyCache.erase(iter++);
 		else
 			++iter;
 	}

@@ -131,10 +131,17 @@ class request : public ::google::protobuf::Message /* @@protoc_insertion_point(c
   ::google::protobuf::uint32 type() const;
   void set_type(::google::protobuf::uint32 value);
 
-  // required .google.protobuf.Any content = 4;
+  // required uint32 timeout = 4;
+  bool has_timeout() const;
+  void clear_timeout();
+  static const int kTimeoutFieldNumber = 4;
+  ::google::protobuf::uint32 timeout() const;
+  void set_timeout(::google::protobuf::uint32 value);
+
+  // required .google.protobuf.Any content = 5;
   bool has_content() const;
   void clear_content();
-  static const int kContentFieldNumber = 4;
+  static const int kContentFieldNumber = 5;
   const ::google::protobuf::Any& content() const;
   ::google::protobuf::Any* mutable_content();
   ::google::protobuf::Any* release_content();
@@ -148,6 +155,8 @@ class request : public ::google::protobuf::Message /* @@protoc_insertion_point(c
   inline void clear_has_associate_id();
   inline void set_has_type();
   inline void clear_has_type();
+  inline void set_has_timeout();
+  inline void clear_has_timeout();
   inline void set_has_content();
   inline void clear_has_content();
 
@@ -161,6 +170,7 @@ class request : public ::google::protobuf::Message /* @@protoc_insertion_point(c
   ::google::protobuf::uint32 associate_id_;
   ::google::protobuf::uint32 type_;
   ::google::protobuf::Any* content_;
+  ::google::protobuf::uint32 timeout_;
   friend void  protobuf_AddDesc_request_2eproto();
   friend void protobuf_AssignDesc_request_2eproto();
   friend void protobuf_ShutdownFile_request_2eproto();
@@ -248,15 +258,39 @@ inline void request::set_type(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:proto.db.request.type)
 }
 
-// required .google.protobuf.Any content = 4;
-inline bool request::has_content() const {
+// required uint32 timeout = 4;
+inline bool request::has_timeout() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void request::set_has_content() {
+inline void request::set_has_timeout() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void request::clear_has_content() {
+inline void request::clear_has_timeout() {
   _has_bits_[0] &= ~0x00000008u;
+}
+inline void request::clear_timeout() {
+  timeout_ = 0u;
+  clear_has_timeout();
+}
+inline ::google::protobuf::uint32 request::timeout() const {
+  // @@protoc_insertion_point(field_get:proto.db.request.timeout)
+  return timeout_;
+}
+inline void request::set_timeout(::google::protobuf::uint32 value) {
+  set_has_timeout();
+  timeout_ = value;
+  // @@protoc_insertion_point(field_set:proto.db.request.timeout)
+}
+
+// required .google.protobuf.Any content = 5;
+inline bool request::has_content() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void request::set_has_content() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void request::clear_has_content() {
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void request::clear_content() {
   if (content_ != NULL) content_->::google::protobuf::Any::Clear();

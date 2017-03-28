@@ -39,7 +39,7 @@ bool CDbThread::connectDb(bool bInit)
 			if (bInit)
 				return false;
 
-			//Sleep(1000);
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			continue;
 		}
 		break;
@@ -73,7 +73,7 @@ bool CDbThread::init(CDbThreadMgr* pDbThreadMgr, uint64_t nMaxCacheSize, uint32_
 		while (true)
 		{
 			this->onProcess();
-			if (this->m_quit == 0)
+			if (this->m_quit != 0)
 			{
 				unique_lock<mutex> lock(this->m_tCommandLock);
 				if (this->m_listCommand.empty())
@@ -119,20 +119,24 @@ void CDbThread::onProcess()
 
 		if (sDbCommand.nType == kOT_FLUSH)
 		{
-			const flush_command* pCommand = dynamic_cast<const flush_command*>(sDbCommand.pMessage);
+			const flush_command* pCommand = dynamic_cast<const flush_command*>(sDbCommand.pMessage.get());
 			if (pCommand == nullptr)
 				continue;
 
 			this->flushCache(pCommand->id(), pCommand->type() == kFCT_DEL);
-			delete pCommand;
 			continue;
 		}
 
+		int64_t nCurTime = time(nullptr);
+		// 需要响应的请求，如果已经超时了，就直接丢弃吧
+		if (sDbCommand.nTimeout != 0 && sDbCommand.nTimeout <= nCurTime && sDbCommand.nSessionID != 0)
+			continue;
+
 		shared_ptr<Message> pMessage;
 		uint32_t nErrorCode = kRC_OK;
-		if (!this->onPreCache(sDbCommand.nType, sDbCommand.pMessage, pMessage))
+		if (!this->onPreCache(sDbCommand.nType, sDbCommand.pMessage.get(), pMessage))
 		{
-			nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage, &pMessage);
+			nErrorCode = this->m_dbCommandHandlerProxy.onDbCommand(sDbCommand.nType, sDbCommand.pMessage.get(), &pMessage);
 			if (nErrorCode == kRC_LOST_CONNECTION)
 			{
 				unique_lock<mutex> lock(this->m_tCommandLock);
@@ -140,7 +144,7 @@ void CDbThread::onProcess()
 				break;
 			}
 		}
-		this->onPostCache(sDbCommand.nType, sDbCommand.pMessage, pMessage);
+		this->onPostCache(sDbCommand.nType, sDbCommand.pMessage.get(), pMessage);
 
 		if (sDbCommand.nSessionID == 0)
 			continue;
@@ -250,7 +254,7 @@ void CDbThread::query(const SDbCommand& sDbCommand)
 	unique_lock<mutex> lock(this->m_tCommandLock);
 	this->m_listCommand.push_back(sDbCommand);
 
-	this->m_condition.notify_all();
+	this->m_condition.notify_one();
 }
 
 uint32_t CDbThread::getQueueSize()

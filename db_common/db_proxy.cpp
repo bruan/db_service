@@ -9,6 +9,8 @@
 #include "proto_src/nop_command.pb.h"
 #include "proto_src/flush_command.pb.h"
 
+#include <time.h>
+
 using namespace std;
 using namespace google::protobuf;
 using namespace db;
@@ -103,7 +105,7 @@ CDbProxy::~CDbProxy()
 {
 }
 
-bool CDbProxy::select(CDbClient* pDbClient, uint64_t nID, const string& szTableName, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::select(CDbClient* pDbClient, uint64_t nID, const std::string& szTableName, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -116,6 +118,7 @@ bool CDbProxy::select(CDbClient* pDbClient, uint64_t nID, const string& szTableN
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_SELECT);
 	request.mutable_content()->PackFrom(command);
 
@@ -124,8 +127,18 @@ bool CDbProxy::select(CDbClient* pDbClient, uint64_t nID, const string& szTableN
 	sPendingResponseInfo.pDbClient = pDbClient;
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
+	
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
 
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -145,7 +158,7 @@ bool CDbProxy::update(const Message* pMessage)
 	return this->sendRequest(&request);
 }
 
-bool CDbProxy::update_r(CDbClient* pDbClient, const Message* pMessage, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::update_r(CDbClient* pDbClient, const google::protobuf::Message* pMessage, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -158,6 +171,7 @@ bool CDbProxy::update_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_UPDATE);
 	request.mutable_content()->PackFrom(*pMessage);
 
@@ -167,7 +181,17 @@ bool CDbProxy::update_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
 
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
+
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -187,7 +211,7 @@ bool CDbProxy::remove(uint64_t nID, const string& szTableName)
 	return this->sendRequest(&request);
 }
 
-bool CDbProxy::remove_r(CDbClient* pDbClient, uint64_t nID, const string& szTableName, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::remove_r(CDbClient* pDbClient, uint64_t nID, const std::string& szTableName, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -200,6 +224,7 @@ bool CDbProxy::remove_r(CDbClient* pDbClient, uint64_t nID, const string& szTabl
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_DELETE);
 	request.mutable_content()->PackFrom(command);
 
@@ -209,7 +234,17 @@ bool CDbProxy::remove_r(CDbClient* pDbClient, uint64_t nID, const string& szTabl
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
 
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
+
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -229,7 +264,7 @@ bool CDbProxy::insert(const Message* pMessage)
 	return this->sendRequest(&request);
 }
 
-bool CDbProxy::insert_r(CDbClient* pDbClient, const Message* pMessage, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::insert_r(CDbClient* pDbClient, const google::protobuf::Message* pMessage, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -242,6 +277,7 @@ bool CDbProxy::insert_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id((uint32_t)nID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_INSERT);
 	request.mutable_content()->PackFrom(*pMessage);
 
@@ -251,12 +287,22 @@ bool CDbProxy::insert_r(CDbClient* pDbClient, const Message* pMessage, uint64_t 
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
 
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
+
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
 
-bool CDbProxy::query(CDbClient* pDbClient, uint32_t nAssociateID, const string& szTableName, const string& szWhereClause, const vector<CDbVariant>& vecArg, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::query(CDbClient* pDbClient, uint32_t nAssociateID, const std::string& szTableName, const std::string& szWhereClause, const std::vector<CDbVariant>& vecArg, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -274,6 +320,7 @@ bool CDbProxy::query(CDbClient* pDbClient, uint32_t nAssociateID, const string& 
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id(nAssociateID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_QUERY);
 	request.mutable_content()->PackFrom(command);
 
@@ -283,7 +330,17 @@ bool CDbProxy::query(CDbClient* pDbClient, uint32_t nAssociateID, const string& 
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
 
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
+
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -307,7 +364,7 @@ bool CDbProxy::call(uint32_t nAssociateID, const string& szSQL, const vector<CDb
 	return this->sendRequest(&request);
 }
 
-bool CDbProxy::call_r(CDbClient* pDbClient, uint32_t nAssociateID, const string& szSQL, const vector<CDbVariant>& vecArg, uint64_t nContext, const DbCallback& callback)
+bool CDbProxy::call_r(CDbClient* pDbClient, uint32_t nAssociateID, const std::string& szSQL, const std::vector<CDbVariant>& vecArg, uint32_t nTimeout, uint64_t nContext, const DbCallback& callback)
 {
 	if (pDbClient == nullptr)
 		return false;
@@ -324,6 +381,7 @@ bool CDbProxy::call_r(CDbClient* pDbClient, uint32_t nAssociateID, const string&
 	request request;
 	request.set_session_id(nSessionID);
 	request.set_associate_id(nAssociateID);
+	request.set_timeout(nTimeout);
 	request.set_type(kOT_CALL);
 	request.mutable_content()->PackFrom(command);
 
@@ -333,7 +391,17 @@ bool CDbProxy::call_r(CDbClient* pDbClient, uint32_t nAssociateID, const string&
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
 
+	STimeoutInfo sTimeoutInfo;
+	sTimeoutInfo.nSessionID = nSessionID;
+	sTimeoutInfo.nTimeout = (int64_t)time(nullptr) + nTimeout;
+	auto iter = lower_bound(this->m_listTimeout.begin(), this->m_listTimeout.end(), sTimeoutInfo, STimeoutInfoComp());
+	iter = this->m_listTimeout.insert(iter, sTimeoutInfo);
+	if (iter == this->m_listTimeout.end())
+		return false;
+
+	sPendingResponseInfo.iterTimeout = iter;
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -357,8 +425,10 @@ bool CDbProxy::nop(CDbClient* pDbClient, uint32_t nAssociateID, uint64_t nContex
 	sPendingResponseInfo.pDbClient = pDbClient;
 	sPendingResponseInfo.callback = callback;
 	sPendingResponseInfo.nContext = nContext;
+	sPendingResponseInfo.iterTimeout = this->m_listTimeout.end();
 
 	this->m_mapPendingResponseInfo[nSessionID] = sPendingResponseInfo;
+	this->m_mapPendingResponseInfoByDbClient[pDbClient].insert(nSessionID);
 
 	return this->sendRequest(&request);
 }
@@ -394,27 +464,28 @@ void CDbProxy::onMessage(const Message* pMessage)
 	if (iter == this->m_mapPendingResponseInfo.end())
 		return;
 
-	SPendingResponseInfo& sPendingResponseInfo = iter->second;
+	SPendingResponseInfo sPendingResponseInfo = iter->second;
+	this->m_mapPendingResponseInfo.erase(iter);
+	auto iterDbClient = this->m_mapPendingResponseInfoByDbClient.find(sPendingResponseInfo.pDbClient);
+	if (iterDbClient != this->m_mapPendingResponseInfoByDbClient.end())
+		iterDbClient->second.erase(pResponse->session_id());
+	if (sPendingResponseInfo.iterTimeout != this->m_listTimeout.end())
+		this->m_listTimeout.erase(sPendingResponseInfo.iterTimeout);
 
-	Message* pContent = createMessage(pResponse->name());
+	unique_ptr<Message> pContent = unique_ptr<Message>(createMessage(pResponse->name()));
 	if (pContent == nullptr)
 	{
 		sPendingResponseInfo.callback(kRC_PROTO_ERROR, nullptr, sPendingResponseInfo.nContext);
-		this->m_mapPendingResponseInfo.erase(iter);
 		return;
 	}
 
 	if (!pContent->ParseFromString(pResponse->content()))
 	{
-		delete pContent;
 		sPendingResponseInfo.callback(kRC_PROTO_ERROR, nullptr, sPendingResponseInfo.nContext);
-		this->m_mapPendingResponseInfo.erase(iter);
 		return;
 	}
 
-	sPendingResponseInfo.callback(pResponse->err_code(), pContent, sPendingResponseInfo.nContext);
-	this->m_mapPendingResponseInfo.erase(iter);
-	delete pContent;
+	sPendingResponseInfo.callback(pResponse->err_code(), pContent.get(), sPendingResponseInfo.nContext);
 }
 
 void CDbProxy::removePendingResponseInfo(CDbClient* pDbClient)
@@ -422,17 +493,47 @@ void CDbProxy::removePendingResponseInfo(CDbClient* pDbClient)
 	if (nullptr == pDbClient)
 		return;
 
-	for (auto iter = this->m_mapPendingResponseInfo.begin(); iter != m_mapPendingResponseInfo.end();)
+	auto iter = this->m_mapPendingResponseInfoByDbClient.find(pDbClient);
+	if (iter == this->m_mapPendingResponseInfoByDbClient.end())
+		return;
+
+	std::set<uint64_t>& setSessionID = iter->second;
+	for (auto iterSessionID = setSessionID.begin(); iterSessionID != setSessionID.end(); ++iterSessionID)
 	{
-		const SPendingResponseInfo& session = iter->second;
-		if (session.pDbClient == pDbClient)
-			iter = this->m_mapPendingResponseInfo.erase(iter);
-		else
-			++iter;
+		this->m_mapPendingResponseInfo.erase(*iterSessionID);
 	}
+
+	this->m_mapPendingResponseInfoByDbClient.erase(iter);
 }
 
 uint64_t CDbProxy::genSessionID()
 {
 	return this->m_nNextSessionID++;
+}
+
+void db::CDbProxy::onTimer()
+{
+	int64_t nCurTime = time(nullptr);
+	for (auto iter = this->m_listTimeout.begin(); iter != this->m_listTimeout.end();)
+	{
+		if (nCurTime > iter->nTimeout)
+		{
+			++iter;
+			continue;
+		}
+
+		uint64_t nSessionID = iter->nSessionID;
+		iter = this->m_listTimeout.erase(iter);
+		
+		auto iterResponseInfo = this->m_mapPendingResponseInfo.find(nSessionID);
+		if (iterResponseInfo == this->m_mapPendingResponseInfo.end())
+			continue;
+
+		SPendingResponseInfo sPendingResponseInfo = iterResponseInfo->second;
+		auto iterDbClient = this->m_mapPendingResponseInfoByDbClient.find(sPendingResponseInfo.pDbClient);
+		if (iterDbClient != this->m_mapPendingResponseInfoByDbClient.end())
+			iterDbClient->second.erase(nSessionID);
+
+		sPendingResponseInfo.callback(kRC_TIME_OUT, nullptr, sPendingResponseInfo.nContext);
+	}
 }
