@@ -517,10 +517,7 @@ void db::CDbProxy::onTimer()
 	for (auto iter = this->m_listTimeout.begin(); iter != this->m_listTimeout.end();)
 	{
 		if (nCurTime > iter->nTimeout)
-		{
-			++iter;
-			continue;
-		}
+			break;
 
 		uint64_t nSessionID = iter->nSessionID;
 		iter = this->m_listTimeout.erase(iter);
