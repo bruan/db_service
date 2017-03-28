@@ -1,5 +1,4 @@
 # db_service
-# db_service
 ###这个库主要用于网游服务器的数据库操作
 	提供简单的select，update，delete，insert，自定义的query，call
 	其中select，update，delete，insert支持缓存功能，读写都有缓存，游戏游戏服务器中写的比例相对较高，这里的写缓存用writeback方式实现。
