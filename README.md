@@ -5,7 +5,8 @@
 	自定义的query，call查询条件的参数做了防SQL注入，当然简单的SQL也是做了防SQL注入
 	采用连接池的方式处理SQL操作，为了防止出现SQL操作的时序问题，一般会根据主键来确定哪个连接。
 
-###例子：
+###例子:
+
 	SQL
 	CREATE TABLE `player_base` (
 	  `id` int(10) unsigned NOT NULL,
