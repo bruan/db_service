@@ -516,7 +516,7 @@ void db::CDbProxy::onTimer()
 	int64_t nCurTime = time(nullptr);
 	for (auto iter = this->m_listTimeout.begin(); iter != this->m_listTimeout.end();)
 	{
-		if (nCurTime > iter->nTimeout)
+		if (nCurTime < iter->nTimeout)
 			break;
 
 		uint64_t nSessionID = iter->nSessionID;
@@ -527,6 +527,7 @@ void db::CDbProxy::onTimer()
 			continue;
 
 		SPendingResponseInfo sPendingResponseInfo = iterResponseInfo->second;
+		this->m_mapPendingResponseInfo.erase(iterResponseInfo);
 		auto iterDbClient = this->m_mapPendingResponseInfoByDbClient.find(sPendingResponseInfo.pDbClient);
 		if (iterDbClient != this->m_mapPendingResponseInfoByDbClient.end())
 			iterDbClient->second.erase(nSessionID);

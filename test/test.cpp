@@ -60,6 +60,8 @@ public:
 		{
 			this->onMessage(iter->pResponse.get());
 		}
+
+		this->onTimer();
 	}
 
 protected:
@@ -245,9 +247,7 @@ int main(int argc, char* argv[])
 	while (true)
 	{
 		myDbProxy.update();
-#ifdef _WIN32
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-#endif
 	}
 
 	return 0;
