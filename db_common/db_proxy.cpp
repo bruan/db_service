@@ -500,7 +500,12 @@ void CDbProxy::removePendingResponseInfo(CDbClient* pDbClient)
 	std::set<uint64_t>& setSessionID = iter->second;
 	for (auto iterSessionID = setSessionID.begin(); iterSessionID != setSessionID.end(); ++iterSessionID)
 	{
-		this->m_mapPendingResponseInfo.erase(*iterSessionID);
+		auto iterResponseInfo = this->m_mapPendingResponseInfo.find(*iterSessionID);
+		if (iterResponseInfo == this->m_mapPendingResponseInfo.end())
+			continue;
+
+		this->m_listTimeout.erase(iterResponseInfo->second.iterTimeout);
+		this->m_mapPendingResponseInfo.erase(iterResponseInfo);
 	}
 
 	this->m_mapPendingResponseInfoByDbClient.erase(iter);
